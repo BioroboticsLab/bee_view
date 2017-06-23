@@ -25,6 +25,11 @@ namespace BeeView {
 		recalcViewMatrix();
 	}
 
+	void Camera::setDir(Vec3f dir)
+	{
+		m_dir = dir;
+		recalcViewMatrix();
+	}
 	void Camera::recalcViewMatrix()
 	{	
 

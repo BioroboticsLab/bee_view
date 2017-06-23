@@ -36,7 +36,7 @@ namespace BeeView
 		Ommatidium(float azimuth, float elevation) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(2.6f) {}
 		Ommatidium(float azimuth, float elevation, float acceptance_angle) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(acceptance_angle) {}
 
-		// TODO BUGGED leftside same as right
+		// TODO: :  BUGGED leftside same as right
 		Vec3f getDirVector() const
 		{
 			// make elvation in range 0 - 180
@@ -79,7 +79,7 @@ namespace BeeView
 		Side m_side;
 
 		// max expanse of bee eye coordinate system
-		int m_max_x = 0; //TODO
+		int m_max_x = 0; //TODO: 
 		int m_min_x = -0;
 		int m_max_y = 0;
 		int m_min_y = -0;

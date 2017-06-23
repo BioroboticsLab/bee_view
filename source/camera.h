@@ -11,6 +11,9 @@ namespace BeeView {
 
 	class Camera
 	{
+	private:
+		Vec3f m_dir;
+		Vec3f m_upVector;
 	public:
 		enum class Type
 		{
@@ -19,8 +22,6 @@ namespace BeeView {
 		};
 
 		Vec3f m_position;
-		Vec3f m_dir;
-		Vec3f m_upVector;
 		Type m_type;
 
 
@@ -43,6 +44,8 @@ namespace BeeView {
 		void lookAt(Vec3f point);
 
 		void recalcViewMatrix();
+
+		void setDir(Vec3f dir);
 	};
 
 	class BeeEyeCamera : public Camera

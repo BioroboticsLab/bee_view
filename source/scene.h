@@ -43,12 +43,20 @@ namespace BeeView {
 	class Scene
 	{
 	public:
-		RTCScene rtcscene; // embree scene
-		std::vector<std::shared_ptr<Mesh>> objects;
+		RTCDevice m_device; // embree
+		RTCScene m_rtcscene; // embree scene
+		std::vector<std::shared_ptr<Mesh>> m_objects;
 
-		Scene();
+		Scene() { }
 
+		/* add Mesh to the Scene. */
 		void addObject(std::shared_ptr<Mesh> mesh);
+
+		/* inits rtcScene and fills the Buffers */
+		void initEmbree();
+
+		/* cleans up the Embree stuff */
+		void cleanupEmbree();
 	};
 
 }

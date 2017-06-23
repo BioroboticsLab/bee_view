@@ -48,7 +48,7 @@ namespace BeeView {
 		ray.time = 0;
 
 		/* intersect ray with scene */
-		rtcIntersect(m_scene->rtcscene, ray);
+		rtcIntersect(m_scene->m_rtcscene, ray);
 #if 1
 		/* shade pixels */
 		if (ray.geomID == RTC_INVALID_GEOMETRY_ID) {
@@ -57,7 +57,7 @@ namespace BeeView {
 		}
 
 		/* texture shading */
-		std::shared_ptr<Mesh> mesh = m_scene->objects[ray.geomID]; // get the hit object
+		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
 		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
 
 		if (mesh->texcoords.size() > 0) // if object has tex coords
@@ -72,7 +72,7 @@ namespace BeeView {
 		}
 
 		// Material Kd shading
-		// return(Color(m_scene->objects[ray.geomID]->texture->Kd));
+		// return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
 
 		// uv shading
 		// return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);

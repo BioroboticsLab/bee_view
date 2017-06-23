@@ -305,7 +305,7 @@ namespace BeeView
 	}
 
 	/*! end current facegroup and append to mesh 
-		builds a vertex map to prevent duplicates (global v,vt,vn buffer is shared by all objects)
+		builds a vertex map to prevent duplicates (global v,vt,vn buffer is shared by all m_objects)
 	*/
 	void OBJLoader::flushFaceGroup()
 	{

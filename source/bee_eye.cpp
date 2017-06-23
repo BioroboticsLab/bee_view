@@ -167,13 +167,13 @@ namespace BeeView
 		for each (const auto &my_o in m_ommatidia)
 		{
 			Ommatidium other_o = Ommatidium(-my_o.m_azimuth, my_o.m_elevation, my_o.m_acceptance_angle);
-			//TODO recalc acceptance angle (or Ommatidium.getDynAcceptanceAngle(), because aa is function of elevation?)
+			//TODO:  recalc acceptance angle (or Ommatidium.getDynAcceptanceAngle(), because aa is function of elevation?)
 
 			other_o.m_x = -my_o.m_x;
 			other_o.m_y = my_o.m_y;
 
 			otherEye.m_ommatidia.push_back(other_o);
-			//TODO sort?
+			//TODO:  sort?
 		}
 		otherEye.m_max_x = abs(m_min_x);
 		otherEye.m_max_y = m_max_y;

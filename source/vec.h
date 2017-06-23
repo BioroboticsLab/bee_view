@@ -8,7 +8,7 @@
 /*
 Simple vec3 implementation, no fancy stuff
 Taken from www.scratchapixel.com
-TODO license
+TODO:  license
 */
 
 namespace BeeView
