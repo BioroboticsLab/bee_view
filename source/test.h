@@ -1,4 +1,6 @@
 #pragma once
+#include <iomanip>
+
 
 #include "renderer.h"
 #include "obj_loader.h"
@@ -29,6 +31,30 @@ namespace BeeView {
 
 			// cleanup embree
 			scene->cleanupEmbree();
+		}
+
+		void test_gauss_sampler()
+		{
+			int version = 3;
+			Image img = Image(21, 21);
+			float sum = 0;
+			for (int i = -img.m_width/2; i < img.m_width/2; i++)
+			{
+				for (int j = -img.m_width/2; j < img.m_height/2; j++)
+				{
+					float w = Renderer::gaussPDF(version,i, j, 2.6);
+					sum += w;
+					std::cout << std::fixed << std::setprecision(5) << w << "\t";
+					img.set(i + img.m_width/2, j + img.m_width/2, Color(w/ Renderer::gaussPDF(version,0, 0, 2.6), 0, 0));
+				}
+				std::cout << std::endl;
+			}
+
+			std::cout << sum << std::endl;
+				
+					//img.set(i, j, Color(Renderer::gaussPDF(i,j,img.m_width/2)*20,0,0));
+
+			img.saveToPPM("test_gauss.ppm");				
 		}
 	}
 }

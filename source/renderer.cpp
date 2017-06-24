@@ -12,6 +12,23 @@
 
 namespace BeeView {
 
+	float Renderer::gaussPDF(int version, int x, int y, float hw)
+	{
+		// halfwidth to varianz
+		float var = hw / (2.3548);
+		float dist = sqrt(x*x + y*y);
+		if (version == 1) {
+			return 1 / (2 * M_PI) * std::exp(-0.5 * (x * x + y * y) / var / var);
+		}
+		if (version == 2)
+		{
+			return (1 / (var * sqrt(2 * M_PI))) * std::exp(-pow((0.5*dist / var), 2));
+		}
+		if (version == 3)
+		{
+			return 0.0109*std::exp(-0.6932*dist*dist);
+		}
+	}
 
 	Color Renderer::randomColor(const int ID)
 	{
