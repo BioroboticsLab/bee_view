@@ -58,6 +58,9 @@ namespace BeeView {
 
 		int m_ommatidium_size;
 
+		// precomputed viewing direction offset array (x,y offsets in degrees)
+		// precompute gauss weight array
+
 		BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4)
 		{
 			m_type = Type::BEE_EYE;

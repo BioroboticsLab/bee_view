@@ -12,6 +12,7 @@
 
 namespace BeeView {
 
+	// TODO should be seperate sampler class
 	float Renderer::gaussPDF(int version, int x, int y, float hw)
 	{
 		// halfwidth to varianz
@@ -24,7 +25,7 @@ namespace BeeView {
 		{
 			return (1 / (var * sqrt(2 * M_PI))) * std::exp(-pow((0.5*dist / var), 2));
 		}
-		if (version == 3)
+		if (version == 3) // for halfwidth = 2
 		{
 			return 0.0109*std::exp(-0.6932*dist*dist);
 		}
