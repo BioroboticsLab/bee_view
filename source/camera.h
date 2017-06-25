@@ -14,6 +14,8 @@ namespace BeeView {
 	private:
 		Vec3f m_dir;
 		Vec3f m_upVector;
+		Vec3f m_position;
+
 	public:
 		enum class Type
 		{
@@ -21,12 +23,17 @@ namespace BeeView {
 			PINHOLE
 		};
 
-		Vec3f m_position;
 		Type m_type;
 
 
-		/* the camera rotation matrix, checkout http://ksimek.github.io/2012/08/22/extrinsic/ for infos */
-		Eigen::Matrix3f viewMatrix;
+		/* the camera rotation matrix, checkout http://ksimek.github.io/2012/08/22/extrinsic/ for infos.
+		 use affinespace for easy 3d transformations. 
+		 (homogenous coordinates, linear + affine part.
+		 linear for rotation, scaling, sheering. 
+		 affine for translation. 
+		 vektors only linear, points linear and affine.)
+		*/
+		Eigen::Affine3f m_viewMatrix;
 
 		Camera() : m_position(0,0,0), m_dir(0,0,-1), m_upVector(Vec3f(0,0,1))
 		{
@@ -38,8 +45,19 @@ namespace BeeView {
 		/* moves the camera and sets the direcation vector to oldPosition-newPosition */
 		void moveAndSetDirection(Vec3f newPosition);
 		
-		/* not implemented*/
-		void rotate(float roll);
+		/* not implemented, rotate camera arround x-axis of camera (right axis) */
+		void rotateX(float angle);
+		/* not implemented, rotate camera arround y-axis of camera (up axis) */
+		void rotateY(float angle);
+		/* not implemented, rotate camera arround z-axis of camera (forward axis) */
+		void rotateZ(float angle);
+
+		/* transform input vector by rotating arround x-axis of camera (right axis) */
+		void rotateVecX(Vec3f &vec, float angle);
+		/* transform input vector by rotating arround y-axis of camera (up axis) */
+		void rotateVecY(Vec3f &vec, float angle);
+		/* transform input vector by rotating arround z-axis of camera (foward axis) */
+		void rotateVecZ(Vec3f &vec, float angle);
 
 		void lookAt(Vec3f point);
 

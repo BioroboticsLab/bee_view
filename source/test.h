@@ -10,7 +10,7 @@ namespace BeeView {
 		void testCamera()
 		{
 			// load the scene from .obj file
-			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_foward.obj";
+			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj"
 			std::shared_ptr<Scene> scene = loadOBJ(file);
 
 			// load the ommatidial array from csv file
@@ -19,16 +19,30 @@ namespace BeeView {
 			beeEye->loadFromCSV(csvfile);
 
 			// setup the camera
-			//std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); //hessen
-			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
-			camera->moveTo(Vec3f(0, -75, 0)); // default camera looks along negative z
-			camera->setDir(Vec3f(0, 0, 1)); // TODO: problem viewmatrix not changed -> not allaw acces to m_dir!!
-											// init the renderer
+			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); //hessen
+			//std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
+			camera->moveTo(Vec3f(278, 273, -800));
+			camera->moveTo(Vec3f(0, -70, 0));
+			camera->setDir(Vec3f(0, 0, 1));
+
 			Renderer renderer = Renderer(scene, camera);
 
 			// render the image
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_render.ppm");
+			img->saveToPPM("test_renderb.ppm");
+
+
+			camera->moveTo(Vec3f(278, 273, -820));
+			camera->moveTo(Vec3f(0, -70, -20));
+
+			img = renderer.renderToImage();
+			img->saveToPPM("test_renderb2_mz.ppm");
+
+			camera->moveTo(Vec3f(298, 273, -820));
+			camera->moveTo(Vec3f(20, -70, -20));
+
+			img = renderer.renderToImage();
+			img->saveToPPM("test_renderb3_x.ppm");
 
 			// cleanup embree
 			scene->cleanupEmbree();
@@ -187,13 +201,14 @@ namespace BeeView {
 		void test_sampler()
 		{
 			// test concentric map:
-			// create evenly spaced points in -2.6:2.6 (normalized to 0:1)
+			// create evenly spaced points in -2.6:2.6
 			// numpoints
 			int n = 11; // sqrt numpoints, should be odd
 			float x = 0;
 			float y = 0;
+			
 			float range = 1.f;
-			float spacing = 2*(range / n) + 2* range/(n*n);
+			float spacing = 2*(range / n) + 2* range/(n*n); // for square range -1..1
 
 			std::vector<float> x_grid;
 			std::vector<float> y_grid;
@@ -216,8 +231,11 @@ namespace BeeView {
 					x = j*spacing;
 				}
 				y = i*spacing;
-				std::cout << std::endl;
+				//std::cout << std::endl;
 			}
+
+			normalize(x_circle, -2.6, 2.6);
+			normalize(y_circle, -2.6, 2.6);
 
 			plot2txt(x_grid, y_grid, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_grid.txt");
 			plot2txt(x_circle, y_circle, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_circle.txt");

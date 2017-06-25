@@ -16,5 +16,5 @@ ggplot(df2, aes(x = x, y = y)) + geom_point(shape=1)
 ommatidia <- read.csv("ommatidia.csv",header = FALSE)
 names(ommatidia) <- c("azimuth","elevation")
 
-ggplot(ommatidia, aes(x = azimuth, y = elevation)) + geom_point(colour = c("blue"),size=0.1)
+ggplot(ommatidia, aes(x = azimuth, y = elevation)) + geom_point(shape=1,colour = c("darkblue"),size=5.2)
 

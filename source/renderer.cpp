@@ -47,13 +47,15 @@ namespace BeeView {
 
 	Color Renderer::shootRay(const Vec3f &dir)
 	{
+
+		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
 		// ray casting function
 		/* initialize ray */
 		RTCRay ray;
 
-		ray.org[0] = m_camera->m_position(0);
-		ray.org[1] = m_camera->m_position(1);
-		ray.org[2] = m_camera->m_position(2);
+		ray.org[0] = cam_pos(0);
+		ray.org[1] = cam_pos(1);
+		ray.org[2] = cam_pos(2);
 		ray.dir[0] = dir(0);
 		ray.dir[1] = dir(1);
 		ray.dir[2] = dir(2);
@@ -74,6 +76,8 @@ namespace BeeView {
 			return Color(0.5f, 0.5f, 0.5f);
 		}
 
+		// Material Kd shading
+		// return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
 		/* texture shading */
 		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
 		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
@@ -89,8 +93,6 @@ namespace BeeView {
 			return mesh->texture->getTexel(st(0), 1.0f - st(1));
 		}
 
-		// Material Kd shading
-		// return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
 
 		// uv shading
 		// return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);
@@ -137,7 +139,7 @@ namespace BeeView {
 		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
 
 
-		Vec3f ray_dir = m_camera->viewMatrix * Vec3f(p_x, p_y, 1);
+		Vec3f ray_dir = m_camera->m_viewMatrix.linear() * Vec3f(p_x, p_y, 1);
 		ray_dir.normalize();
 #endif
 		return shootRay(ray_dir);
@@ -274,7 +276,7 @@ namespace BeeView {
 			//std::cout << x_out << ", " << y_out << std::endl;
 
 			// texture shading
-			Vec3f ray_dir = m_camera->viewMatrix * dir;
+			Vec3f ray_dir = m_camera->m_viewMatrix.linear() * dir;
 			ray_dir.normalize();
 			Color color = shootRay(ray_dir);
 

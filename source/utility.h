@@ -92,4 +92,16 @@ namespace BeeView
 		return;
 	}
 
+	// normalize all x in vec to be in range a..b
+	inline void normalize(std::vector<float> &vec, float a, float b)
+	{
+		float min_x = *std::min_element(vec.begin(), vec.end());
+		float max_x = *std::max_element(vec.begin(), vec.end());
+		for (int i = 0; i < vec.size(); i++)
+		{
+			float &x = vec[i];
+			x = (b - a)*(x - min_x) / (max_x - min_x) + a;
+		}
+	}
+
 }
