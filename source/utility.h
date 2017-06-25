@@ -6,6 +6,12 @@ This File contains small general purpose functions and classes.
 
 #include <eigen\Eigen\Dense>
 #include <math.h>
+#include <iostream>
+#include <fstream>
+#include <limits>
+#include <numeric>
+#include <vector>
+
 
 #define M_PI 3.14159265
 
@@ -36,4 +42,54 @@ namespace BeeView
 		float theta2 = (M_PI / 2) - theta;
 		return Vec3f(cos(phi) * sin(theta2), sin(phi) * sin(theta2), cos(theta2));
 	}
+
+	/* RNG: https://stackoverflow.com/questions/1640258/need-a-fast-random-generator-for-c */
+	static unsigned long rng_x = 123456789, rng_y = 362436069, rng_z = 521288629;
+
+	/* Marsaglia xorshift generator */
+	inline unsigned long xorshf96(void) {          //period 2^96-1
+		unsigned long t;
+		rng_x ^= rng_x << 16;
+		rng_x ^= rng_x >> 5;
+		rng_x ^= rng_x << 1;
+
+		t = rng_x;
+		rng_x = rng_y;
+		rng_y = rng_z;
+		rng_z = t ^ rng_x ^ rng_y;
+
+		return rng_z;
+	}
+
+	/* return [0..1]*/
+	inline float randf()
+	{
+		return (float)xorshf96() / std::numeric_limits<unsigned long>::max();
+	}
+	/* return [-1..1] */
+	inline float randfu()
+	{
+		return (float)xorshf96() / ((~0UL >> 1)*1.0) - 1.0;
+	}
+
+	/* scatter plot to txt for displaying it externaly (e.g. with R). x and y must be same size */
+	inline void plot2txt(const std::vector<float> &x, const std::vector<float> &y, std::string txtFile)
+	{
+		if (x.size() != y.size())
+		{
+			std::cerr << "vectors x and y must be same size!";
+			return;
+		}
+
+		std::ofstream outFile(txtFile);
+
+		for (int i = 0; i <= x.size(); i++)
+		{
+			outFile << x[i] << "," << y[i] << "\n";
+		}
+
+		outFile.close();
+		return;
+	}
+
 }
