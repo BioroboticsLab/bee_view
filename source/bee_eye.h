@@ -36,6 +36,7 @@ namespace BeeView
 		Ommatidium(float azimuth, float elevation) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(2.6f) {}
 		Ommatidium(float azimuth, float elevation, float acceptance_angle) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(acceptance_angle) {}
 
+		/* return the direction vector for ray tracing, calculated from elevation and azimuth */
 		Vec3f getDirVector() const
 		{
 			// make elvation in range 0 - 180
@@ -69,7 +70,8 @@ namespace BeeView
 	class BeeEye
 	{
 	public:
-		typedef std::shared_ptr<BeeEye> Ptr;
+
+		typedef std::shared_ptr<BeeEye> Ptr; // convenience
 
 		/* sorted array of ommatidia (sortkey 0: sortkey 1: elevation, sortkey 2: azimuth)*/
 		std::vector<Ommatidium> m_ommatidia;
@@ -77,13 +79,13 @@ namespace BeeView
 		/* LEFT or RIGHT */
 		Side m_side;
 
-		// max expanse of bee eye coordinate system
+		// max expanse of bee eye coordinate system, gets set when csv is loaded
 		int m_max_x = 0; //TODO: 
 		int m_min_x = -0;
 		int m_max_y = 0;
 		int m_min_y = -0;
 
-		BeeEye() : m_side(Side::RIGHT) {}
+		BeeEye() : m_side(Side::RIGHT) {} // TODO: is empty beeeye acceptable?
 		BeeEye(Side side) : m_side(side) {}
 
 		/*

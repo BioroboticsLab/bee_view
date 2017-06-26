@@ -4,6 +4,7 @@
 
 #include "renderer.h"
 #include "obj_loader.h"
+#include "sampler.h"
 
 namespace BeeView {
 	namespace Test {
@@ -87,10 +88,10 @@ namespace BeeView {
 			{
 				for (int j = -img.m_width/2; j < img.m_height/2; j++)
 				{
-					float w = Renderer::gaussPDF(version,i, j, 2.6);
+					float w = 0; // TODO Renderer::gaussPDF(version,i, j, 2.6);
 					sum += w;
 					std::cout << std::fixed << std::setprecision(5) << w << "\t";
-					img.set(i + img.m_width/2, j + img.m_width/2, Color(w/ Renderer::gaussPDF(version,0, 0, 2.6), 0, 0));
+					img.set(i + img.m_width / 2, j + img.m_width / 2, Color(0));//w / Renderer::gaussPDF(version,0, 0, 2.6), 0, 0));
 				}
 				std::cout << std::endl;
 			}
@@ -211,7 +212,7 @@ namespace BeeView {
 			return r * Vec2f(std::cos(theta), std::sin(theta));
 		}
 
-		/* https://www.aanda.org/articles/aa/pdf/2010/12/aa15278-10.pdf */
+		/* https://www.aanda.org/articles/aa/pdf/2010/12/aa15278-10.pdf BEST */
 		Vec2f sampleDisk(Vec2f p)
 		{
 			if (p(0) == 0 && p(1) == 0)
@@ -226,6 +227,21 @@ namespace BeeView {
 				(2 * p(1)) / sqrt(M_PI) * sin((p(0)*M_PI) / (4 * p(1))),
 					(2 * p(1)) / sqrt(M_PI) * cos((p(0)*M_PI) / (4 * p(1)))
 				);
+		}
+
+		void test_sampler2()
+		{
+			Sampler sampler = Sampler();
+			//std::vector<Vec2f> points = sampler.concentricDiskSamples(21, 2.6);
+			std::vector<Vec2f> points = sampler.squareSamples(21);
+
+			std::vector<float> weights = sampler.computeWeightVector(points, 2.6);
+
+			float sum_weights = std::accumulate(weights.begin(), weights.end(), 0.0f);
+
+			std::cout << "sum weights: " << sum_weights << std::endl;
+
+			plot2txt(points, weights,"D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_weights.txt");
 		}
 
 		void test_sampler()

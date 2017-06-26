@@ -22,13 +22,10 @@ namespace BeeView
 
 	template<typename T> __forceinline T clamp(const T& x, const T& lower = T(0), const T& upper = T(1)) { return std::max(std::min(x, upper), lower); }
 	
-	inline
-		float deg2rad(const float &deg)
-	{
-		return deg * M_PI / 180.0f;
-	}
+	inline float deg2rad(const float &deg)	{ return deg * M_PI / 180.0f; }
 
-	/* C:\\Users\\Documents\\file.txt -> return C:\\Users\\Documents\\, home/user/Docements/file.txt -> return home/user/Docements/ */
+	/* C:\\Users\\Documents\\file.txt -> return C:\\Users\\Documents\\,
+	 * home/user/Docements/file.txt -> return home/user/Docements/ */
 	inline std::string getFilePath(std::string fullPath)
 	{
 		if (fullPath.find_last_of("\\/") != -1) {
@@ -61,11 +58,12 @@ namespace BeeView
 		return rng_z;
 	}
 
-	/* return [0..1]*/
+	/* return [0..1] */
 	inline float randf()
 	{
 		return (float)xorshf96() / std::numeric_limits<unsigned long>::max();
 	}
+
 	/* return [-1..1] */
 	inline float randfu()
 	{
@@ -83,13 +81,61 @@ namespace BeeView
 
 		std::ofstream outFile(txtFile);
 
-		for (int i = 0; i <= x.size(); i++)
+		for (int i = 0; i < x.size(); i++)
 		{
 			outFile << x[i] << "," << y[i] << "\n";
 		}
 
 		outFile.close();
 		return;
+	}
+
+	/* plot points */
+	inline void plot2txt(const std::vector<Vec2f> &vec, std::string txtFile)
+	{
+
+		std::ofstream outFile(txtFile);
+
+		for (int i = 0; i < vec.size(); i++)
+		{
+			outFile << vec[i](0) << "," << vec[i](1) << "\n";
+		}
+
+		outFile.close();
+		return;
+	}
+
+	/* plot points with data, TODO should be generic */
+	inline void plot2txt(const std::vector<Vec2f> &vec, std::vector<float> data, std::string txtFile)
+	{
+		if (vec.size() != data.size())
+		{
+			std::cerr << "vectors must be same size!";
+			return;
+		}
+
+		std::ofstream outFile(txtFile);
+
+		for (int i = 0; i < vec.size(); i++)
+		{
+			outFile << vec[i](0) << "," << vec[i](1) << "," << data[i] << "\n";
+		}
+
+		outFile.close();
+		return;
+	}
+
+	/* normalize a single float to be in range a..b */
+	inline void normalize(float &x, float a, float b, float min_x, float max_x)
+	{
+		x = (b - a)*(x - min_x) / (max_x - min_x) + a;
+	}
+
+	/* normalize point to be in range a..b */
+	inline void normalizePoint(Vec2f &point, float a, float b, float min_x, float max_x)
+	{
+		normalize(point(0), a, b, min_x, max_x);
+		normalize(point(1), a, b, min_x, max_x);
 	}
 
 	// normalize all x in vec to be in range a..b
@@ -99,8 +145,7 @@ namespace BeeView
 		float max_x = *std::max_element(vec.begin(), vec.end());
 		for (int i = 0; i < vec.size(); i++)
 		{
-			float &x = vec[i];
-			x = (b - a)*(x - min_x) / (max_x - min_x) + a;
+			normalize(vec[i], a, b, min_x, max_x);
 		}
 	}
 

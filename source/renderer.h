@@ -28,7 +28,6 @@ namespace BeeView {
 			m_camera = camera;
 		}
 
-		static float gaussPDF(int version, int x, int y, float hw);
 	private:
 
 		std::unique_ptr<Image> renderToImagePinhole();

@@ -12,25 +12,6 @@
 
 namespace BeeView {
 
-	// TODO should be seperate sampler class
-	float Renderer::gaussPDF(int version, int x, int y, float hw)
-	{
-		// halfwidth to varianz
-		float var = hw / (2.3548);
-		float dist = sqrt(x*x + y*y);
-		if (version == 1) {
-			return 1 / (2 * M_PI) * std::exp(-0.5 * (x * x + y * y) / var / var);
-		}
-		if (version == 2)
-		{
-			return (1 / (var * sqrt(2 * M_PI))) * std::exp(-pow((0.5*dist / var), 2));
-		}
-		if (version == 3) // for halfwidth = 2
-		{
-			return 0.0109*std::exp(-0.6932*dist*dist);
-		}
-	}
-
 	Color Renderer::randomColor(const int ID)
 	{
 		int r = ((ID + 13) * 17 * 23) & 255;
@@ -50,6 +31,7 @@ namespace BeeView {
 
 		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
 		
+
 		/* initialize ray */
 		RTCRay ray;
 
@@ -188,11 +170,11 @@ namespace BeeView {
 	Convert beeeye coordinate to image coordinates
 
 	Bee eye:
-	(+y)
-	|
-	(-x)----+-----(+x)
-	|
-	(-y)
+          (+y)
+	        |
+    (-x)----+-----(+x)
+            |
+          (-y)
 
 	Image:
 	+----------(+x)
@@ -314,6 +296,7 @@ namespace BeeView {
 				for (int j = 0; j < camera->m_ommatidium_size; j++)
 					img->set(rel_x + i, rel_y + j, color);
 
+			/* for the crosses at center */
 			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
 				center = Vec2f(rel_x, rel_y);
 

@@ -1,3 +1,7 @@
+// Modified obj loader from intels Embree, which is based on TinyObjLoader v0.9 by syoyo https://github.com/syoyo/tinyobjloader
+
+// Contributors:
+// Intel Corporation
 // ======================================================================== //
 // Copyright 2009-2017 Intel Corporation                                    //
 //                                                                          //
