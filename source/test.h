@@ -10,7 +10,7 @@ namespace BeeView {
 		void testCamera()
 		{
 			// load the scene from .obj file
-			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj"
+			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
 			std::shared_ptr<Scene> scene = loadOBJ(file);
 
 			// load the ommatidial array from csv file
@@ -19,30 +19,60 @@ namespace BeeView {
 			beeEye->loadFromCSV(csvfile);
 
 			// setup the camera
-			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); //hessen
+			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); 
 			//std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
-			camera->moveTo(Vec3f(278, 273, -800));
+			//camera->moveTo(Vec3f(278, 273, -800)); // cornell box defalut
 			camera->moveTo(Vec3f(0, -70, 0));
-			camera->setDir(Vec3f(0, 0, 1));
+
+			Vec3f dir = Vec3f(0.4, 0.2, 1).normalized();
+			camera->setDir(dir);
 
 			Renderer renderer = Renderer(scene, camera);
 
 			// render the image
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_renderb.ppm");
+			img->saveToPPM("test_cam12.ppm");
 
+			// test directions: move along neg z
+			camera->moveTo(Vec3f(0, -70, -40));
+			
+			img = renderer.renderToImage();
+			img->saveToPPM("test_cam22_m_negz.ppm");
 
-			camera->moveTo(Vec3f(278, 273, -820));
-			camera->moveTo(Vec3f(0, -70, -20));
+			// move along pos x
+			camera->moveTo(Vec3f(20, -70, -40));
 
 			img = renderer.renderToImage();
-			img->saveToPPM("test_renderb2_mz.ppm");
+			img->saveToPPM("test_cam32_m_x.ppm");
 
-			camera->moveTo(Vec3f(298, 273, -820));
-			camera->moveTo(Vec3f(20, -70, -20));
-
+			//test rotation x down
+			//camera->rotateVecX(dir, -20);
+			//camera->setDir(dir);
+			camera->rotateX(-20);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_renderb3_x.ppm");
+			img->saveToPPM("test_cam42_r_downx.ppm");
+
+		
+
+			// rotate back up
+			//camera->rotateVecX(dir, 20);
+			//camera->setDir(dir);
+			camera->rotateX(20);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_cam52_r_upx.ppm");
+
+			// rotate to left
+			//camera->rotateVecY(dir, 20);
+			//camera->setDir(dir);
+			camera->rotateY(20);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_cam62_r_lefty.ppm");
+
+			// roll around z
+			//camera->rotateVecZ(dir, 10);
+			camera->rotateZ(20);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_cam72_r_leftz.ppm");
 
 			// cleanup embree
 			scene->cleanupEmbree();

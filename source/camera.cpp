@@ -40,27 +40,68 @@ namespace BeeView {
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(0));
 
-		vec = t * vec;
+		vec = t.linear() * vec;
 	}
 	/* transform input vector by rotating arround y-axis of camera (up axis) */
 	void Camera::rotateVecY(Vec3f &vec, float angle)
 	{
+		Eigen::Transform<float, 3, Eigen::Affine> t;
+		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(1));
 
+		vec = t.linear()* vec;
 	}
+
 	/* transform input vector by rotating arround z-axis of camera (foward axis) */
 	void Camera::rotateVecZ(Vec3f &vec, float angle)
 	{
+		
+		Eigen::Transform<float, 3, Eigen::Affine> t;
+		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(2));
+
+		vec = t.linear() * vec;
 
 	}
+
+	/* rotate camera arround x-axis of world (right axis) */
+	void Camera::rotateX(float angle)
+	{
+		Eigen::Transform<float, 3, Eigen::Affine> t;
+		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitX());
+
+		m_dir = t.linear() * m_dir;
+		m_dir.normalize();
+		recalcViewMatrix();
+	}
+
+	void Camera::rotateY(float angle)
+	{
+		Eigen::Transform<float, 3, Eigen::Affine> t;
+		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitY());
+
+		m_dir = t.linear() * m_dir;
+		m_dir.normalize();
+		recalcViewMatrix();
+	}
+
+	void Camera::rotateZ(float angle)
+	{
+		Eigen::Transform<float, 3, Eigen::Affine> t;
+		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitZ());
+
+		m_up = t.linear() * m_up;
+		m_up.normalize();
+		recalcViewMatrix();
+	}
+
 
 	void Camera::recalcViewMatrix()
 	{	
 
-		Vec3f temp = Vec3f(0, 1, 0); // use this vector for spanning the camera pane, (take some vektor not parellel to m_dir) 
+		// use m_up vector for spanning the camera pane, (take some vektor not parallel to m_dir) 
 
 		// vForward, vSide, and vUp are the 3 axis of the Camera coordinate system
 		Vec3f vForward = m_dir;
-		Vec3f vSide = temp.cross(vForward).normalized(); // TODO: left or right handed?
+		Vec3f vSide = m_up.cross(vForward).normalized(); // TODO: left or right handed?
 		Vec3f vUp = vForward.cross(vSide).normalized();
 
 		Eigen::Matrix3f linearPart = Eigen::Matrix3f::Zero();
@@ -70,7 +111,7 @@ namespace BeeView {
 			vSide(0),vUp(0), vForward(0),
 			vSide(1), vUp(1), vForward(1),
 			vSide(2), vUp(2), vForward(2);
-		//-x to fix right hand vs lefthand? TODO: check, should reflect on y -> diagonal -1, 1 , 1
+		//-x to fix right hand vs lefthand? TODO: check, should reflect on y -> diagonal -1, 1 , 1, dont do it! breaks things
 
 		m_viewMatrix.linear() = linearPart;
 

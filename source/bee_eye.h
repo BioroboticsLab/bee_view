@@ -36,7 +36,6 @@ namespace BeeView
 		Ommatidium(float azimuth, float elevation) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(2.6f) {}
 		Ommatidium(float azimuth, float elevation, float acceptance_angle) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(acceptance_angle) {}
 
-		// TODO: :  BUGGED leftside same as right
 		Vec3f getDirVector() const
 		{
 			// make elvation in range 0 - 180

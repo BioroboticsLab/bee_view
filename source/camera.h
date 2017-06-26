@@ -13,8 +13,8 @@ namespace BeeView {
 	{
 	private:
 		Vec3f m_dir;
-		Vec3f m_upVector;
 		Vec3f m_position;
+		Vec3f m_up;
 
 	public:
 		enum class Type
@@ -35,7 +35,7 @@ namespace BeeView {
 		*/
 		Eigen::Affine3f m_viewMatrix;
 
-		Camera() : m_position(0,0,0), m_dir(0,0,-1), m_upVector(Vec3f(0,0,1))
+		Camera() : m_position(0,0,0), m_dir(0,0,-1), m_up(Vec3f(0,1,0))
 		{
 			recalcViewMatrix();
 		}
@@ -64,6 +64,10 @@ namespace BeeView {
 		void recalcViewMatrix();
 
 		void setDir(Vec3f dir);
+		Vec3f getDir()
+		{
+			return m_dir;
+		}
 	};
 
 	class BeeEyeCamera : public Camera

@@ -49,7 +49,7 @@ namespace BeeView {
 	{
 
 		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
-		// ray casting function
+		
 		/* initialize ray */
 		RTCRay ray;
 
@@ -77,7 +77,7 @@ namespace BeeView {
 		}
 
 		// Material Kd shading
-		// return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
+		 //return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
 		/* texture shading */
 		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
 		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
@@ -138,7 +138,11 @@ namespace BeeView {
 		//float p_x = (2 * (x + 0.5) / (float)camera.m_width - 1) * scale;
 		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
 
-
+		// apply transformation to point
+		//Vec3f ray_p_world = m_camera->m_viewMatrix * Vec3f(p_x, p_y, -1);
+		//Vec3f ray_origin_world = m_camera->m_viewMatrix * Vec3f::Zero();
+		//Vec3f ray_dir = ray_p_world - ray_origin_world;
+		// equivelant to:
 		Vec3f ray_dir = m_camera->m_viewMatrix.linear() * Vec3f(p_x, p_y, 1);
 		ray_dir.normalize();
 #endif
@@ -261,9 +265,6 @@ namespace BeeView {
 
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
 		{
-			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
-			convert2ImageCoords(ommatidium, params, x, y);
-
 			Vec3f dir = ommatidium.getDirVector();
 
 			// visualize elevation and azimuth
@@ -281,6 +282,9 @@ namespace BeeView {
 			Color color = shootRay(ray_dir);
 
 			std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
+
+			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
+			convert2ImageCoords(ommatidium, params, x, y);
 
 			int rel_x = x * camera->m_ommatidium_size;
 			int rel_y = y * camera->m_ommatidium_size;
