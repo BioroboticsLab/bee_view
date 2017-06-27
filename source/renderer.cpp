@@ -259,12 +259,12 @@ namespace BeeView {
 			//Color color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
 
 			// visualize x,y,z of dir vector
-			//Color color = Color(dir(0),dir(1),dir(2));
+			Color color = Color(dir(0),dir(1),dir(2));
 
 			// random shading
 			//Color color = randomColor(ommatidium.m_x*ommatidium.m_y);
 			//std::cout << x_out << ", " << y_out << std::endl;
-
+#if 0
 			/* texture shading */
 
 			std::vector<Color> colorSamples;
@@ -299,7 +299,7 @@ namespace BeeView {
 				color.m_g += w * colorSamples[i].m_g;
 				color.m_b += w * colorSamples[i].m_b;
 			}
-
+#endif
 			// need beeeyecamera methods
 			std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 

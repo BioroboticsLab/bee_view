@@ -43,9 +43,9 @@ namespace BeeView
 
 			Ommatidium ommatidium;
 
-			std::vector<float> xy;
+			std::vector<float> xy; // x,y pair
 
-			/* split line by comma */
+			/* split line by comma and extract x,y */
 			while (std::getline(lineStream, token, ','))
 			{
 				xy.push_back(std::stof(token));
@@ -92,10 +92,20 @@ namespace BeeView
 			// create "rows": every time elevation changes -> new row!
 			if (cur_elevation != ommatidium.m_elevation)
 			{
-				++y;
 				if (cur_zone == 1 || cur_zone == 2) x = 0;
 				if (cur_zone == 3 || cur_zone == 4) x = 1;
 				cur_elevation = ommatidium.m_elevation;
+#if 1
+				// also fix "feathered edge" 
+				if (cur_zone == 3)
+					if (y % 2 == 0 && i > 0)
+						m_ommatidia[i - 1].m_y = -y + 1;
+				if (cur_zone == 4)
+					if (y % 2 == 0 && i > 0)
+						m_ommatidia[i - 1].m_y = y - 1;
+#endif
+
+				++y;
 			}
 
 			// if zone changes, start at center again

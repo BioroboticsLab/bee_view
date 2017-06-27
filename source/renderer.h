@@ -19,7 +19,8 @@ namespace BeeView {
 
 		Renderer(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camera) : m_scene(scene), m_camera(camera) 
 		{ 
-			m_scene->initEmbree();
+			if(m_scene != nullptr)
+				m_scene->initEmbree();
 		}
 
 		/* renders the image of scene according to set camera */

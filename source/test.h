@@ -8,6 +8,24 @@
 
 namespace BeeView {
 	namespace Test {
+
+		void testCameraNoScene()
+		{
+			// load the ommatidial array from csv file
+			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
+			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee-eye-model\\ommatidia.csv";
+			beeEye->loadFromCSV(csvfile);
+
+			// setup the camera
+			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
+
+			Renderer renderer = Renderer(nullptr, camera);
+
+			// render the image
+			std::unique_ptr<Image> img = renderer.renderToImage();
+			img->saveToPPM("test_ommatidia_shift2.ppm");
+		}
+
 		void testCamera()
 		{
 			// load the scene from .obj file
