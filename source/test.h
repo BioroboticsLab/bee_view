@@ -22,10 +22,11 @@ namespace BeeView {
 			// setup the camera
 			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); 
 			//std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
+
 			//camera->moveTo(Vec3f(278, 273, -800)); // cornell box defalut
 			camera->moveTo(Vec3f(0, -70, 0));
 
-			Vec3f dir = Vec3f(0.4, 0.2, 1).normalized();
+			Vec3f dir = Vec3f(0, 0, 1).normalized();
 			camera->setDir(dir);
 
 			Renderer renderer = Renderer(scene, camera);
@@ -41,42 +42,141 @@ namespace BeeView {
 			img->saveToPPM("test_cam22_m_negz.ppm");
 
 			// move along pos x
-			camera->moveTo(Vec3f(20, -70, -40));
+			camera->moveTo(Vec3f(40, -70, -40));
 
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam32_m_x.ppm");
 
 			//test rotation x down
-			//camera->rotateVecX(dir, -20);
-			//camera->setDir(dir);
-			camera->rotateX(-20);
+			camera->rotateVecX(dir, 20);
+			camera->setDir(dir);
+			//camera->rotateX(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam42_r_downx.ppm");
 
 		
 
 			// rotate back up
-			//camera->rotateVecX(dir, 20);
-			//camera->setDir(dir);
-			camera->rotateX(20);
+			camera->rotateVecX(dir, -20);
+			camera->setDir(dir);
+			//camera->rotateX(-20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam52_r_upx.ppm");
 
 			// rotate to left
-			//camera->rotateVecY(dir, 20);
-			//camera->setDir(dir);
-			camera->rotateY(20);
+			camera->rotateVecY(dir, 20);
+			camera->setDir(dir);
+			//camera->rotateY(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam62_r_lefty.ppm");
 
 			// roll around z
-			//camera->rotateVecZ(dir, 10);
-			camera->rotateZ(20);
+			camera->rotateVecZ(dir, 10);
+			camera->setDir(dir);
+			//camera->rotateZ(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam72_r_leftz.ppm");
 
 			// cleanup embree
 			scene->cleanupEmbree();
+		}
+
+		void testCamera2()
+		{
+			Camera cam = Camera();
+
+			// make camera coordinate system aligned with wordle coordinate system
+			cam.setDir(Vec3f(0, 0, 1));
+			std::cout << cam.m_viewMatrix.matrix();
+			std::cout << std::endl << std::endl;
+
+			Vec3f testVec = Vec3f(0, 0, 1);
+
+			// rotate to right, pos x and z: expect 1,0,1 norm
+			cam.rotateVecY(testVec, 45);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+
+			// rotate to left, neg x, pos z: expect -1,0,1 norm
+			cam.rotateVecY(testVec, -90);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+
+			// rotate back to 0,0,1
+			cam.rotateVecY(testVec, 45);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+
+			// 0,1,1 norm
+			cam.rotateVecX(testVec, 45);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+
+			// 0,-1,1 norm
+			cam.rotateVecX(testVec, -90);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+
+			// 1,-1,1 norm
+			cam.rotateVecY(testVec, 45);
+
+			std::cout << testVec;
+			std::cout << std::endl << std::endl;
+		}
+
+		void testCamera3()
+		{
+			// load the scene from .obj file
+			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
+			std::shared_ptr<Scene> scene = loadOBJ(file);
+
+			// load the ommatidial array from csv file
+			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
+			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee-eye-model\\ommatidia.csv";
+			beeEye->loadFromCSV(csvfile);
+
+			// setup the camera
+			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
+
+			camera->m_acceptanceAngle = 2.6;
+			camera->m_sqrtNumSamplePoints = 11;
+		
+			camera->moveTo(Vec3f(0, -70, 0));
+
+			Vec3f dir = Vec3f(0, 0, 1).normalized();
+			camera->setDir(dir);
+
+			Renderer renderer = Renderer(scene, camera);
+
+			// render the image
+			std::unique_ptr<Image> img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_s11_a26.ppm");
+
+			// render the image
+			camera->m_sqrtNumSamplePoints = 21;
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_s21_a26.ppm");
+
+
+			// render the image
+			camera->m_sqrtNumSamplePoints = 11;
+			camera->m_acceptanceAngle = 5.2;
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_s11_a52.ppm");
+
+			// render the image
+			camera->m_acceptanceAngle = 1.3;
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_s11_a13.ppm");
+
+			// cleanup embree
+			scene->cleanupEmbree();
+
 		}
 
 		void test_gauss_sampler()

@@ -214,7 +214,7 @@ namespace BeeView {
 		int x_dim = (camera->m_leftEye->m_max_x + abs(camera->m_leftEye->m_min_x) + 1) * camera->m_ommatidium_size;
 		int y_dim = (camera->m_leftEye->m_max_y + abs(camera->m_leftEye->m_min_y) + 1)*camera->m_ommatidium_size;
 
-		// add to x_dim because of shift
+		// add to x_dim because of ommatidia shift
 		x_dim += camera->m_ommatidium_size / 2;
 
 		// 2 eyes
@@ -226,13 +226,17 @@ namespace BeeView {
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(x_dim, y_dim);
 
-		drawBeeEye(img, camera->m_leftEye);
-		drawBeeEye(img, camera->m_rightEye);
+		// setup sampler
+		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints,camera->m_acceptanceAngle); // TODO: where set acceptanceangle and num_samplepoints per ommatidium?
+
+		// draw bee eye on image
+		drawBeeEye(img, camera->m_leftEye, sampler);
+		drawBeeEye(img, camera->m_rightEye, sampler);
 
 		return img;
 	}
 
-	void Renderer::drawBeeEye(std::unique_ptr<Image> &img,  BeeEye::Ptr &beeEye)
+	void Renderer::drawBeeEye(std::unique_ptr<Image> &img,  BeeEye::Ptr &beeEye, Sampler &sampler)
 	{
 		int x;
 		int y;
@@ -245,24 +249,58 @@ namespace BeeView {
 		params.y_min = beeEye->m_min_y;
 		params.y_max = beeEye->m_max_y;
 
+		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
 		{
+			// get main dir
 			Vec3f dir = ommatidium.getDirVector();
 
 			// visualize elevation and azimuth
 			//Color color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
-			// visualize x,y,z of dir vactor
+
+			// visualize x,y,z of dir vector
 			//Color color = Color(dir(0),dir(1),dir(2));
 
 			// random shading
 			//Color color = randomColor(ommatidium.m_x*ommatidium.m_y);
 			//std::cout << x_out << ", " << y_out << std::endl;
 
-			// texture shading
-			Vec3f ray_dir = m_camera->m_viewMatrix.linear() * dir;
-			ray_dir.normalize();
-			Color color = shootRay(ray_dir);
+			/* texture shading */
 
+			std::vector<Color> colorSamples;
+
+			// for all samplepoints: shoot ray, get color
+			for (Vec2f &dev : sampler.m_samplePoints)
+			{
+				// make copy of dir
+				Vec3f sampleDir = dir;
+
+				// rotate dir vector bei x degrees to right
+				m_camera->rotateVecY(sampleDir, dev(0));
+
+				// rotate dir vector bei y degrees up
+				m_camera->rotateVecX(sampleDir, dev(1));
+
+				// transform to world coordinates
+				Vec3f rayDir = m_camera->m_viewMatrix.linear() * sampleDir;
+				rayDir.normalize();
+
+				// shoot ray and store color in array
+				colorSamples.push_back(shootRay(rayDir));
+			}
+
+			Color color = Color(); // 0,0,0
+
+			// weight each color in colorSamples and add up
+			for (int i = 0; i < colorSamples.size(); i++)
+			{
+				float &w = sampler.m_weights[i];
+				color.m_r += w * colorSamples[i].m_r;
+				color.m_g += w * colorSamples[i].m_g;
+				color.m_b += w * colorSamples[i].m_b;
+			}
+
+			// need beeeyecamera methods
 			std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
 			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
@@ -283,20 +321,16 @@ namespace BeeView {
 				// space between the two eyes
 				rel_x += camera->m_ommatidium_size;
 			}
-			else
+			else // left eye
 			{
 				if (y % 2 == 1)
 					rel_x += camera->m_ommatidium_size / 2;
 			}
 
-		
-
-			/* draw the square */
-			for (int i = 0; i < camera->m_ommatidium_size; i++)
-				for (int j = 0; j < camera->m_ommatidium_size; j++)
-					img->set(rel_x + i, rel_y + j, color);
-
-			/* for the crosses at center */
+			/* draw the ommatidium as square */
+			drawSquare(img, rel_x, rel_y, camera->m_ommatidium_size, color);
+			
+			/* for the crosses at center of eye */
 			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
 				center = Vec2f(rel_x, rel_y);
 

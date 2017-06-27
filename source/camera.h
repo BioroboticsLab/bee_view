@@ -80,10 +80,16 @@ namespace BeeView {
 
 		int m_ommatidium_size;
 
+		// the squareroot of the number of sample points per ommatidium
+		int m_sqrtNumSamplePoints; // good numbers for evenly distributed concentric disk are 11, 21
+
+		// acceptance angle for all ommatidia (TOD: better in ommatidium or beeEye class?)
+		float m_acceptanceAngle;
+
 		// precomputed viewing direction offset array (x,y offsets in degrees)
 		// precompute gauss weight array
 
-		BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4)
+		BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4), m_acceptanceAngle(2.6), m_sqrtNumSamplePoints(11)
 		{
 			m_type = Type::BEE_EYE;
 			m_leftEye = beeEye;

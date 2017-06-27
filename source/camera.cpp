@@ -34,24 +34,30 @@ namespace BeeView {
 		recalcViewMatrix();
 	}
 
-	/* transform input vector by rotating arround x-axis of camera (right axis) */
+	/* transform input vector by rotating arround x-axis of camera (right axis), normalizes vector 
+	 * positive values rotate up */
 	void Camera::rotateVecX(Vec3f &vec, float angle)
 	{
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(0));
 
 		vec = t.linear() * vec;
+		vec.normalize();
 	}
-	/* transform input vector by rotating arround y-axis of camera (up axis) */
+	/* transform input vector by rotating arround y-axis of camera (up axis), normalizes vector
+	 * positive values rotate to the right when looking forward */
 	void Camera::rotateVecY(Vec3f &vec, float angle)
 	{
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(1));
 
 		vec = t.linear()* vec;
+		vec.normalize();
 	}
 
-	/* transform input vector by rotating arround z-axis of camera (foward axis) */
+	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector
+	 * doesnt work on dir-vector of camera, to roll the camera use up-vector of camera instead of dir-vector,
+	 * or use camera.rotateZ(). */
 	void Camera::rotateVecZ(Vec3f &vec, float angle)
 	{
 		
@@ -59,6 +65,7 @@ namespace BeeView {
 		t = Eigen::AngleAxisf(deg2rad(angle), m_viewMatrix.linear().col(2));
 
 		vec = t.linear() * vec;
+		vec.normalize();
 
 	}
 
@@ -101,8 +108,8 @@ namespace BeeView {
 
 		// vForward, vSide, and vUp are the 3 axis of the Camera coordinate system
 		Vec3f vForward = m_dir;
-		Vec3f vSide = m_up.cross(vForward).normalized(); // TODO: left or right handed?
-		Vec3f vUp = vForward.cross(vSide).normalized();
+		Vec3f vSide = vForward.cross(m_up).normalized(); // TODO: left or right handed?
+		Vec3f vUp = vSide.cross(vForward).normalized();
 
 		Eigen::Matrix3f linearPart = Eigen::Matrix3f::Zero();
 
@@ -118,7 +125,7 @@ namespace BeeView {
 		m_viewMatrix.translation() = m_position;
 
 		//DEBUG
-		std::cout << "Camera Matrx: " << std::endl << m_viewMatrix.matrix() << std::endl;
+		//std::cout << "Camera Matrix: " << std::endl << m_viewMatrix.matrix() << std::endl;
 
 	}
 }
