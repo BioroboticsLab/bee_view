@@ -143,10 +143,13 @@ namespace BeeView
 	{
 		float min_x = *std::min_element(vec.begin(), vec.end());
 		float max_x = *std::max_element(vec.begin(), vec.end());
+
+		std::cout << "min: " << min_x << " max: " << max_x << std::endl;
 		for (int i = 0; i < vec.size(); i++)
 		{
 			normalize(vec[i], a, b, min_x, max_x);
 		}
 	}
 
+	
 }

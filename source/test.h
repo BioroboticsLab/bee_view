@@ -346,12 +346,12 @@ namespace BeeView {
 				);
 		}
 
-		// test the sampling mehtods and plot (txt: in R)
+		// test the sampling methods and plot with weights (txt: in R)
 		void test_sampler2()
 		{
 			Sampler sampler = Sampler();
-			//std::vector<Vec2f> points = sampler.concentricDiskSamples(21, 2.6);
-			std::vector<Vec2f> points = sampler.squareSamples(21);
+			std::vector<Vec2f> points = sampler.concentricDiskSamples(21, 2.6);
+			//std::vector<Vec2f> points = sampler.squareSamples(21);
 
 			std::vector<float> weights = sampler.computeWeightVector(points, 2.6);
 
@@ -362,47 +362,63 @@ namespace BeeView {
 			plot2txt(points, weights,"D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_weights.txt");
 		}
 
-		void test_sampler()
+		/* maps to rainbow color, max =  maximum value, input = input value
+		* https://stackoverflow.com/questions/37876316/map-value-range-to-rainbow-colormap
+		*/
+		Color getRainbowColor(float max, float input)
 		{
-			// test concentric map:
-			// create evenly spaced points in -2.6:2.6
-			// numpoints
-			int n = 11; // sqrt numpoints, should be odd
-			float x = 0;
-			float y = 0;
+			float inc = 6.0 / input;
+			float x = max * inc;
+
+			float r = 0.0f;
+			float g = 0.0f;
+			float b = 0.0f;
+			if ((0 <= x && x <= 1) || (5 <= x && x <= 6)) r = 1.0f;
+			else if (4 <= x && x <= 5) r = x - 4;
+			else if (1 <= x && x <= 2) r = 1.0f - (x - 1);
+			if (1 <= x && x <= 3) g = 1.0f;
+			else if (0 <= x && x <= 1) g = x - 0;
+			else if (3 <= x && x <= 4) g = 1.0f - (x - 3);
+			if (3 <= x && x <= 5) b = 1.0f;
+			else if (2 <= x && x <= 3) b = x - 2;
+			else if (5 <= x && x <= 6) b = 1.0f - (x - 5);
+
+			return Color(r, g, b);
+		}
+
+		void test_gaussian()
+		{
+			Sampler sampler = Sampler();
+
+			Image img = Image(500, 500);
+
 			
-			float range = 1.f;
-			float spacing = 2*(range / n) + 2* range/(n*n); // for square range -1..1
-
-			std::vector<float> x_grid;
-			std::vector<float> y_grid;
-			std::vector<float> x_circle;
-			std::vector<float> y_circle;
-
-			for (int i = -n / 2; i <= (n + 1) / 2; i++)
+			std::vector<Vec2f> samples = sampler.squareSamples(499);
+			//std::vector<Vec2f> samples = sampler.concentricDiskSamples(499,250);
+			for (Vec2f &p : samples)
 			{
-				for (int j = -n / 2; j <= (n) / 2; j++)
-				{
-					x_grid.push_back(x);
-					y_grid.push_back(y);
-
-					//Vec2f p = ToUnitDisk(Vec2f(x, y));
-					Vec2f p = sampleDisk(Vec2f(x, y));
-					x_circle.push_back(p(0));
-					y_circle.push_back(p(1));
-
-					//std::cout << x << " " << y << ", ";
-					x = j*spacing;
-				}
-				y = i*spacing;
-				//std::cout << std::endl;
+				p(0) = p(0) * 249;
+				p(1) = p(1) * 249;
 			}
 
-			normalize(x_circle, -2.6, 2.6);
-			normalize(y_circle, -2.6, 2.6);
 
-			plot2txt(x_grid, y_grid, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_grid.txt");
-			plot2txt(x_circle, y_circle, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_circle.txt");
+			std::cout << " test1 ";
+			std::vector<float> weights = sampler.computeWeightVector(samples,180,4);
+			std::cout << " test2 ";
+
+			normalize(weights, 0, 1);
+			
+			int i = 0;
+			for (Vec2f &p : samples)
+			{
+
+				img.set(floor(p(0) + 250), floor(p(1) + 250), getRainbowColor(weights[i], 1.0)); //Color(weights[i],0,0));// getRainbowColor(1000,weights[i]*1000)); //
+				//std::cout << floor(p(0) * 249 + 250) << " " << floor(p(1) * 249 + 250) << std::endl;
+				//std::cout << weights[i] << std::endl;
+				i++;
+			}
+
+			img.saveToPPM("test_gauss4.ppm");
 		}
 	}
 }

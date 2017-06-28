@@ -6,7 +6,7 @@
 
 namespace BeeView
 {
-	// just rely on compiler to move and not copy return value, c++11
+	// just rely on compiler to move and not copy return value
 	std::vector<Vec2f> Sampler::concentricDiskSamples(int numSamples, float acceptanceAngle)
 	{
 		// first compute square of -1..1 and then map to disk
@@ -71,25 +71,21 @@ namespace BeeView
 		float dist = sqrt(x*x + y*y);
 
 		if (version == 1)
-		{
 			return 1 / (2 * M_PI) * std::exp(-0.5 * (x * x + y * y) / var / var);
-		}
 		if (version == 2)
-		{
 			return (1 / (var * sqrt(2 * M_PI))) * std::exp(-pow((0.5*dist / var), 2));
-		}
 		if (version == 3) // for halfwidth = 2
-		{
 			return 0.0109*std::exp(-0.6932*dist*dist);
-		}
+		if (version == 4) // gaussian kernel function
+			return std::exp(-pow(0.5 * dist / var , 2));
 		return 0;
 	}
 
-	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle)
+	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle, int version)
 	{
 		std::vector<float> weights;
 		for (Vec2f &p : samples)
-			weights.push_back(gaussPDF(2, p(0), p(1), acceptanceAngle));
+			weights.push_back(gaussPDF(version, p(0), p(1), acceptanceAngle));
 
 		// normalize weights to sum 1
 		double sum = std::accumulate(weights.begin(), weights.end(), 0.0);

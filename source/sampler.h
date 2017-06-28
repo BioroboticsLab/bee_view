@@ -12,7 +12,7 @@ namespace BeeView
 	{
 
 	public:
-		std::vector<Vec2f> m_samplePoints; // TODO: fill on creation for efficiency
+		std::vector<Vec2f> m_samplePoints; 
 		std::vector<float> m_weights;
 		Sampler(){}
 		
@@ -42,16 +42,17 @@ namespace BeeView
 				);
 		}
 
-		/* creates numSamples*numSamples uniformly distributed points on a disk,
+		/* creates numSamples*numSamples + 2*numSamples + 1 uniformly distributed points on a disk,
+		 * that is because i want samples on x = 0 and y = 0 and x = -1 and y = -1.
 		 * with x,y equal to deviation from centerpoint (0,0), with maximum extent acceptanceAngle */
 		std::vector<Vec2f> concentricDiskSamples(int numSamples, float acceptanceAngle);
 
-		/* creates numSamples*numSamples x,y coordinates, evenly spaced on a square in range -1..1,
+		/* creates numSamples*numSamples + 2*numSamples + 1 x,y coordinates, evenly spaced on a square in range -1..1,
 		 * use odd numSamples, samples start at x=0 and y=0 */
 		std::vector<Vec2f> squareSamples(int numSamples);
 
 		/* compute gaussian weights based on x,y coordinates of sample, TODO normalize so sum(weights) = 1 */
-		std::vector<float> computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle);
+		std::vector<float> computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle, int version = 2);
 
 	};
 
