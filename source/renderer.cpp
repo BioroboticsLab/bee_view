@@ -259,7 +259,14 @@ namespace BeeView {
 			//Color color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
 
 			// visualize x,y,z of dir vector
-			Color color = Color(dir(0),dir(1),dir(2));
+			//Color color = Color(dir(0),dir(1),dir(2));
+
+			//solid schading
+			Color color = Color();
+			if (ommatidium.m_x == 0 || ommatidium.m_y == 0)
+				color = Color(0, 1, 0);
+			else
+				color = Color(1, 0, 0);
 
 			// random shading
 			//Color color = randomColor(ommatidium.m_x*ommatidium.m_y);
@@ -332,7 +339,7 @@ namespace BeeView {
 			
 			/* for the crosses at center of eye */
 			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
-				center = Vec2f(rel_x, rel_y);
+				center = Vec2f(rel_x + camera->m_ommatidium_size / 2, rel_y + camera->m_ommatidium_size/2);
 
 		}
 

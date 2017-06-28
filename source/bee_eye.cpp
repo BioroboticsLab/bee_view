@@ -65,7 +65,7 @@ namespace BeeView
 
 		}
 
-		// sort ommatidia by zone, elevation, azimuth
+		// sort ommatidia by zone, elevation, azimuth (overwritten < operator in ommatidium)
 		std::sort(m_ommatidia.begin(), m_ommatidia.end());
 
 		// remove duplicates
@@ -85,6 +85,8 @@ namespace BeeView
 		int sign_x = 1;
 		int sign_y = 1;
 
+
+
 		for (int i = 0; i < m_ommatidia.size(); i++)
 		{
 			Ommatidium &ommatidium = m_ommatidia[i];
@@ -95,8 +97,8 @@ namespace BeeView
 				if (cur_zone == 1 || cur_zone == 2) x = 0;
 				if (cur_zone == 3 || cur_zone == 4) x = 1;
 				cur_elevation = ommatidium.m_elevation;
-#if 1
-				// also fix "feathered edge" 
+#if 0
+				// also fix "feathered edge, bad solution, since some ommatidia will be overwritten" 
 				if (cur_zone == 3)
 					if (y % 2 == 0 && i > 0)
 						m_ommatidia[i - 1].m_y = -y + 1;
@@ -104,7 +106,7 @@ namespace BeeView
 					if (y % 2 == 0 && i > 0)
 						m_ommatidia[i - 1].m_y = y - 1;
 #endif
-
+				
 				++y;
 			}
 
@@ -113,10 +115,10 @@ namespace BeeView
 			{
 
 				cur_zone = ommatidium.m_zone;
-				if (cur_zone == 1) { x = 0; y = 0; }
-				if (cur_zone == 2) { x = 0; y = 1; }
-				if (cur_zone == 3) { x = 1; y = 1; }
-				if (cur_zone == 4) { x = 1; y = 0; }
+				if (cur_zone == 1) { x = 0; y = 0; } // y 0
+				if (cur_zone == 2) { x = 0; y = 1; } // y -1
+				if (cur_zone == 3) { x = 1; y = 0; } // y -1
+				if (cur_zone == 4) { x = 1; y = 1; } // y 0
 
 			}
 
@@ -143,7 +145,71 @@ namespace BeeView
 #endif
 
 		}
+
+		// don't need fix, because code above was bugged: now corrected, fix edge obsolete
+#if 0
+		// fix edge by going through rows and checking size, not optimized for efficiency ;-)
+		std::vector<Ommatidium> allOmmatidia = m_ommatidia;
+
+		// sort array only bei elevation (not zone)
+		std::sort(allOmmatidia.begin(), allOmmatidia.end(),
+			[](const Ommatidium &a, const Ommatidium &b) -> bool
+		{
+			return  std::make_tuple(a.m_elevation,a.m_azimuth) < std::make_tuple(b.m_elevation, b.m_azimuth);
+		});
 		
+		// for fixing edge: create rows
+		std::vector<std::vector<Ommatidium>> rows; // index rows = y
+		std::vector<Ommatidium> row;
+
+		int curY = allOmmatidia[0].m_y;
+		for (Ommatidium &o : allOmmatidia)
+		{
+			if (curY != o.m_y)
+			{
+				
+				// add row to rows
+				rows.push_back(row);
+				curY = o.m_y;
+
+				//new row
+				row = std::vector<Ommatidium>();
+			}
+			row.push_back(o);
+		}
+		//add last row
+		rows.push_back(row);
+		
+		// if row has more members than both neighmours -> add first ommatidium to row above
+		for (int i = 1; i < rows.size()-1; i++)
+		{
+			std::vector<Ommatidium> &prevRow = rows[i-1];
+			std::vector<Ommatidium> &curRow = rows[i];
+			std::vector<Ommatidium> &nextRow = rows[i+1];
+
+			if (curRow.size() > prevRow.size() && curRow.size() > nextRow.size())
+			{
+				// put first ommatidium in row above
+				curRow[0].m_y += 1;
+				curRow[0].m_x = nextRow[0].m_x - 1;
+			}
+		}
+
+		// put the fixed ommatidia in m_ommatidia
+		m_ommatidia = std::vector<Ommatidium>();
+		
+		for (auto oRow : rows)
+		{
+			for (auto o : oRow)
+			{
+				m_ommatidia.push_back(o);
+			}
+		}
+			
+#endif
+		// sort ommatidia by zone, elevation, azimuth (overwritten < operator in ommatidium)
+		//std::sort(m_ommatidia.begin(), m_ommatidia.end());
+
 		// save min max of coordinate expansion:
 		auto minmax_x = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
 			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_x < rhs.m_x; });
@@ -164,8 +230,6 @@ namespace BeeView
 
 		std::cout << "Minimum y: " << m_min_y << std::endl;
 		std::cout << "Maximum y: " << m_max_y << std::endl;
-
-
 
 	}
 

@@ -23,7 +23,7 @@ namespace BeeView {
 
 			// render the image
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_ommatidia_shift2.ppm");
+			img->saveToPPM("test_ommatidia_shift.ppm");
 		}
 
 		void testCamera()
