@@ -9,6 +9,7 @@
 namespace BeeView {
 	namespace Test {
 
+		// for shading where the scene doesnt have to be loaded
 		void testCameraNoScene()
 		{
 			// load the ommatidial array from csv file
@@ -26,6 +27,7 @@ namespace BeeView {
 			img->saveToPPM("test_ommatidia_shift.ppm");
 		}
 
+		// test the pinhole camera and the coordinates (move camera around)
 		void testCamera()
 		{
 			// load the scene from .obj file
@@ -99,6 +101,7 @@ namespace BeeView {
 			scene->cleanupEmbree();
 		}
 
+		// test the rotation of vectors around camera axis
 		void testCamera2()
 		{
 			Camera cam = Camera();
@@ -147,6 +150,7 @@ namespace BeeView {
 			std::cout << std::endl << std::endl;
 		}
 
+		// test the beeeye camera
 		void testCamera3()
 		{
 			// load the scene from .obj file
@@ -238,11 +242,9 @@ namespace BeeView {
 		}
 
 
-		// samplers:
-
+		// testing of different disk sampling methods :
 
 		/* http://psgraphics.blogspot.de/2011/01/improved-code-for-concentric-map.html v2*/
-
 		Vec2f ToUnitDisk(Vec2f O) {
 			if (O == Vec2f(0, 0))
 				return O;
@@ -299,15 +301,12 @@ namespace BeeView {
 			return Vec2f(r * cos(phi), r * sin(phi));
 		}
 
-
-
 		/* uniform -> not uniform ;-) */
 		Vec2f UniformSampleDisk(const Vec2f &u) {
 			float r = std::sqrt(u(0));
 			float theta = 2 * M_PI * u(1);
 			return Vec2f(r * std::cos(theta), r * std::sin(theta));
 		}
-
 
 		/* pbrt2 v3 : BAD */
 		Vec2f ConcentricSampleDisk(const Vec2f &u) {
@@ -347,6 +346,7 @@ namespace BeeView {
 				);
 		}
 
+		// test the sampling mehtods and plot (txt: in R)
 		void test_sampler2()
 		{
 			Sampler sampler = Sampler();

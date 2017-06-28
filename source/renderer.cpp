@@ -9,6 +9,14 @@
 
 #include "renderer.h"
 
+// debug variables
+//#define TEXTURE_SHADING
+//#define XYZ_SHADING
+//#define SOLID_SHADING
+//#define ELEVATION_AZIMUTH_SHADING
+#define SINGLE_RAY_TEXTURE_SHADING
+//#define RANDOM_SHADING
+
 
 namespace BeeView {
 
@@ -30,7 +38,7 @@ namespace BeeView {
 	{
 
 		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
-		
+
 
 		/* initialize ray */
 		RTCRay ray;
@@ -170,11 +178,11 @@ namespace BeeView {
 	Convert beeeye coordinate to image coordinates
 
 	Bee eye:
-          (+y)
-	        |
-    (-x)----+-----(+x)
-            |
-          (-y)
+		  (+y)
+			|
+	(-x)----+-----(+x)
+			|
+		  (-y)
 
 	Image:
 	+----------(+x)
@@ -227,7 +235,7 @@ namespace BeeView {
 		std::unique_ptr<Image> img = std::make_unique<Image>(x_dim, y_dim);
 
 		// setup sampler
-		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints,camera->m_acceptanceAngle); // TODO: where set acceptanceangle and num_samplepoints per ommatidium?
+		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints, camera->m_acceptanceAngle); // TODO: where set acceptanceangle and num_samplepoints per ommatidium?
 
 		// draw bee eye on image
 		drawBeeEye(img, camera->m_leftEye, sampler);
@@ -236,7 +244,7 @@ namespace BeeView {
 		return img;
 	}
 
-	void Renderer::drawBeeEye(std::unique_ptr<Image> &img,  BeeEye::Ptr &beeEye, Sampler &sampler)
+	void Renderer::drawBeeEye(std::unique_ptr<Image> &img, BeeEye::Ptr &beeEye, Sampler &sampler)
 	{
 		int x;
 		int y;
@@ -252,26 +260,62 @@ namespace BeeView {
 		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
 		{
+			// fix for "nice" display at elevation = 0 (model returns to many ommatidia for e=0), delete last ommatidium at e=0
+			if (ommatidium.m_y == 0)
+			{
+				if (beeEye->m_side == Side::RIGHT && (ommatidium.m_x == -5 || ommatidium.m_x == -4))
+					continue;
+				if (beeEye->m_side == Side::LEFT && (ommatidium.m_x == 5 || ommatidium.m_x == 4))
+					continue;
+			}
+
 			// get main dir
 			Vec3f dir = ommatidium.getDirVector();
 
+			Color color = Color(); // 0,0,0
+
+#ifdef ELEVATION_AZIMUTH_SHADING
+
 			// visualize elevation and azimuth
-			//Color color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
+			color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
+
+#endif
+
+#ifdef XYZ_SHADING
 
 			// visualize x,y,z of dir vector
-			//Color color = Color(dir(0),dir(1),dir(2));
+			color = Color(dir(0), dir(1), dir(2));
+
+#endif
+
+#ifdef SOLID_SHADING
 
 			//solid schading
-			Color color = Color();
+
 			if (ommatidium.m_x == 0 || ommatidium.m_y == 0)
 				color = Color(0, 1, 0);
 			else
 				color = Color(1, 0, 0);
 
+#endif
+
+#ifdef RANDOM_SHADING
+
 			// random shading
-			//Color color = randomColor(ommatidium.m_x*ommatidium.m_y);
-			//std::cout << x_out << ", " << y_out << std::endl;
-#if 0
+			color = randomColor(ommatidium.m_x*ommatidium.m_y);
+#endif
+
+#ifdef SINGLE_RAY_TEXTURE_SHADING
+
+			// transform to world coordinates
+			Vec3f rayDir = m_camera->m_viewMatrix.linear() * dir;
+			rayDir.normalize();
+
+			// shoot ray and store color in array
+			color = shootRay(rayDir);
+#endif
+
+#ifdef TEXTURE_SHADING
 			/* texture shading */
 
 			std::vector<Color> colorSamples;
@@ -296,7 +340,7 @@ namespace BeeView {
 				colorSamples.push_back(shootRay(rayDir));
 			}
 
-			Color color = Color(); // 0,0,0
+			color = Color(); // 0,0,0
 
 			// weight each color in colorSamples and add up
 			for (int i = 0; i < colorSamples.size(); i++)
@@ -307,6 +351,7 @@ namespace BeeView {
 				color.m_b += w * colorSamples[i].m_b;
 			}
 #endif
+
 			// need beeeyecamera methods
 			std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
@@ -336,10 +381,10 @@ namespace BeeView {
 
 			/* draw the ommatidium as square */
 			drawSquare(img, rel_x, rel_y, camera->m_ommatidium_size, color);
-			
+
 			/* for the crosses at center of eye */
 			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
-				center = Vec2f(rel_x + camera->m_ommatidium_size / 2, rel_y + camera->m_ommatidium_size/2);
+				center = Vec2f(rel_x + camera->m_ommatidium_size / 2, rel_y + camera->m_ommatidium_size / 2);
 
 		}
 

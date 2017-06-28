@@ -97,15 +97,6 @@ namespace BeeView
 				if (cur_zone == 1 || cur_zone == 2) x = 0;
 				if (cur_zone == 3 || cur_zone == 4) x = 1;
 				cur_elevation = ommatidium.m_elevation;
-#if 0
-				// also fix "feathered edge, bad solution, since some ommatidia will be overwritten" 
-				if (cur_zone == 3)
-					if (y % 2 == 0 && i > 0)
-						m_ommatidia[i - 1].m_y = -y + 1;
-				if (cur_zone == 4)
-					if (y % 2 == 0 && i > 0)
-						m_ommatidia[i - 1].m_y = y - 1;
-#endif
 				
 				++y;
 			}
@@ -207,8 +198,6 @@ namespace BeeView
 		}
 			
 #endif
-		// sort ommatidia by zone, elevation, azimuth (overwritten < operator in ommatidium)
-		//std::sort(m_ommatidia.begin(), m_ommatidia.end());
 
 		// save min max of coordinate expansion:
 		auto minmax_x = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),

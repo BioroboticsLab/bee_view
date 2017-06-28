@@ -2,6 +2,8 @@
 
 #include "sampler.h"
 
+//#define DEBUG
+
 namespace BeeView
 {
 	// just rely on compiler to move and not copy return value, c++11
@@ -26,8 +28,9 @@ namespace BeeView
 		for (Vec2f &p : cSamples)
 			normalizePoint(p, -acceptanceAngle, acceptanceAngle, min_x(0), -min_x(0));
 
-		// DEBUG
+#ifdef DEBUG
 		plot2txt(cSamples, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_circle2.txt");
+#endif
 
 		return cSamples;
 	}
@@ -53,8 +56,9 @@ namespace BeeView
 			y = i*spacing;
 		}
 
-		// DEBUG
+#ifdef DEBUG
 		plot2txt(samples, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_grid2.txt");
+#endif // DEBUG
 
 		return samples;
 	}
