@@ -63,7 +63,7 @@ namespace BeeView
 		return samples;
 	}
 
-	float Sampler::gaussPDF(int version, int x, int y, float hw)
+	float Sampler::gaussPDF(int version, float x, float y, float hw)
 	{
 		// halfwidth to varianz
 		float var = hw / (2.3548);
@@ -77,7 +77,11 @@ namespace BeeView
 		if (version == 3) // for halfwidth = 2
 			return 0.0109*std::exp(-0.6932*dist*dist);
 		if (version == 4) // gaussian kernel function
-			return std::exp(-pow(0.5 * dist / var , 2));
+		{
+			float ret_val = std::exp(-pow(0.5 * dist / var, 2));
+			return ret_val;
+		}
+			
 		return 0;
 	}
 
@@ -85,7 +89,12 @@ namespace BeeView
 	{
 		std::vector<float> weights;
 		for (Vec2f &p : samples)
-			weights.push_back(gaussPDF(version, p(0), p(1), acceptanceAngle));
+		{
+
+			float x = p(0);
+			float y = p(1);
+			weights.push_back(gaussPDF(version, x, y, acceptanceAngle));
+		}
 
 		// normalize weights to sum 1
 		double sum = std::accumulate(weights.begin(), weights.end(), 0.0);

@@ -4,18 +4,22 @@
 #include <embree2/rtcore.h>
 #include <embree2/rtcore_ray.h>
 #include <memory>
+#include <chrono>
+
 
 #include <eigen\Eigen\Dense>
 
 #include "renderer.h"
 
 // debug variables
-//#define TEXTURE_SHADING
+#define TEXTURE_SHADING
 //#define XYZ_SHADING
 //#define SOLID_SHADING
 //#define ELEVATION_AZIMUTH_SHADING
-#define SINGLE_RAY_TEXTURE_SHADING
+//#define SINGLE_RAY_TEXTURE_SHADING
 //#define RANDOM_SHADING
+
+#define DEBUG
 
 
 namespace BeeView {
@@ -129,18 +133,23 @@ namespace BeeView {
 		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
 
 		// apply transformation to point
-		//Vec3f ray_p_world = m_camera->m_viewMatrix * Vec3f(p_x, p_y, -1);
-		//Vec3f ray_origin_world = m_camera->m_viewMatrix * Vec3f::Zero();
-		//Vec3f ray_dir = ray_p_world - ray_origin_world;
+		// Vec3f ray_p_world = m_camera->m_viewMatrix * Vec3f(p_x, p_y, -1);
+		// Vec3f ray_origin_world = m_camera->m_viewMatrix * Vec3f::Zero();
+		// Vec3f ray_dir = ray_p_world - ray_origin_world;
 		// equivelant to:
+
 		Vec3f ray_dir = m_camera->m_viewMatrix.linear() * Vec3f(p_x, p_y, 1);
 		ray_dir.normalize();
+
 #endif
+
 		return shootRay(ray_dir);
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImagePinhole()
 	{
+
+		// TODO: global verbose
 		std::cout << "Start rendering Image... ";
 		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
 
@@ -234,12 +243,24 @@ namespace BeeView {
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(x_dim, y_dim);
 
+		// benchmark
+		std::ofstream benchmarkLog;
+
+		benchmarkLog.open("log.txt", std::ios_base::app);
+		benchmarkLog << std::endl << "samples: " << std::to_string(camera->m_sqrtNumSamplePoints*camera->m_sqrtNumSamplePoints + 2 * camera->m_sqrtNumSamplePoints + 1) << ", acceptance angle: " << std::to_string(camera->m_acceptanceAngle) << std::endl;
+		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
 		// setup sampler
-		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints, camera->m_acceptanceAngle); // TODO: where set acceptanceangle and num_samplepoints per ommatidium?
+		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints, camera->m_acceptanceAngle, Sampler::Mode::DISK);
 
 		// draw bee eye on image
 		drawBeeEye(img, camera->m_leftEye, sampler);
 		drawBeeEye(img, camera->m_rightEye, sampler);
+
+		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
+		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 
 		return img;
 	}
@@ -274,38 +295,34 @@ namespace BeeView {
 
 			Color color = Color(); // 0,0,0
 
-#ifdef ELEVATION_AZIMUTH_SHADING
+			#ifdef ELEVATION_AZIMUTH_SHADING
 
-			// visualize elevation and azimuth
 			color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
 
-#endif
+			#endif
+		
+			#ifdef XYZ_SHADING
 
-#ifdef XYZ_SHADING
-
-			// visualize x,y,z of dir vector
 			color = Color(dir(0), dir(1), dir(2));
 
-#endif
+			#endif
 
-#ifdef SOLID_SHADING
-
-			//solid schading
+			#ifdef SOLID_SHADING
 
 			if (ommatidium.m_x == 0 || ommatidium.m_y == 0)
 				color = Color(0, 1, 0);
 			else
 				color = Color(1, 0, 0);
 
-#endif
+			#endif
 
-#ifdef RANDOM_SHADING
+			#ifdef RANDOM_SHADING
 
-			// random shading
 			color = randomColor(ommatidium.m_x*ommatidium.m_y);
-#endif
 
-#ifdef SINGLE_RAY_TEXTURE_SHADING
+			#endif
+
+			#ifdef SINGLE_RAY_TEXTURE_SHADING
 
 			// transform to world coordinates
 			Vec3f rayDir = m_camera->m_viewMatrix.linear() * dir;
@@ -313,10 +330,10 @@ namespace BeeView {
 
 			// shoot ray and store color in array
 			color = shootRay(rayDir);
-#endif
 
-#ifdef TEXTURE_SHADING
-			/* texture shading */
+			#endif
+
+			#ifdef TEXTURE_SHADING
 
 			std::vector<Color> colorSamples;
 
@@ -389,7 +406,7 @@ namespace BeeView {
 		}
 
 		// draw cross at eye center
-		drawCross(img, center(0), center(1));
+		drawCross(img, floor(center(0)), floor(center(1)));
 
 		return;
 	}

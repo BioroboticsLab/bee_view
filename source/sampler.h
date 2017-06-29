@@ -12,18 +12,47 @@ namespace BeeView
 	{
 
 	public:
+
+		enum class Mode
+		{
+			DISK,
+			SQUARE
+		};
+
 		std::vector<Vec2f> m_samplePoints; 
 		std::vector<float> m_weights;
 		Sampler(){}
 		
 		Sampler(int numSamples, float acceptanceAngle) 
 		{
-			m_samplePoints = concentricDiskSamples(numSamples,acceptanceAngle);
-			m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+			if (numSamples > 1)
+			{
+				m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
+				m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+			}
 		}
 
+		Sampler(int numSamples, float acceptanceAngle, Mode mode)
+		{
+			if (numSamples > 1)
+			{
+				if (mode == Mode::DISK)
+				{
+					m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
+				}
+				else if(mode == Mode::SQUARE)
+				{
+					m_samplePoints = squareSamples(numSamples);
+					for (Vec2f &p : m_samplePoints) // also make square in range -aa:aa
+						p = acceptanceAngle*p;
+				}
+				m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+			}
+		}
+
+
 		/* Bivariate Gaussian function, TODO: delete versions */
-		float gaussPDF(int version, int x, int y, float hw);
+		float gaussPDF(int version, float x, float y, float hw);
 
 		/* map square to disk (https://www.aanda.org/articles/aa/pdf/2010/12/aa15278-10.pdf) */
 		Vec2f sampleDisk(Vec2f p)

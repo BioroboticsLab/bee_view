@@ -220,6 +220,8 @@ namespace BeeView
 		std::cout << "Minimum y: " << m_min_y << std::endl;
 		std::cout << "Maximum y: " << m_max_y << std::endl;
 
+		std::cout << std::endl << "Number of ommatidia per Eye: " << std::to_string(m_ommatidia.size()) << std::endl;
+
 	}
 
 	/* creates the other eye and computes the complementary angles for each ommatidium */
