@@ -6,6 +6,22 @@
 
 namespace BeeView
 {
+	Vec2f Sampler::sampleDisk(Vec2f p)
+	{
+		if (p(0) == 0 && p(1) == 0)
+			return p;
+		if (abs(p(1)) <= abs(p(0)))
+			return Vec2f(
+			(2 * p(0)) / sqrt(M_PI) * cos((p(1)*M_PI) / (4 * p(0))),
+				(2 * p(0)) / sqrt(M_PI) * sin((p(1)*M_PI) / (4 * p(0)))
+			);
+		if (abs(p(0)) < abs(p(1)))
+			return Vec2f(
+			(2 * p(1)) / sqrt(M_PI) * sin((p(0)*M_PI) / (4 * p(1))),
+				(2 * p(1)) / sqrt(M_PI) * cos((p(0)*M_PI) / (4 * p(1)))
+			);
+	}
+
 	// just rely on compiler to move and not copy return value
 	std::vector<Vec2f> Sampler::concentricDiskSamples(int numSamples, float acceptanceAngle)
 	{
@@ -27,10 +43,6 @@ namespace BeeView
 
 		for (Vec2f &p : cSamples)
 			normalizePoint(p, -acceptanceAngle, acceptanceAngle, min_x(0), -min_x(0));
-
-#ifdef DEBUG
-		plot2txt(cSamples, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_circle2.txt");
-#endif
 
 		return cSamples;
 	}
@@ -56,36 +68,18 @@ namespace BeeView
 			y = i*spacing;
 		}
 
-#ifdef DEBUG
-		plot2txt(samples, "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\plot_grid2.txt");
-#endif // DEBUG
-
 		return samples;
 	}
 
-	float Sampler::gaussPDF(int version, float x, float y, float hw)
+	float Sampler::gaussPDF(float x, float y, float hw)
 	{
-		// halfwidth to varianz
-		float var = hw / (2.3548);
-
 		float dist = sqrt(x*x + y*y);
-
-		if (version == 1)
-			return 1 / (2 * M_PI) * std::exp(-0.5 * (x * x + y * y) / var / var);
-		if (version == 2)
-			return (1 / (var * sqrt(2 * M_PI))) * std::exp(-pow((0.5*dist / var), 2));
-		if (version == 3) // for halfwidth = 2
-			return 0.0109*std::exp(-0.6932*dist*dist);
-		if (version == 4) // gaussian kernel function
-		{
-			float ret_val = std::exp(-pow(0.5 * dist / var, 2));
-			return ret_val;
-		}
-			
-		return 0;
+		// have to change to 3.333, so that FWHM ist correct
+		float var = hw / 3.333;
+		return std::exp(-pow(0.5 * dist / var, 2));	
 	}
 
-	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle, int version)
+	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle)
 	{
 		std::vector<float> weights;
 		for (Vec2f &p : samples)
@@ -93,7 +87,7 @@ namespace BeeView
 
 			float x = p(0);
 			float y = p(1);
-			weights.push_back(gaussPDF(version, x, y, acceptanceAngle));
+			weights.push_back(gaussPDF(x, y, acceptanceAngle));
 		}
 
 		// normalize weights to sum 1

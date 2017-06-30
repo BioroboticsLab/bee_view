@@ -21,6 +21,7 @@ namespace BeeView
 		mesh->id = static_cast<unsigned int>(m_objects.size()-1);
 	}
 
+	/* commit all objects to embree */
 	void Scene::initEmbree()
 	{
 		m_device = rtcNewDevice(NULL);

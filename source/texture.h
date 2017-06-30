@@ -8,14 +8,17 @@
 
 namespace BeeView
 {
-
-	// image, material, texture class in one
-	class Texture
+	/* wrapper class for image, with extra functions, also used as material class */
+	class Texture : public Image
 	{
-	private:
-		Image img;
 
 	public:
+
+		/* Ambient and difuse values */
+		Vec3f Ka = Vec3f(1, 1, 1);
+		Vec3f Kd = Vec3f(1, 1, 1);
+		std::string name;
+
 		Texture();
 		Texture(std::string filename);
 
@@ -24,12 +27,6 @@ namespace BeeView
 
 		/* load image into img */
 		void loadImage(std::string fileName);
-
-		/* Ambient and difuse values are multiplied with each Color by renderer */
-		Vec3f Ka = Vec3f(1, 1, 1);
-		Vec3f Kd = Vec3f(1, 1, 1);
-		std::string name;
-
 
 	};
 

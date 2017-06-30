@@ -18,31 +18,74 @@
 //#define ELEVATION_AZIMUTH_SHADING
 //#define SINGLE_RAY_TEXTURE_SHADING
 //#define RANDOM_SHADING
+//#define MATERIAL_KD_SHADING
 
 #define DEBUG
 
 
 namespace BeeView {
 
-	Color Renderer::randomColor(const int ID)
+	std::unique_ptr<Image> Renderer::renderToImage()
 	{
-		int r = ((ID + 13) * 17 * 23) & 255;
-		int g = ((ID + 15) * 11 * 13) & 255;
-		int b = ((ID + 17) * 7 * 19) & 255;
-		const float oneOver255f = 1.f / 255.f;
-		return Color(r*oneOver255f, g*oneOver255f, b*oneOver255f);
+		if (m_camera->m_type == Camera::Type::PINHOLE)
+			return renderToImagePinhole();
+		else if (m_camera->m_type == Camera::Type::BEE_EYE)
+			return renderToImageBeeEye();
+		else
+		{
+			std::cerr << "Renderer: Camera Type not supported. " << std::endl;
+			return std::make_unique<Image>();
+		}
 	}
 
-	Color Renderer::azimuthElevationColor(const int a, const int e)
+	std::unique_ptr<Image> Renderer::renderToImagePinhole()
 	{
-		return Color((e + 90) / 180.f, 0, (a + 270) / 360.f);
+
+		// TODO: global verbose
+		std::cout << "Start rendering Image... ";
+		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
+
+		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getWidth(), camera->getHeight());
+
+		for (int y = 0; y < camera->getHeight(); y++) {
+			for (int x = 0; x < camera->getWidth(); x++) {
+				Color c = renderPixel((float)x, (float)y);
+				img->set(x, y, c);
+			}
+		}
+
+		// TODO: global verbose
+		std::cout << "Done" << std::endl;
+		return img;
+	}
+
+	Color Renderer::renderPixel(float x, float y)
+	{
+		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
+
+
+		float p_x = (2 * (x + 0.5) / (float)camera->getWidth() - 1) * camera->getImageAspectRatio() * camera->getScale();
+		float p_y = (1 - 2 * (y + 0.5) / (float)camera->getHeight()) * camera->getScale();
+
+		//float p_x = (2 * (x + 0.5) / (float)camera.m_width - 1) * scale;
+		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
+
+		// apply transformation to point
+		// Vec3f ray_p_world = m_camera->m_viewMatrix * Vec3f(p_x, p_y, -1);
+		// Vec3f ray_origin_world = m_camera->m_viewMatrix * Vec3f::Zero();
+		// Vec3f ray_dir = ray_p_world - ray_origin_world;
+		// equivelant to:
+
+		Vec3f ray_dir = m_camera->m_viewMatrix.linear() * Vec3f(p_x, p_y, 1);
+		ray_dir.normalize();
+
+		return shootRay(ray_dir);
 	}
 
 	Color Renderer::shootRay(const Vec3f &dir)
 	{
 
 		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
-
 
 		/* initialize ray */
 		RTCRay ray;
@@ -63,15 +106,21 @@ namespace BeeView {
 
 		/* intersect ray with scene */
 		rtcIntersect(m_scene->m_rtcscene, ray);
-#if 1
 		/* shade pixels */
-		if (ray.geomID == RTC_INVALID_GEOMETRY_ID) {
-			//std::cout << "Ray missed!" << std::endl;
-			return Color(0.5f, 0.5f, 0.5f);
-		}
 
-		// Material Kd shading
-		 //return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
+		// no Objects hit -> Backgroundcolor
+		if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
+			return Color(0.5f, 0.5f, 0.5f);
+
+
+#ifdef MATERIAL_KD_SHADING
+		return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
+#endif	
+
+#ifdef UV_SHADING
+		return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);
+#endif	
+
 		/* texture shading */
 		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
 		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
@@ -87,140 +136,8 @@ namespace BeeView {
 			return mesh->texture->getTexel(st(0), 1.0f - st(1));
 		}
 
-
-		// uv shading
-		// return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);
-
-#endif
-
-		// visualise ray dir as color
-		Vec3f ray_color = (dir + Vec3f(1, 1, 1)) * 0.5;
-
-		return Color(ray_color(0), ray_color(1), ray_color(2));
-	}
-
-	Color Renderer::renderPixel(float x, float y, const RenderPixelParams &params)
-	{
-
-#if 0
-		/* https://stackoverflow.com/questions/14094042/calculating-camera-ray-direction-to-3d-world-pixel */
-		/* compute ray directions */
-
-		Vec3f upVector = Vec3f(0, 0, 1); // no rolling
-		Vec3f leftVector = upVector.cross(camera.m_dir); //vec_x
-		Vec3f vec_y = camera.m_dir.cross(leftVector);
-
-		float aspect = static_cast<float>(camera.m_height) / camera.m_width;
-
-		float y_fov = aspect * camera.m_fov * 0.5; //phi
-
-
-		Vec3f u = tan(deg2rad(camera.m_fov * 0.5)) * leftVector; // caution: tan 90 not defined
-		Vec3f v = tan(deg2rad(y_fov)) * vec_y;
-
-		float rel_x = static_cast<float>(2 * (x + 0.5)) / camera.m_width - 1;
-		float rel_y = 1 - static_cast<float>(2 * (y + 0.5)) / camera.m_height;
-
-
-		Vec3f p = rel_x * u + rel_y * v;
-		Vec3f ray_dir = p; // (p - camera.m_position).normalized(); ray dir doesnt care about camera position?
-#else // 1
-
-		float p_x = (2 * (x + 0.5) / params.width - 1) * params.imageAspectRatio * params.scale;
-		float p_y = (1 - 2 * (y + 0.5) / params.height) * params.scale;
-
-		//float p_x = (2 * (x + 0.5) / (float)camera.m_width - 1) * scale;
-		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
-
-		// apply transformation to point
-		// Vec3f ray_p_world = m_camera->m_viewMatrix * Vec3f(p_x, p_y, -1);
-		// Vec3f ray_origin_world = m_camera->m_viewMatrix * Vec3f::Zero();
-		// Vec3f ray_dir = ray_p_world - ray_origin_world;
-		// equivelant to:
-
-		Vec3f ray_dir = m_camera->m_viewMatrix.linear() * Vec3f(p_x, p_y, 1);
-		ray_dir.normalize();
-
-#endif
-
-		return shootRay(ray_dir);
-	}
-
-	std::unique_ptr<Image> Renderer::renderToImagePinhole()
-	{
-
-		// TODO: global verbose
-		std::cout << "Start rendering Image... ";
-		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
-
-		std::unique_ptr<Image> img = std::make_unique<Image>(camera->m_width, camera->m_height);
-
-		// setup constant params for renderPixel()
-		RenderPixelParams params;
-		params.width = (float)camera->m_width;
-		params.height = (float)camera->m_height;
-		params.imageAspectRatio = camera->m_width / (float)camera->m_height;
-		params.scale = tan(deg2rad(camera->m_fov * 0.5));
-
-		for (int y = 0; y < camera->m_height; y++) {
-			for (int x = 0; x < camera->m_width; x++) {
-				Color c = renderPixel((float)x, (float)y, params);
-				img->set(x, y, c);
-			}
-		}
-
-		std::cout << "Done" << std::endl;
-		return img;
-	}
-
-	std::unique_ptr<Image> Renderer::renderToImage()
-	{
-		if (m_camera->m_type == Camera::Type::PINHOLE)
-			return renderToImagePinhole();
-		else if (m_camera->m_type == Camera::Type::BEE_EYE)
-			return renderToImageBeeEye();
-		else
-			std::cerr << "Renderer: Camera Type not supported. " << std::endl;
-	}
-
-	/*
-	Convert beeeye coordinate to image coordinates
-
-	Bee eye:
-		  (+y)
-			|
-	(-x)----+-----(+x)
-			|
-		  (-y)
-
-	Image:
-	+----------(+x)
-	|
-	|
-	(+y)
-
-	*/
-	void Renderer::convert2ImageCoords(const Ommatidium &ommatidium, const ConvertCoordsParams &params, int &out_x, int &out_y)
-	{
-		/*
-		convert to:
-		(+y)
-		|
-		|
-		+-------(+x)
-		*/
-		out_x = ommatidium.m_x + abs(params.x_min);
-		out_y = ommatidium.m_y + abs(params.y_min);
-
-		/*
-		convert to:
-		+-------(+x)
-		|
-		|
-		(+y)
-		*/
-		out_y = abs(out_y - (params.y_max + abs(params.y_min)));
-		assert(out_x >= 0 && out_y >= 0);
+		// if somehow falls through
+		return Color(0.5f, 0.5f, 0.5f);
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
@@ -247,15 +164,12 @@ namespace BeeView {
 		std::ofstream benchmarkLog;
 
 		benchmarkLog.open("log.txt", std::ios_base::app);
-		benchmarkLog << std::endl << "samples: " << std::to_string(camera->m_sqrtNumSamplePoints*camera->m_sqrtNumSamplePoints + 2 * camera->m_sqrtNumSamplePoints + 1) << ", acceptance angle: " << std::to_string(camera->m_acceptanceAngle) << std::endl;
+		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-		// setup sampler
-		Sampler sampler = Sampler(camera->m_sqrtNumSamplePoints, camera->m_acceptanceAngle, Sampler::Mode::DISK);
-
 		// draw bee eye on image
-		drawBeeEye(img, camera->m_leftEye, sampler);
-		drawBeeEye(img, camera->m_rightEye, sampler);
+		renderBeeEye(img, Side::LEFT);
+		renderBeeEye(img, Side::RIGHT);
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
@@ -265,12 +179,21 @@ namespace BeeView {
 		return img;
 	}
 
-	void Renderer::drawBeeEye(std::unique_ptr<Image> &img, BeeEye::Ptr &beeEye, Sampler &sampler)
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side)
 	{
 		int x;
 		int y;
 
 		Vec2f center;
+
+		// need beeeyecamera methods
+		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
+
+		BeeEye::Ptr beeEye;
+		if (side == Side::LEFT)
+			beeEye = camera->m_leftEye;
+		else
+			beeEye = camera->m_rightEye;
 
 		ConvertCoordsParams params;
 		params.x_min = beeEye->m_min_x; //TODO refactor inconsistent order, should be beeEye.m_x_min
@@ -322,7 +245,7 @@ namespace BeeView {
 
 			#endif
 
-			#ifdef SINGLE_RAY_TEXTURE_SHADING
+			#if defined(SINGLE_RAY_TEXTURE_SHADING) || defined(MATERIAL_KD_SHADING) || defined(UV_SHADING)
 
 			// transform to world coordinates
 			Vec3f rayDir = m_camera->m_viewMatrix.linear() * dir;
@@ -338,7 +261,7 @@ namespace BeeView {
 			std::vector<Color> colorSamples;
 
 			// for all samplepoints: shoot ray, get color
-			for (Vec2f &dev : sampler.m_samplePoints)
+			for (Vec2f &dev : camera->m_sampler.m_samplePoints)
 			{
 				// make copy of dir
 				Vec3f sampleDir = dir;
@@ -362,15 +285,12 @@ namespace BeeView {
 			// weight each color in colorSamples and add up
 			for (int i = 0; i < colorSamples.size(); i++)
 			{
-				float &w = sampler.m_weights[i];
+				float &w = camera->m_sampler.m_weights[i];
 				color.m_r += w * colorSamples[i].m_r;
 				color.m_g += w * colorSamples[i].m_g;
 				color.m_b += w * colorSamples[i].m_b;
 			}
-#endif
-
-			// need beeeyecamera methods
-			std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
+			#endif
 
 			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
 			convert2ImageCoords(ommatidium, params, x, y);
@@ -410,4 +330,60 @@ namespace BeeView {
 
 		return;
 	}
+
+	/*
+	Convert beeeye coordinate to image coordinates
+
+	Bee eye:
+	(+y)
+	|
+	(-x)----+-----(+x)
+	|
+	(-y)
+
+	Image:
+	+----------(+x)
+	|
+	|
+	(+y)
+
+	*/
+	void Renderer::convert2ImageCoords(const Ommatidium &ommatidium, const ConvertCoordsParams &params, int &out_x, int &out_y)
+	{
+		/*
+		convert to:
+		(+y)
+		|
+		|
+		+-------(+x)
+		*/
+		out_x = ommatidium.m_x + abs(params.x_min);
+		out_y = ommatidium.m_y + abs(params.y_min);
+
+		/*
+		convert to:
+		+-------(+x)
+		|
+		|
+		(+y)
+		*/
+		out_y = abs(out_y - (params.y_max + abs(params.y_min)));
+		assert(out_x >= 0 && out_y >= 0);
+	}
+
+	Color Renderer::randomColor(const int ID)
+	{
+		int r = ((ID + 13) * 17 * 23) & 255;
+		int g = ((ID + 15) * 11 * 13) & 255;
+		int b = ((ID + 17) * 7 * 19) & 255;
+		const float oneOver255f = 1.f / 255.f;
+		return Color(r*oneOver255f, g*oneOver255f, b*oneOver255f);
+	}
+
+	Color Renderer::azimuthElevationColor(const int a, const int e)
+	{
+		return Color((e + 90) / 180.f, 0, (a + 270) / 360.f);
+	}
+
+
 }

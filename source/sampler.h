@@ -12,67 +12,56 @@ namespace BeeView
 	{
 
 	public:
-
 		enum class Mode
 		{
 			DISK,
 			SQUARE
 		};
 
+	private:
+		Mode m_mode;
+		int m_numSamplePoints;
+		float m_acceptanceAngle;
+
+	public:
+
 		std::vector<Vec2f> m_samplePoints; 
 		std::vector<float> m_weights;
+
 		Sampler(){}
 		
 		Sampler(int numSamples, float acceptanceAngle) 
 		{
-			if (numSamples > 1)
+			if (numSamples > 0)
 			{
 				m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
 				m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+				m_mode = Mode::DISK;
+				m_numSamplePoints = numSamples;
+				m_acceptanceAngle = acceptanceAngle;
 			}
 		}
 
 		Sampler(int numSamples, float acceptanceAngle, Mode mode)
 		{
-			if (numSamples > 1)
+			if (numSamples > 0)
 			{
-				if (mode == Mode::DISK)
-				{
-					m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
-				}
-				else if(mode == Mode::SQUARE)
-				{
-					m_samplePoints = squareSamples(numSamples);
-					for (Vec2f &p : m_samplePoints) // also make square in range -aa:aa
-						p = acceptanceAngle*p;
-				}
-				m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+				m_mode = mode;
+				m_numSamplePoints = numSamples;
+				m_acceptanceAngle = acceptanceAngle;
+				recalcSamplesAndWeights();
 			}
 		}
 
 
 		/* Bivariate Gaussian function, TODO: delete versions */
-		float gaussPDF(int version, float x, float y, float hw);
+		float gaussPDF(float x, float y, float hw);
 
 		/* map square to disk (https://www.aanda.org/articles/aa/pdf/2010/12/aa15278-10.pdf) */
-		Vec2f sampleDisk(Vec2f p)
-		{
-			if (p(0) == 0 && p(1) == 0)
-				return p;
-			if (abs(p(1)) <= abs(p(0)))
-				return Vec2f(
-				(2 * p(0)) / sqrt(M_PI) * cos((p(1)*M_PI) / (4 * p(0))),
-					(2 * p(0)) / sqrt(M_PI) * sin((p(1)*M_PI) / (4 * p(0)))
-				);
-			if (abs(p(0)) < abs(p(1)))
-				return Vec2f(
-				(2 * p(1)) / sqrt(M_PI) * sin((p(0)*M_PI) / (4 * p(1))),
-					(2 * p(1)) / sqrt(M_PI) * cos((p(0)*M_PI) / (4 * p(1)))
-				);
-		}
-
-		/* creates numSamples*numSamples + 2*numSamples + 1 uniformly distributed points on a disk,
-		 * that is because i want samples on x = 0 and y = 0 and x = -1 and y = -1.
+		Vec2f sampleDisk(Vec2f p);
+		
+		/* creates numSamples*numSamples + numSamples uniformly distributed points on a disk,
+		 * that is because I want samples on x = 0 and y = 0 and x = -1 and y = -1.
 		 * with x,y equal to deviation from centerpoint (0,0), with maximum extent acceptanceAngle */
 		std::vector<Vec2f> concentricDiskSamples(int numSamples, float acceptanceAngle);
 
@@ -81,7 +70,50 @@ namespace BeeView
 		std::vector<Vec2f> squareSamples(int numSamples);
 
 		/* compute gaussian weights based on x,y coordinates of sample, TODO normalize so sum(weights) = 1 */
-		std::vector<float> computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle, int version = 2);
+		std::vector<float> computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle);
+
+		// getters and setters for encapsulated members
+		void setMode(Mode mode)
+		{
+			m_mode = mode;
+			recalcSamplesAndWeights();
+		}
+
+		Mode getMode() { return m_mode; }
+
+		void setAcceptanceAngle(float acceptanceAngle)
+		{
+			m_acceptanceAngle = acceptanceAngle;
+			recalcSamplesAndWeights();
+			return;
+		}
+
+		float getAcceptanceAngle() { return m_acceptanceAngle; }
+
+		void setSqrtNumSamplePoints(int sqrtNumSamplePoints)
+		{
+			m_numSamplePoints = sqrtNumSamplePoints;
+			recalcSamplesAndWeights();
+			return;
+		}
+
+		int getNumSamplePoints() { return m_numSamplePoints; }
+
+		private:
+			void recalcSamplesAndWeights()
+			{
+				if (m_mode == Mode::DISK)
+				{
+					m_samplePoints = concentricDiskSamples(m_numSamplePoints, m_acceptanceAngle);
+				}
+				else if (m_mode == Mode::SQUARE)
+				{
+					m_samplePoints = squareSamples(m_numSamplePoints);
+					for (Vec2f &p : m_samplePoints) // also make square in range -aa:aa
+						p = m_acceptanceAngle*p;
+				}
+				m_weights = computeWeightVector(m_samplePoints, m_acceptanceAngle);
+			}
 
 	};
 

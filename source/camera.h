@@ -6,9 +6,11 @@
 
 #include "bee_eye.h"
 #include "utility.h"
+#include "sampler.h"
 
 namespace BeeView {
 
+	/* Camera class, holds the render parameters */
 	class Camera
 	{
 	private:
@@ -45,11 +47,11 @@ namespace BeeView {
 		/* moves the camera and sets the direcation vector to oldPosition-newPosition */
 		void moveAndSetDirection(Vec3f newPosition);
 		
-		/* not implemented, rotate camera arround x-axis of camera (right axis) */
+		/* rotate camera arround x-axis of camera (right axis) */
 		void rotateX(float angle);
-		/* not implemented, rotate camera arround y-axis of camera (up axis) */
+		/* rotate camera arround y-axis of camera (up axis) */
 		void rotateY(float angle);
-		/* not implemented, rotate camera arround z-axis of camera (forward axis) */
+		/* rotate camera arround z-axis of camera (forward axis) */
 		void rotateZ(float angle);
 
 		/* transform input vector by rotating arround x-axis of camera (right axis) */
@@ -72,6 +74,13 @@ namespace BeeView {
 
 	class BeeEyeCamera : public Camera
 	{
+	private:
+		// sample points per ommatidium. actuall number of points: m_sqrtNumSamplePoints*m_sqrtNumSamplePoints + m_sqrtNumSamplePoints
+		// this is for evenly distributing the sampling points over a square or a disk.
+		int m_sqrtNumSamplePoints;
+
+		// acceptance angle for all ommatidia
+		float m_acceptanceAngle;
 
 	public:
 
@@ -80,42 +89,84 @@ namespace BeeView {
 
 		int m_ommatidium_size;
 
-		// the squareroot of the number of sample points per ommatidium
-		int m_sqrtNumSamplePoints; // good numbers for evenly distributed concentric disk are 11, 21
-
-		// acceptance angle for all ommatidia (TOD: better in ommatidium or beeEye class?)
-		float m_acceptanceAngle;
+		// the sampler to draw directions from
+		Sampler m_sampler;
 
 		// precomputed viewing direction offset array (x,y offsets in degrees)
 		// precompute gauss weight array
 
-		BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4), m_acceptanceAngle(2.6), m_sqrtNumSamplePoints(11)
+		BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4)
 		{
 			m_type = Type::BEE_EYE;
 			m_leftEye = beeEye;
 			m_rightEye = std::make_shared<BeeEye>(beeEye->createOtherEye());
 
+			m_sampler = Sampler(11, 2.6);
+
 			if (m_leftEye->m_side == Side::RIGHT)
 				m_leftEye.swap(m_rightEye);
 		}
+		
 
 	};
 
 	class PinholeCamera : public Camera
 	{
-	public:
+	private:
 		float m_fov;
-		int m_width;
-		int m_height;
+		int m_width = 1;
+		int m_height = 1;
 
-		PinholeCamera(int width, int height) : m_fov(50), m_width(width), m_height(height)
+		// precompute these parameters for efficiency
+		float m_imageAspectRatio = 1;
+		float m_scale;
+	public:
+
+		PinholeCamera(int width, int height)
 		{
 			m_type = Type::PINHOLE;
+			setWidth(width);
+			setHeight(height);
+			setFOV(50.f);
 		}
 		PinholeCamera(int width, int height, float fov) : m_fov(fov), m_width(width), m_height(height) 
 		{
 			m_type = Type::PINHOLE;
+			setWidth(width);
+			setHeight(height);
+			setFOV(fov);
 		}
+
+		int getWidth() { return m_width;  }
+		void setWidth(int width)
+		{
+			if (width == 0)
+			{
+				std::cerr << "camera width can't be 0!" << std::endl;
+				return;
+			}
+			m_width = width;
+			m_imageAspectRatio = m_width / (float)m_height;
+		}
+		int getHeight() { return m_height;  }
+		void setHeight(int height)
+		{
+			if (height == 0)
+			{
+				std::cerr << "camera height can't be 0!" << std::endl;
+				return;
+			}
+			m_height = height;
+			m_imageAspectRatio = m_width / (float)m_height;
+		}
+		float getFOV() { return m_fov; }
+		void setFOV(float fov)
+		{
+			m_fov = fov;
+			m_scale = tan(deg2rad(m_fov * 0.5));
+		}
+		float getScale() { return m_scale; } // only getter
+		float getImageAspectRatio() { return m_imageAspectRatio; } // only getter
 
 	};
 }

@@ -1,5 +1,5 @@
 
-// Modified by Johannes Polster. TODO license
+// Modified by Johannes Polster. TODO: license
 // ======================================================================== //
 // Copyright 2009-2017 Intel Corporation                                    //
 //                                                                          //
@@ -20,7 +20,7 @@
 #include "../build/BeeView/BeeView/stdafx.h"
 
 #include <algorithm> 
-#include <memory> // for std::unique_ptr
+#include <memory>
 #include <iostream>
 #include <cstring>
 #include <cstdio>
@@ -28,7 +28,6 @@
 #include <string>
 
 #include "image.h"
-//#include "vec.h"
 #include "utility.h"
 
 namespace BeeView {
@@ -55,22 +54,6 @@ namespace BeeView {
 
 	Image::Image(std::string file) 
 	{
-		// TODO load image
-		/*
-		int channels_in_file;
-		float *dataf;
-		std::cout << "Beginn loading image: " << file << std::endl;
-		dataf = stbi_loadf(file.c_str(), &m_width, &m_height, &channels_in_file, 3);
-		std::cout << "Finished loading" << std::endl << "image width: " << m_width << "image height: " << m_height << std::endl;
-
-		
-		for (int i = 0; i < m_width*m_height * 3; i += 3) {
-			m_data.push_back(Color(dataf[i], dataf[i + 1], dataf[i + 2]));
-		}
-
-		std::cout << m_data.size() / m_width << " " << m_data.size() / m_height;
-		*/
-
 		loadFromPPM(file);
 	}
 

@@ -24,19 +24,16 @@ namespace BeeView
 		/* elevation angle, range (right eye): -90 - 90 */
 		float m_elevation;
 
-		float m_acceptance_angle;
-
 		int m_zone; // for sorting. sort zone, elevation, azimuth
 
 		// bee eye coordinate system. center is (0,0), also is direction of eye
 		int m_x;
 		int m_y;
 
-		Ommatidium() : m_azimuth(0), m_elevation(0), m_acceptance_angle(2.6f) {}
-		Ommatidium(float azimuth, float elevation) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(2.6f) {}
-		Ommatidium(float azimuth, float elevation, float acceptance_angle) : m_azimuth(azimuth), m_elevation(elevation), m_acceptance_angle(acceptance_angle) {}
+		Ommatidium() : m_azimuth(0), m_elevation(0) {}
+		Ommatidium(float azimuth, float elevation) : m_azimuth(azimuth), m_elevation(elevation) {}
 
-		/* return the direction vector for ray tracing, calculated from elevation and azimuth */
+		/* return the Vec3f direction vector, calculated from elevation and azimuth */
 		Vec3f getDirVector() const
 		{
 			// make elvation in range 0 - 180
@@ -80,7 +77,7 @@ namespace BeeView
 		Side m_side;
 
 		// max expanse of bee eye coordinate system, gets set when csv is loaded
-		int m_max_x = 0; //TODO: 
+		int m_max_x = 0; 
 		int m_min_x = -0;
 		int m_max_y = 0;
 		int m_min_y = -0;

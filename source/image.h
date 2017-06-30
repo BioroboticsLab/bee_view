@@ -5,7 +5,7 @@
 
 namespace BeeView {
 
-	/* RGB Color class, values between 0 and 1 */
+	/* RGB Color class, values expected to be between 0 and 1 */
 	class Color
 	{
 	public:

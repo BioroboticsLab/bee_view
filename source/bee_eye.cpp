@@ -74,6 +74,7 @@ namespace BeeView
 		int size_after = m_ommatidia.size();
 		int nr_duplicates = size_before - size_after;
 
+		// TODO: if verbose
 		std::cout << "Removed " << nr_duplicates << " duplicates form Ommatidial array." << std::endl;
 	
 		float cur_elevation = m_ommatidia[0].m_elevation;
@@ -205,15 +206,12 @@ namespace BeeView
 		auto minmax_y = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
 			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_y < rhs.m_y; });
 
-		/*auto min_it = std::min_element(m_ommatidia.begin(),  m_ommatidia.end(), 
-		[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_x < rhs.m_x; });*/
-
 		m_min_x = minmax_x.first->m_x;
 		m_max_x = minmax_x.second->m_x;
 		m_min_y = minmax_y.first->m_y;
 		m_max_y = minmax_y.second->m_y;
 
-
+		// TODO: if Verbose 
 		std::cout << "Minimum x: " << m_min_x << std::endl;
 		std::cout << "Maximum x: " << m_max_x << std::endl;
 
@@ -222,6 +220,7 @@ namespace BeeView
 
 		std::cout << std::endl << "Number of ommatidia per Eye: " << std::to_string(m_ommatidia.size()) << std::endl;
 
+		return;
 	}
 
 	/* creates the other eye and computes the complementary angles for each ommatidium */
@@ -231,8 +230,7 @@ namespace BeeView
 		otherEye.m_side = Side(!static_cast<int>(m_side)); // flip sides
 		for each (const auto &my_o in m_ommatidia)
 		{
-			Ommatidium other_o = Ommatidium(-my_o.m_azimuth, my_o.m_elevation, my_o.m_acceptance_angle);
-			//TODO:  recalc acceptance angle (or Ommatidium.getDynAcceptanceAngle(), because aa is function of elevation?)
+			Ommatidium other_o = Ommatidium(-my_o.m_azimuth, my_o.m_elevation);
 
 			other_o.m_x = -my_o.m_x;
 			other_o.m_y = my_o.m_y;

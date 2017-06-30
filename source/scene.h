@@ -4,7 +4,6 @@
 #include <memory>
 #include <embree2\rtcore.h>
 
-//#include "vec.h"
 #include "utility.h"
 #include "texture.h"
 
@@ -19,27 +18,27 @@ namespace BeeView {
 		Triangle(int x, int y, int z) : v0(x), v1(y), v2(z) { }
 	};
 
+	/* Triangle Mesh */
 	class Mesh 
 	{
 	public:
-		unsigned int id; // embree object id?
+		unsigned int id; // embree object id
 		std::vector<Vec3f> positions; // vertex coordinates, length = numVertices
 		std::vector<Vec2f> texcoords; // vertex texture coordinates, length = numVertices
 
 		std::vector<Vec3f> normals; // don't need them for beeview, but maybe for other cool, fancy stuff
-
 		std::vector<Triangle> triangles;
-
 		std::shared_ptr<Texture> texture;
 
 		Mesh();
 
-		size_t numVertices() const 
+		int numVertices() const 
 		{
 			return positions.size();
 		}
 	};
 
+	/* Scene class, holds the triangleMeshes and embree scene */
 	class Scene
 	{
 	public:
@@ -52,7 +51,7 @@ namespace BeeView {
 		/* add Mesh to the Scene. */
 		void addObject(std::shared_ptr<Mesh> mesh);
 
-		/* inits rtcScene and fills the Buffers */
+		/* fills embrees Buffers */
 		void initEmbree();
 
 		/* cleans up the Embree stuff */

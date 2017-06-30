@@ -40,17 +40,9 @@ namespace BeeView {
 		/* renders the bee eyes according to parameters in beeEyeCamera */
 		std::unique_ptr<Image> renderToImageBeeEye();
 
-		/* Params for Renderer::renderPixel() */
-		struct RenderPixelParams
-		{
-			float imageAspectRatio;
-			float width;
-			float height;
-			float scale;
-		};
-
+	
 		/* PINHOLE: renders single pixel */
-		Color renderPixel(float x, float y, const RenderPixelParams &params);
+		Color renderPixel(float x, float y);
 
 		/* Shoot a ray from camera position in direction dir, return texture color at hitpoint */
 		Color shootRay(const Vec3f &dir);
@@ -62,7 +54,7 @@ namespace BeeView {
 		Color azimuthElevationColor(const int a, const int e);
 
 		/* renders the given beeeye onto the given image */
-		void drawBeeEye(std::unique_ptr<Image> &img, BeeEye::Ptr &beeEye, Sampler &sampler);
+		void renderBeeEye(std::unique_ptr<Image> &img, Side side);
 
 		struct ConvertCoordsParams
 		{

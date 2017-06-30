@@ -72,9 +72,7 @@ namespace BeeView {
 			camera->setDir(dir);
 			//camera->rotateX(20);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_cam42_r_downx.ppm");
-
-		
+			img->saveToPPM("test_cam42_r_downx.ppm");		
 
 			// rotate back up
 			camera->rotateVecX(dir, -20);
@@ -165,8 +163,8 @@ namespace BeeView {
 			// setup the camera
 			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
 
-			camera->m_acceptanceAngle = 0;
-			camera->m_sqrtNumSamplePoints = 1;
+			camera->m_sampler.setAcceptanceAngle(0);
+			camera->m_sampler.setSqrtNumSamplePoints(1);
 		
 			camera->moveTo(Vec3f(0, -70, 0));
 
@@ -177,37 +175,37 @@ namespace BeeView {
 
 			// render the image
 			//std::unique_ptr<Image> img = renderer.renderToImage();
-			//img->saveToPPM("test_beeEye_single_ray.ppm");
+			//img->saveToPPM("test_beeEye_square_single_ray.ppm");
 
 #if 1
-			camera->m_acceptanceAngle = 2.6;
+			camera->m_sampler.setAcceptanceAngle(2.6);
+			camera->m_sampler.setMode(Sampler::Mode::SQUARE);
 
 			// render the image
-			camera->m_sqrtNumSamplePoints = 7;
+			camera->m_sampler.setSqrtNumSamplePoints(7);
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s7_a26.ppm");
+			img->saveToPPM("test_beeEye_square_s7_a26.ppm");
 
 			// render the image
-			camera->m_sqrtNumSamplePoints = 11;
+			camera->m_sampler.setSqrtNumSamplePoints(11);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a26.ppm");
+			img->saveToPPM("test_beeEye_square_s11_a26.ppm");
 
 			// render the image
-			camera->m_sqrtNumSamplePoints = 21;
+			camera->m_sampler.setSqrtNumSamplePoints(21);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s21_a26.ppm");
-
-
-			// render the image
-			camera->m_sqrtNumSamplePoints = 11;
-			camera->m_acceptanceAngle = 5.2;
-			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a52.ppm");
+			img->saveToPPM("test_beeEye_square_s21_a26.ppm");
 
 			// render the image
-			camera->m_acceptanceAngle = 1.3;
+			camera->m_sampler.setSqrtNumSamplePoints(11);
+			camera->m_sampler.setAcceptanceAngle(5.2);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a13.ppm");
+			img->saveToPPM("test_beeEye_square_s11_a52.ppm");
+
+			// render the image
+			camera->m_sampler.setAcceptanceAngle(1.3);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_square_s11_a13.ppm");
 #endif
 			// cleanup embree
 			scene->cleanupEmbree();
@@ -364,34 +362,65 @@ namespace BeeView {
 		{
 			// create the data for the plots
 
-#define SQUARE
-
-			// num samples 21*21 + ...
 			Sampler sampler = Sampler();
-			std::vector<Vec2f> points = sampler.concentricDiskSamples(7, 2.6);
-#ifdef SQUARE
-			points = sampler.squareSamples(7);
+			float acceptanceAngle = 2.6;
+			int sqrtSamples = 0;
+			std::vector<Vec2f> points;
+			std::vector<float> weights;
+			std::string fileName;
 
-			for (Vec2f &p : points) // also make square in range -2.6:2.6
-				p = 2.6*p;
-#endif
-			std::vector<float> weights = sampler.computeWeightVector(points, 2.6,4);
-
-			float sum_weights = std::accumulate(weights.begin(), weights.end(), 0.0f);
-
-			std::cout << "sum weights: " << sum_weights << std::endl; // should be 1
-
-			int numSamples = points.size();
-			std::cout << "num samples: " << numSamples << std::endl;
-
-			std::string fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(numSamples) + "_weights.txt";
-
-#ifdef SQUARE
-			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_square_" + std::to_string(numSamples) + "_weights.txt";
-#endif
+			// 462 samples for square
+			sqrtSamples = 21;
+			points = sampler.squareSamples(sqrtSamples);
+			// also make square in range -2.6:2.6
+			for (Vec2f &p : points) 
+				p = acceptanceAngle*p;
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_square_" + std::to_string(points.size()) + "_weights.txt";
 			plot2txt(points, weights, fileName);
 
+			// 132 samples for square
+			sqrtSamples = 11;
+			points = sampler.squareSamples(sqrtSamples);
+			// also make square in range -2.6:2.6
+			for (Vec2f &p : points)
+				p = acceptanceAngle*p;
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_square_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
 
+			// 56 samples for square
+			sqrtSamples = 7;
+			points = sampler.squareSamples(sqrtSamples);
+			// also make square in range -2.6:2.6
+			for (Vec2f &p : points)
+				p = acceptanceAngle*p;
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_square_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+			// 462 samples for disk
+			sqrtSamples = 21;
+			points = sampler.concentricDiskSamples(sqrtSamples,acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+			// 132 samples for disk
+			sqrtSamples = 11;
+			points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+			// 56 samples for disk
+			sqrtSamples = 7;
+			points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+			return;
 		}
 
 		/* maps to rainbow color, max =  maximum value, input = input value
@@ -435,7 +464,7 @@ namespace BeeView {
 
 
 			std::cout << " test1 ";
-			std::vector<float> weights = sampler.computeWeightVector(samples,180,4);
+			std::vector<float> weights = sampler.computeWeightVector(samples,180);
 			std::cout << " test2 ";
 
 			normalize(weights, 0, 1);
