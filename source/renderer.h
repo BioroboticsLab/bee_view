@@ -40,6 +40,7 @@ namespace BeeView {
 		/* renders the bee eyes according to parameters in beeEyeCamera */
 		std::unique_ptr<Image> renderToImageBeeEye();
 
+		std::unique_ptr<Image> Renderer::renderToImagePanoramic();
 	
 		/* PINHOLE: renders single pixel */
 		Color renderPixel(float x, float y);

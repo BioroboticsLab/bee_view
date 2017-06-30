@@ -9,6 +9,30 @@
 namespace BeeView {
 	namespace Test {
 
+		void testPanoramicCamera()
+		{
+			// load the scene from .obj file
+			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
+			std::shared_ptr<Scene> scene = loadOBJ(file);
+
+			// setup the camera
+			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>(1500,270,170);			
+
+			camera->moveTo(Vec3f(0, -70, 0));
+
+			Vec3f dir = Vec3f(0, 0, 1).normalized();
+			camera->setDir(dir);
+
+			Renderer renderer = Renderer(scene, camera);
+
+			// render the image
+			std::unique_ptr<Image> img = renderer.renderToImage();
+			img->saveToPPM("test_panoramic.ppm");
+
+			scene->cleanupEmbree();
+
+		}
+
 		// for shading where the scene doesnt have to be loaded
 		void testCameraNoScene()
 		{

@@ -22,7 +22,8 @@ namespace BeeView {
 		enum class Type
 		{
 			BEE_EYE,
-			PINHOLE
+			PINHOLE,
+			PANORAMIC
 		};
 
 		Type m_type;
@@ -169,4 +170,30 @@ namespace BeeView {
 		float getImageAspectRatio() { return m_imageAspectRatio; } // only getter
 
 	};
+
+	class PanoramicCamera : public Camera
+	{
+	public:
+		float m_xFov = 360;
+		float m_yFov = 90;
+
+		// width in pixels
+		int m_width;
+
+		PanoramicCamera(int width) : m_width(width) 
+		{
+			m_type = Type::PANORAMIC;
+		}
+
+		PanoramicCamera(int width, float xFov) : m_width(width), m_xFov(xFov)
+		{
+			m_type = Type::PANORAMIC;
+		}
+
+		PanoramicCamera(int width, float xFov, float yFov) : m_width(width), m_xFov(xFov), m_yFov(yFov)
+		{
+			m_type = Type::PANORAMIC;
+		}
+	};
+
 }

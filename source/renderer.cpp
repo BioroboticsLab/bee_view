@@ -31,11 +31,51 @@ namespace BeeView {
 			return renderToImagePinhole();
 		else if (m_camera->m_type == Camera::Type::BEE_EYE)
 			return renderToImageBeeEye();
+		else if (m_camera->m_type == Camera::Type::PANORAMIC)
+			return renderToImagePanoramic();
 		else
 		{
 			std::cerr << "Renderer: Camera Type not supported. " << std::endl;
 			return std::make_unique<Image>();
 		}
+	}
+
+	std::unique_ptr<Image> Renderer::renderToImagePanoramic()
+	{
+		// horizontal spacing: xFov / width
+		// vertical spacing: width/height = xFov/yFov -> height = width * yFov / xFov
+
+		std::shared_ptr<PanoramicCamera> camera = std::static_pointer_cast<PanoramicCamera>(m_camera);
+		int height = (int)ceil(camera->m_width * camera->m_yFov / camera->m_xFov);
+
+		float hAngleSpacing = camera->m_xFov / camera->m_width;
+		float vAngleSpacing = camera->m_yFov / height;
+
+		std::unique_ptr<Image> img = std::make_unique<Image>(camera->m_width, height);
+
+		// start at: -xfov/2, +yfov/2
+		float hAngle = -camera->m_xFov / 2;
+		float vAngle = camera->m_yFov / 2;
+
+		for (int y = 0; y < height; y++)
+		{
+			hAngle = -camera->m_xFov / 2;
+
+			for (int x = 0; x < camera->m_width; x++)
+			{
+				Vec3f dir = camera->getDir();
+				camera->rotateVecX(dir, vAngle);
+				camera->rotateVecY(dir, hAngle);
+
+				dir = camera->m_viewMatrix.linear() * dir;
+				Color color = shootRay(dir);
+				img->set(x, y, color);
+				hAngle += hAngleSpacing;
+			}
+			vAngle -= vAngleSpacing;
+		}
+
+		return img;
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImagePinhole()
