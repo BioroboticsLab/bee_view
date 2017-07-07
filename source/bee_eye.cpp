@@ -1,12 +1,5 @@
 #include "../build/BeeView/BeeView/stdafx.h"
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
-#include <cassert>
-
 #include "bee_eye.h"
 #include "utility.h"
 

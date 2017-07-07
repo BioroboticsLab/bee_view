@@ -1,9 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-#include <embree2\rtcore.h>
-
 #include "utility.h"
 #include "texture.h"
 

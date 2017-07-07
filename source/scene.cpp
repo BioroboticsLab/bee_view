@@ -1,11 +1,6 @@
 #include "../build/BeeView/BeeView/stdafx.h"
 
-#include <iostream>
-
 #include "scene.h"
-
-
-//extern RTCDevice g_device;
 
 namespace BeeView
 {

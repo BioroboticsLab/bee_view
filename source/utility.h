@@ -4,15 +4,6 @@
 This File contains small general purpose functions and classes.
 */
 
-#include <eigen\Eigen\Dense>
-#include <math.h>
-#include <iostream>
-#include <fstream>
-#include <limits>
-#include <numeric>
-#include <vector>
-
-
 #define M_PI 3.14159265
 
 namespace BeeView

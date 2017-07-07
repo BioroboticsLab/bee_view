@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "vec.h"
 #include "utility.h"
 #include "scene.h"
 #include "camera.h"

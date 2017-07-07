@@ -19,11 +19,6 @@
 // ======================================================================== //
 
 #include "../build/BeeView/BeeView/stdafx.h"
-#include <map>
-#include <memory>
-#include <string>
-#include <fstream> 
-#include <iostream>
 
 #include "scene.h"
 #include "obj_loader.h"

@@ -1,11 +1,6 @@
 #pragma once
 
-#include <memory>
-
-#include <eigen\Eigen\Core>
-
 #include "bee_eye.h"
-#include "utility.h"
 #include "sampler.h"
 
 namespace BeeView {
@@ -47,13 +42,23 @@ namespace BeeView {
 
 		/* moves the camera and sets the direcation vector to oldPosition-newPosition */
 		void moveAndSetDirection(Vec3f newPosition);
+
+		void lookAt(Vec3f point);
+
+		void setDir(Vec3f dir);
+		Vec3f getDir() { return m_dir; }
 		
 		/* rotate camera arround x-axis of camera (right axis) */
-		void rotateX(float angle);
+		void rotateUp(float angle);
+		void rotateDown(float angle);
+
 		/* rotate camera arround y-axis of camera (up axis) */
-		void rotateY(float angle);
+		void rotateRight(float angle);
+		void rotateLeft(float angle);
+
 		/* rotate camera arround z-axis of camera (forward axis) */
-		void rotateZ(float angle);
+		void rollRight(float angle);
+		void rollLeft(float angle);
 
 		/* transform input vector by rotating arround x-axis of camera (right axis) */
 		void rotateVecX(Vec3f &vec, float angle);
@@ -62,15 +67,9 @@ namespace BeeView {
 		/* transform input vector by rotating arround z-axis of camera (foward axis) */
 		void rotateVecZ(Vec3f &vec, float angle);
 
-		void lookAt(Vec3f point);
-
 		void recalcViewMatrix();
 
-		void setDir(Vec3f dir);
-		Vec3f getDir()
-		{
-			return m_dir;
-		}
+
 	};
 
 	class BeeEyeCamera : public Camera

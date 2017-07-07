@@ -1,13 +1,6 @@
 #include "../build/BeeView/BeeView/stdafx.h"
 
-#include <iostream>
-#include <embree2/rtcore.h>
-#include <embree2/rtcore_ray.h>
-#include <memory>
 #include <chrono>
-
-
-#include <eigen\Eigen\Dense>
 
 #include "renderer.h"
 

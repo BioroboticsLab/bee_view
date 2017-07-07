@@ -1,8 +1,5 @@
 #include "../build/BeeView/BeeView/stdafx.h"
 
-#include <iostream>
-#include <eigen\Eigen\Dense>
-
 #include "camera.h"
 
 namespace BeeView {
@@ -57,7 +54,7 @@ namespace BeeView {
 
 	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector
 	 * doesnt work on dir-vector of camera, to roll the camera use up-vector of camera instead of dir-vector,
-	 * or use camera.rotateZ(). */
+	 * or use camera.rollRight(). */
 	void Camera::rotateVecZ(Vec3f &vec, float angle)
 	{
 		
@@ -70,7 +67,7 @@ namespace BeeView {
 	}
 
 	/* rotate camera arround x-axis of world (right axis) */
-	void Camera::rotateX(float angle)
+	void Camera::rotateUp(float angle)
 	{
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitX());
@@ -80,7 +77,12 @@ namespace BeeView {
 		recalcViewMatrix();
 	}
 
-	void Camera::rotateY(float angle)
+	void Camera::rotateDown(float angle)
+	{
+		rotateUp(-angle);
+	}
+
+	void Camera::rotateRight(float angle)
 	{
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitY());
@@ -90,7 +92,12 @@ namespace BeeView {
 		recalcViewMatrix();
 	}
 
-	void Camera::rotateZ(float angle)
+	void Camera::rotateLeft(float angle)
+	{
+		rotateRight(-angle);
+	}
+
+	void Camera::rollRight(float angle)
 	{
 		Eigen::Transform<float, 3, Eigen::Affine> t;
 		t = Eigen::AngleAxisf(deg2rad(angle), Vec3f::UnitZ());
@@ -98,6 +105,11 @@ namespace BeeView {
 		m_up = t.linear() * m_up;
 		m_up.normalize();
 		recalcViewMatrix();
+	}
+
+	void Camera::rollLeft(float angle)
+	{
+		rollRight(-angle);
 	}
 
 

@@ -19,14 +19,6 @@
 
 #include "../build/BeeView/BeeView/stdafx.h"
 
-#include <algorithm> 
-#include <memory>
-#include <iostream>
-#include <cstring>
-#include <cstdio>
-#include <fstream>
-#include <string>
-
 #include "image.h"
 #include "utility.h"
 

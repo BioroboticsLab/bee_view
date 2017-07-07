@@ -1,10 +1,10 @@
 #pragma once
 #include <iomanip>
 
-
 #include "renderer.h"
 #include "obj_loader.h"
 #include "sampler.h"
+#include "bee_view_api.h"
 
 namespace BeeView {
 	namespace Test {
@@ -94,28 +94,28 @@ namespace BeeView {
 			//test rotation x down
 			camera->rotateVecX(dir, 20);
 			camera->setDir(dir);
-			//camera->rotateX(20);
+			//camera->rotateUp(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam42_r_downx.ppm");		
 
 			// rotate back up
 			camera->rotateVecX(dir, -20);
 			camera->setDir(dir);
-			//camera->rotateX(-20);
+			//camera->rotateUp(-20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam52_r_upx.ppm");
 
 			// rotate to left
 			camera->rotateVecY(dir, 20);
 			camera->setDir(dir);
-			//camera->rotateY(20);
+			//camera->rotateRight(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam62_r_lefty.ppm");
 
 			// roll around z
 			camera->rotateVecZ(dir, 10);
 			camera->setDir(dir);
-			//camera->rotateZ(20);
+			//camera->rollRight(20);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam72_r_leftz.ppm");
 
@@ -203,33 +203,33 @@ namespace BeeView {
 
 #if 1
 			camera->m_sampler.setAcceptanceAngle(2.6);
-			camera->m_sampler.setMode(Sampler::Mode::SQUARE);
+			camera->m_sampler.setMode(Sampler::Mode::DISK);
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(7);
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_square_s7_a26.ppm");
+			img->saveToPPM("test_beeEye_s7_a26.ppm");
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(11);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_square_s11_a26.ppm");
+			img->saveToPPM("test_beeEye_s11_a26.ppm");
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(21);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_square_s21_a26.ppm");
+			img->saveToPPM("test_beeEye_s21_a26.ppm");
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(11);
 			camera->m_sampler.setAcceptanceAngle(5.2);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_square_s11_a52.ppm");
+			img->saveToPPM("test_beeEye_s11_a52.ppm");
 
 			// render the image
 			camera->m_sampler.setAcceptanceAngle(1.3);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_square_s11_a13.ppm");
+			img->saveToPPM("test_beeEye_s11_a13.ppm");
 #endif
 			// cleanup embree
 			scene->cleanupEmbree();
@@ -505,5 +505,15 @@ namespace BeeView {
 
 			img.saveToPPM("test_gauss4.ppm");
 		}
+
+		typedef std::vector<std::vector<std::vector<float>>> PyImage;
+
+		void testApi()
+		{
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj");
+			PyImage img = beeView.render();
+			return;
+		}
+
 	}
 }

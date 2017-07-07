@@ -1,8 +1,5 @@
 #pragma once 
 
-#include <vector>
-#include <string>
-
 #include "image.h"
 #include "utility.h"
 

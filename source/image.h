@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include "utility.h"
 
 namespace BeeView {
