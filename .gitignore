@@ -1,5 +1,6 @@
 models/
 build/
+.vs/
 *.jpg
 *.JPG
 *.jpeg
@@ -10,6 +11,8 @@ build/
 *.PNG
 # Compiled source #
 ###################
+*.pdb
+*.obj
 *.com
 *.class
 *.dll

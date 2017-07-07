@@ -1,0 +1,90 @@
+
+samples: 56, acceptance angle: 2.600000
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 3
+Time difference (ms) = 0
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1
+Time difference (ms) = 0
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 224803
+Time difference (ms) = 224
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 264764
+Time difference (ms) = 264
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 453471
+Time difference (ms) = 453
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 967109
+Time difference (ms) = 967
+
+samples: 462, acceptance angle: 2.600000
+Time difference (microseconds) = 3476437
+Time difference (ms) = 3476
+
+samples: 132, acceptance angle: 5.200000
+Time difference (microseconds) = 995831
+Time difference (ms) = 995
+
+samples: 132, acceptance angle: 1.300000
+Time difference (microseconds) = 1029451
+Time difference (ms) = 1029
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 531297
+Time difference (ms) = 531
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1210499
+Time difference (ms) = 1210
+
+samples: 462, acceptance angle: 2.600000
+Time difference (microseconds) = 4364587
+Time difference (ms) = 4364
+
+samples: 132, acceptance angle: 5.200000
+Time difference (microseconds) = 1127779
+Time difference (ms) = 1127
+
+samples: 132, acceptance angle: 1.300000
+Time difference (microseconds) = 1049951
+Time difference (ms) = 1049
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 418605
+Time difference (ms) = 418
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1007941
+Time difference (ms) = 1007
+
+samples: 462, acceptance angle: 2.600000
+Time difference (microseconds) = 3308688
+Time difference (ms) = 3308
+
+samples: 132, acceptance angle: 5.200000
+Time difference (microseconds) = 1007930
+Time difference (ms) = 1007
+
+samples: 132, acceptance angle: 1.300000
+Time difference (microseconds) = 985801
+Time difference (ms) = 985
