@@ -38,9 +38,9 @@ namespace BeeView {
 		{
 			// load the ommatidial array from csv file
 			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
-			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
+			//std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
 
-			beeEye->loadFromCSV(csvfile);
+			//beeEye->loadFromCSV(csvfile);
 			
 			// setup the camera
 			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);

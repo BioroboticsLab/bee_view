@@ -1,10 +1,126 @@
 #include "stdafx.h"
 
 #include "bee_eye.h"
-#include "utility.h"
 
 namespace BeeView
 {
+	void BeeEye::initOmmatidia()
+	{
+		for (auto &xy : elevation_azimuth_angles)
+		{
+			assert(xy.size() == 2);
+
+			Ommatidium ommatidium;
+
+			ommatidium.m_azimuth = xy[0];
+			ommatidium.m_elevation = xy[1];
+
+			/* assign zone */
+			if (ommatidium.m_azimuth <= 0 && ommatidium.m_elevation >= 0) ommatidium.m_zone = 4;
+			if (ommatidium.m_azimuth <= 0 && ommatidium.m_elevation <= 0) ommatidium.m_zone = 3;
+			if (ommatidium.m_azimuth >= 0 && ommatidium.m_elevation <= 0) ommatidium.m_zone = 2;
+			if (ommatidium.m_azimuth >= 0 && ommatidium.m_elevation >= 0) ommatidium.m_zone = 1;
+			// -> 0,0 zone 1
+
+			m_ommatidia.push_back(ommatidium);
+
+		}
+
+		// sort ommatidia by zone, elevation, azimuth (overwritten < operator in ommatidium)
+		std::sort(m_ommatidia.begin(), m_ommatidia.end());
+
+		// remove duplicates
+		int size_before = m_ommatidia.size();
+		m_ommatidia.erase(std::unique(m_ommatidia.begin(), m_ommatidia.end()), m_ommatidia.end());
+		int size_after = m_ommatidia.size();
+		int nr_duplicates = size_before - size_after;
+
+		// TODO: if verbose
+		std::cout << "Removed " << nr_duplicates << " duplicates form Ommatidial array." << std::endl;
+
+		float cur_elevation = m_ommatidia[0].m_elevation;
+		int cur_zone = 1;
+
+		int x = 0;
+		int y = 0;
+
+		int sign_x = 1;
+		int sign_y = 1;
+
+
+
+		for (int i = 0; i < m_ommatidia.size(); i++)
+		{
+			Ommatidium &ommatidium = m_ommatidia[i];
+
+			// create "rows": every time elevation changes -> new row!
+			if (cur_elevation != ommatidium.m_elevation)
+			{
+				if (cur_zone == 1 || cur_zone == 2) x = 0;
+				if (cur_zone == 3 || cur_zone == 4) x = 1;
+				cur_elevation = ommatidium.m_elevation;
+
+				++y;
+			}
+
+			// if zone changes, start at center again
+			if (ommatidium.m_zone != cur_zone)
+			{
+
+				cur_zone = ommatidium.m_zone;
+				if (cur_zone == 1) { x = 0; y = 0; } // y 0
+				if (cur_zone == 2) { x = 0; y = 1; } // y -1
+				if (cur_zone == 3) { x = 1; y = 0; } // y -1
+				if (cur_zone == 4) { x = 1; y = 1; } // y 0
+
+			}
+
+			assert(ommatidium.m_zone == cur_zone);
+
+			// fix sign
+			if (cur_zone == 1) { sign_x = 1; sign_y = 1; }
+			if (cur_zone == 2) { sign_x = 1; sign_y = -1; }
+			if (cur_zone == 3) { sign_x = -1; sign_y = -1; }
+			if (cur_zone == 4) { sign_x = -1; sign_y = 1; }
+
+			ommatidium.m_x = sign_x*x;
+			ommatidium.m_y = sign_y*y;
+
+			++x;
+#if 0
+			std::cout <<
+				"zone: " << ommatidium.m_zone <<
+				", azimuth: " << ommatidium.m_azimuth <<
+				", elevation: " << ommatidium.m_elevation <<
+				", x: " << ommatidium.m_x <<
+				", y: " << ommatidium.m_y <<
+				std::endl;
+#endif
+
+		}
+
+		// save min max of coordinate expansion:
+		auto minmax_x = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
+			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_x < rhs.m_x; });
+		auto minmax_y = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
+			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_y < rhs.m_y; });
+
+		m_min_x = minmax_x.first->m_x;
+		m_max_x = minmax_x.second->m_x;
+		m_min_y = minmax_y.first->m_y;
+		m_max_y = minmax_y.second->m_y;
+
+		// TODO: if Verbose 
+		std::cout << "Minimum x: " << m_min_x << std::endl;
+		std::cout << "Maximum x: " << m_max_x << std::endl;
+
+		std::cout << "Minimum y: " << m_min_y << std::endl;
+		std::cout << "Maximum y: " << m_max_y << std::endl;
+
+		std::cout << std::endl << "Number of ommatidia per Eye: " << std::to_string(m_ommatidia.size()) << std::endl;
+
+		return;
+	}
 
 
 	void BeeEye::loadFromCSV(std::string fileName)

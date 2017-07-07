@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utility.h"
+#include "../data/elevation_azimuth_angles.h"
 
 namespace BeeView
 {
@@ -78,25 +79,33 @@ namespace BeeView
 		int m_max_y = 0;
 		int m_min_y = -0;
 
-		BeeEye() : m_side(Side::RIGHT) {} // TODO: is empty beeeye acceptable?
-		BeeEye(Side side) : m_side(side) {}
+		/* creates the right bee eye. use createOtherEye() to construct the left eye. */
+		BeeEye() : m_side(Side::RIGHT) 
+		{
+			initOmmatidia();
+		}
 
 		/*
 		create ommatidialarray from csv file.
-		expects csv file to have 2 columns, first column is azimuth angle, second column is elevation angle.
-		one row for each ommatidium.
-		comma seperated, no quotation marks, no header, no spaces, only floats (no scientific notation e.g. 2.4e04, minus sign must be minus sign)
-		Example:
-		0,0.5
-		0.1,4
-		-34,3
-		-43,210.5
-
 		step 1: create array of ommatidia
 		step 2: remove duplicates (operator == for ommatidium?)
 		step 3: sort: elevation, azimuth
 		*/
 		void loadFromCSV(std::string fileName);
+
+		/* initializes the ommatidia from the elevation and azimuth angles that are stored in data/elevation_azimuth_angles.cpp 
+		   To create elevation_azimuth_angles.cpp use the functions vec2hFile and readFloatsFromCSV from utility.h.
+		   e.g. vec2hFile(readFloatsFromCSV(csvFileName),"elevation_azimuth_angles");
+		   Expects csv file to have 2 columns, first column is azimuth angle, second column is elevation angle.
+		   one row for each ommatidium.
+		   comma seperated, no quotation marks, no header, no spaces, only floats (no scientific notation e.g. 2.4e04, minus sign must be minus sign)
+		   Example:
+		   0,0.5
+		   0.1,4
+		   -34,3
+		   -43,210.5
+		*/
+		void initOmmatidia();
 
 		/* creates the other eye and computes the complementary angles for each ommatidium */
 		BeeEye createOtherEye() const;

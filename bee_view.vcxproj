@@ -118,6 +118,7 @@
     </Link>
     <ClCompile>
       <WarningLevel>Level2</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,6 +130,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="data\elevation_azimuth_angles.cpp" />
     <ClCompile Include="python\bee_view_api.cpp" />
     <ClCompile Include="src\bee_eye.cpp" />
     <ClCompile Include="src\camera.cpp" />
@@ -138,7 +140,9 @@
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\sampler.cpp" />
     <ClCompile Include="src\scene.cpp" />
-    <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>

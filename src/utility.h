@@ -28,6 +28,75 @@ namespace BeeView
 		return "";
 	}
 
+	/* returns vector of rows of floats */
+	inline std::vector<std::vector<float>> readFloatsFromCSV(std::string fileName)
+	{
+		std::vector<std::vector<float>> ret;
+
+			/* open file */
+			std::ifstream  data;
+			data.open(fileName.c_str());
+			if (!data.is_open()) {
+				std::cerr << "cannot open " + fileName;
+				return ret;
+			}
+
+			std::string line;
+
+
+			/* load the rows */
+			while (std::getline(data, line))
+			{
+				std::stringstream lineStream(line);
+				std::string token;
+
+				std::vector<float> row;
+
+				/* split line by comma and extract floats */
+				while (std::getline(lineStream, token, ','))
+				{
+					row.push_back(std::stof(token));
+				}
+				ret.push_back(row);
+			}
+			return ret;
+	}
+
+	/* writes contents of vec to a .h and .cpp file */
+	inline void vec2hFile(std::vector<std::vector<float>> vec, std::string vectorName)
+	{
+		std::ofstream hFile;
+
+		hFile.open(vectorName + ".h");
+		hFile << "#pragma once" << std::endl
+			<< "#include <vector>" << std::endl
+			<< "extern std::vector<std::vector<float>> " << vectorName << ";" << std::endl;
+
+		std::ofstream cppFile;
+
+		cppFile.open(vectorName + ".cpp");
+		cppFile << "#include \"" << vectorName << ".h\"" << std::endl;
+		cppFile << vectorName << " = {" << std::endl;
+
+		for (std::vector<float> &row : vec)
+		{
+							
+			cppFile << "{";
+			for (float &f : row)
+			{
+				cppFile << f;
+				if (&f != &row.back())
+					cppFile << ", ";
+			}
+
+			if (&row != &vec.back())
+				cppFile << "}," << std::endl;
+			else
+				cppFile << "}" << std::endl << "};" << std::endl;
+		}
+		return;
+	}
+
 	inline Vec3f sphericalToCartesian(const float &theta, const float &phi)
 	{
 		float theta2 = (M_PI / 2) - theta;

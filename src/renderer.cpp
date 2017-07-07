@@ -5,8 +5,8 @@
 #include "renderer.h"
 
 // debug variables, for beeEye rendering
-#define TEXTURE_SHADING
-//#define XYZ_SHADING
+//#define TEXTURE_SHADING
+#define XYZ_SHADING
 //#define SOLID_SHADING
 //#define ELEVATION_AZIMUTH_SHADING
 //#define SINGLE_RAY_TEXTURE_SHADING

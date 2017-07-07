@@ -6,9 +6,12 @@ int main()
 {
 	//BeeView::Test::testCamera();
 
-	//BeeView::Test::testCameraNoScene();
+	BeeView::Test::testCameraNoScene();
 
-	BeeView::Test::testBeeEyeCam();
+	//BeeView::Test::testBeeEyeCam();
+
+	//vec2hFile(readFloatsFromCSV("D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv"), "elevation_azimuth_angles");
+
 
 //	BeeView::Test::testPanoramicCamera();
 //	BeeView::Test::testCameraNoScene();
