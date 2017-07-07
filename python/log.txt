@@ -1,0 +1,4 @@
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1
+Time difference (ms) = 0
