@@ -117,6 +117,7 @@ namespace BeeView
 
 		/*! file to load */
 		const std::string path;
+		std::string base_path;
 
 		/*! Geometry buffer. never gets cleared */
 		std::vector<Vec3f> v; // positions
@@ -156,6 +157,8 @@ namespace BeeView
 			std::cerr << "cannot open " + fileName;
 			return;
 		}
+
+		base_path = getFilePath(fileName);
 
 		char line[10000];
 		memset(line, 0, sizeof(line));
@@ -234,7 +237,7 @@ namespace BeeView
 			/* load material library */
 			if (!strncmp(token, "mtllib", 6) && isSep(token[6])) {
 				
-				loadMTL(getFilePath(path) + std::string(parseSep(token += 6)));
+				loadMTL(base_path + std::string(parseSep(token += 6)));
 				continue;
 			}
 
@@ -419,12 +422,12 @@ namespace BeeView
 				
 				if (!strncmp(token, "map_Ka", 6) || !strncmp(token, "Ka_map", 6)) { 
 					parseSep(token += 6);
-					cur.loadImage(token);
+					cur.loadImage(base_path + token);
 					continue; 
 				}
 				if (!strncmp(token, "map_Kd", 6) || !strncmp(token, "Kd_map", 6)) {
 					parseSep(token += 6);
-					cur.loadImage(token);
+					cur.loadImage(base_path + token);
 					continue;
 				}
 

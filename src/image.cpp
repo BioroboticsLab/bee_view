@@ -166,7 +166,7 @@ namespace BeeView {
 		}
 
 		if(verbose_lvl > 0)
-			std::cout << "\tDone." << std::endl;
+			std::cout << "Done." << std::endl;
 		if(verbose_lvl > 1)
 			std::cout << "\tImage Stats: Width " << m_width << ", Height " << m_height << ", Number of Pixels " << m_data.size() << "." << std::endl;
 

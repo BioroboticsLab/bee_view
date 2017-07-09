@@ -511,7 +511,7 @@ namespace BeeView {
 
 		void testApi()
 		{
-			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv");
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\skydome_minus_z_forward.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv");
 
 			beeView.setCameraPosition(0, -70, 0);
 
@@ -521,11 +521,9 @@ namespace BeeView {
 
 			int width = img[0].size();
 
-			std::cout << "Height: " << width << std::endl;
 
 			int height = img.size();
 
-			std::cout << "Width: " << height << std::endl;
 
 			Image c_img = Image(width, height);
 			for (int y = 0; y < height; y++)
