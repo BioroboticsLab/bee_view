@@ -4,7 +4,7 @@
 #include "renderer.h"
 #include "obj_loader.h"
 #include "sampler.h"
-#include "../python/bee_view_api.h"
+#include "../python/beeview_api.h"
 
 namespace BeeView {
 	namespace Test {
@@ -33,14 +33,14 @@ namespace BeeView {
 
 		}
 
-		// for shading where the scene doesnt have to be loaded
+		// for shading where the scene doesnt have to be loaded, ude #define ... in renderer to define shading type
 		void testCameraNoScene()
 		{
 			// load the ommatidial array from csv file
 			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
-			//std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
+			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
 
-			//beeEye->loadFromCSV(csvfile);
+			beeEye->loadFromCSV(csvfile);
 			
 			// setup the camera
 			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
@@ -511,8 +511,30 @@ namespace BeeView {
 
 		void testApi()
 		{
-			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj");
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv");
+
+			beeView.setCameraPosition(0, -70, 0);
+
+			beeView.setCameraDirVector(0, 0, 1);
+			
 			PyImage img = beeView.render();
+
+			int width = img[0].size();
+
+			std::cout << "Height: " << width << std::endl;
+
+			int height = img.size();
+
+			std::cout << "Width: " << height << std::endl;
+
+			Image c_img = Image(width, height);
+			for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++)
+			{
+				Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
+				c_img.set(x, y, color);
+			}
+			c_img.saveToPPM("test_api_c.ppm");
 			return;
 		}
 

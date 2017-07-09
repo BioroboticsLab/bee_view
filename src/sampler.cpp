@@ -6,6 +6,31 @@
 
 namespace BeeView
 {
+
+	/* precomputes sample points on construction */
+	Sampler::Sampler(int numSamples, float acceptanceAngle)
+	{
+		if (numSamples > 0)
+		{
+			m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
+			m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
+			m_mode = Mode::DISK;
+			m_numSamplePoints = numSamples;
+			m_acceptanceAngle = acceptanceAngle;
+		}
+	}
+
+	Sampler::Sampler(int numSamples, float acceptanceAngle, Mode mode)
+	{
+		if (numSamples > 0)
+		{
+			m_mode = mode;
+			m_numSamplePoints = numSamples;
+			m_acceptanceAngle = acceptanceAngle;
+			recalcSamplesAndWeights();
+		}
+	}
+
 	Vec2f Sampler::sampleDisk(Vec2f p)
 	{
 		if (p(0) == 0 && p(1) == 0)
@@ -98,6 +123,47 @@ namespace BeeView
 
 
 		return weights;
+	}
+
+	void Sampler::setMode(Sampler::Mode mode)
+	{
+		m_mode = mode;
+		recalcSamplesAndWeights();
+	}
+
+	Sampler::Mode Sampler::getMode() { return m_mode; }
+
+	void Sampler::setAcceptanceAngle(float acceptanceAngle)
+	{
+		m_acceptanceAngle = acceptanceAngle;
+		recalcSamplesAndWeights();
+		return;
+	}
+
+	float Sampler::getAcceptanceAngle() { return m_acceptanceAngle; }
+
+	void Sampler::setSqrtNumSamplePoints(int sqrtNumSamplePoints)
+	{
+		m_numSamplePoints = sqrtNumSamplePoints;
+		recalcSamplesAndWeights();
+		return;
+	}
+
+	int Sampler::getNumSamplePoints() { return m_numSamplePoints; }
+
+	void Sampler::recalcSamplesAndWeights()
+	{
+		if (m_mode == Mode::DISK)
+		{
+			m_samplePoints = concentricDiskSamples(m_numSamplePoints, m_acceptanceAngle);
+		}
+		else if (m_mode == Mode::SQUARE)
+		{
+			m_samplePoints = squareSamples(m_numSamplePoints);
+			for (Vec2f &p : m_samplePoints) // also make square in range -aa:aa
+				p = m_acceptanceAngle*p;
+		}
+		m_weights = computeWeightVector(m_samplePoints, m_acceptanceAngle);
 	}
 
 }

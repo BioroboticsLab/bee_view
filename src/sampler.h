@@ -22,36 +22,20 @@ namespace BeeView
 
 	public:
 
-		std::vector<Vec2f> m_samplePoints; 
+		// precomputed viewing direction offset array (x,y offsets in degrees)
+		std::vector<Vec2f> m_samplePoints;
+
+		// precomputed gauss weight array
 		std::vector<float> m_weights;
 
 		Sampler(){}
 		
-		Sampler(int numSamples, float acceptanceAngle) 
-		{
-			if (numSamples > 0)
-			{
-				m_samplePoints = concentricDiskSamples(numSamples, acceptanceAngle);
-				m_weights = computeWeightVector(m_samplePoints, acceptanceAngle);
-				m_mode = Mode::DISK;
-				m_numSamplePoints = numSamples;
-				m_acceptanceAngle = acceptanceAngle;
-			}
-		}
+		/* precomputes sample points on construction */
+		Sampler(int numSamples, float acceptanceAngle);
 
-		Sampler(int numSamples, float acceptanceAngle, Mode mode)
-		{
-			if (numSamples > 0)
-			{
-				m_mode = mode;
-				m_numSamplePoints = numSamples;
-				m_acceptanceAngle = acceptanceAngle;
-				recalcSamplesAndWeights();
-			}
-		}
+		Sampler(int numSamples, float acceptanceAngle, Mode mode);
 
-
-		/* Bivariate Gaussian function, TODO: delete versions */
+		/* Bivariate Gaussian function */
 		float gaussPDF(float x, float y, float hw);
 
 		/* map square to disk (https://www.aanda.org/articles/aa/pdf/2010/12/aa15278-10.pdf) */
@@ -70,47 +54,20 @@ namespace BeeView
 		std::vector<float> computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle);
 
 		// getters and setters for encapsulated members
-		void setMode(Mode mode)
-		{
-			m_mode = mode;
-			recalcSamplesAndWeights();
-		}
+		void setMode(Mode mode);
 
-		Mode getMode() { return m_mode; }
+		Mode getMode();
 
-		void setAcceptanceAngle(float acceptanceAngle)
-		{
-			m_acceptanceAngle = acceptanceAngle;
-			recalcSamplesAndWeights();
-			return;
-		}
+		void setAcceptanceAngle(float acceptanceAngle);
 
-		float getAcceptanceAngle() { return m_acceptanceAngle; }
+		float getAcceptanceAngle();
 
-		void setSqrtNumSamplePoints(int sqrtNumSamplePoints)
-		{
-			m_numSamplePoints = sqrtNumSamplePoints;
-			recalcSamplesAndWeights();
-			return;
-		}
+		void setSqrtNumSamplePoints(int sqrtNumSamplePoints);
 
-		int getNumSamplePoints() { return m_numSamplePoints; }
+		int getNumSamplePoints();
 
 		private:
-			void recalcSamplesAndWeights()
-			{
-				if (m_mode == Mode::DISK)
-				{
-					m_samplePoints = concentricDiskSamples(m_numSamplePoints, m_acceptanceAngle);
-				}
-				else if (m_mode == Mode::SQUARE)
-				{
-					m_samplePoints = squareSamples(m_numSamplePoints);
-					for (Vec2f &p : m_samplePoints) // also make square in range -aa:aa
-						p = m_acceptanceAngle*p;
-				}
-				m_weights = computeWeightVector(m_samplePoints, m_acceptanceAngle);
-			}
+			void recalcSamplesAndWeights();
 
 	};
 

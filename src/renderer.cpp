@@ -5,8 +5,8 @@
 #include "renderer.h"
 
 // debug variables, for beeEye rendering
-//#define TEXTURE_SHADING
-#define XYZ_SHADING
+#define TEXTURE_SHADING
+//#define XYZ_SHADING
 //#define SOLID_SHADING
 //#define ELEVATION_AZIMUTH_SHADING
 //#define SINGLE_RAY_TEXTURE_SHADING
@@ -14,7 +14,6 @@
 //#define MATERIAL_KD_SHADING
 
 #define DEBUG
-
 
 namespace BeeView {
 
@@ -75,7 +74,7 @@ namespace BeeView {
 	{
 
 		// TODO: global verbose
-		std::cout << "Start rendering Image... ";
+		std::cout << "Start rendering Image with PINHOLE camera... ";
 		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
 
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getWidth(), camera->getHeight());
@@ -169,15 +168,16 @@ namespace BeeView {
 			return mesh->texture->getTexel(st(0), 1.0f - st(1));
 		}
 
-		// if somehow falls through
 		return Color(0.5f, 0.5f, 0.5f);
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
 	{
+
+		std::cout << "Start rendeing Image with BEE_EYE camera... ";
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
-		// get image dimensions
+		// compute image dimensions
 		int x_dim = (camera->m_leftEye->m_max_x + abs(camera->m_leftEye->m_min_x) + 1) * camera->m_ommatidium_size;
 		int y_dim = (camera->m_leftEye->m_max_y + abs(camera->m_leftEye->m_min_y) + 1)*camera->m_ommatidium_size;
 
@@ -193,21 +193,24 @@ namespace BeeView {
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(x_dim, y_dim);
 
+#ifdef DEBUG
 		// benchmark
 		std::ofstream benchmarkLog;
-
 		benchmarkLog.open("log.txt", std::ios_base::app);
 		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
+#endif
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
 		renderBeeEye(img, Side::RIGHT);
 
+#ifdef DEBUG
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
 		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
 		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
+#endif
+
+		std::cout << "Done." << std::endl;
 
 		return img;
 	}
@@ -296,7 +299,7 @@ namespace BeeView {
 			// for all samplepoints: shoot ray, get color
 			for (Vec2f &dev : camera->m_sampler.m_samplePoints)
 			{
-				// make copy of dir
+				// get dir
 				Vec3f sampleDir = dir;
 
 				// rotate dir vector bei x degrees to right
@@ -331,7 +334,7 @@ namespace BeeView {
 			int rel_x = x * camera->m_ommatidium_size;
 			int rel_y = y * camera->m_ommatidium_size;
 
-			// shift every second row, to simulate hexagonal shape // TODO fix "feathered" edge
+			// shift every second row, to simulate hexagonal shape
 			if (beeEye->m_side == Side::RIGHT)
 			{
 				if (y % 2 == 0)
@@ -417,6 +420,4 @@ namespace BeeView {
 	{
 		return Color((e + 90) / 180.f, 0, (a + 270) / 360.f);
 	}
-
-
 }

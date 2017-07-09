@@ -6,8 +6,8 @@ import os
 project_path =  os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 sourcefiles  = [
-    os.path.join(project_path,'python','bee_view.pyx'), 
-    os.path.join(project_path,'python','bee_view_api.cpp'),
+    os.path.join(project_path,'python','beeview.pyx'), 
+    os.path.join(project_path,'python','beeview_api.cpp'),
     os.path.join(project_path,'src','bee_eye.cpp'),
     os.path.join(project_path,'src','camera.cpp'),
     os.path.join(project_path,'src','image.cpp'),
@@ -19,7 +19,7 @@ sourcefiles  = [
     os.path.join(project_path,'src','texture.cpp')
     ]
 
-ext=[Extension('bee_view',
+ext=[Extension('beeview',
             sources = sourcefiles,
             libraries=["embree"],  
             extra_link_args=["/LIBPATH:"+ os.path.join(project_path,'lib')],

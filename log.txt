@@ -88,3 +88,71 @@ Time difference (ms) = 1007
 samples: 132, acceptance angle: 1.300000
 Time difference (microseconds) = 985801
 Time difference (ms) = 985
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 233273
+Time difference (ms) = 233
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 170688
+Time difference (ms) = 170
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 177046
+Time difference (ms) = 177
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 174239
+Time difference (ms) = 174
+
+samples: 132, acceptance angle: 2.600000
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 139836048
+Time difference (ms) = 139836
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 335754788
+Time difference (ms) = 335754
+
+samples: 462, acceptance angle: 2.600000
+
+samples: 56, acceptance angle: 2.600000
+Time difference (microseconds) = 440427
+Time difference (ms) = 440
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1015260
+Time difference (ms) = 1015
+
+samples: 462, acceptance angle: 2.600000
+Time difference (microseconds) = 3338656
+Time difference (ms) = 3338
+
+samples: 132, acceptance angle: 5.200000
+Time difference (microseconds) = 1042056
+Time difference (ms) = 1042
+
+samples: 132, acceptance angle: 1.300000
+Time difference (microseconds) = 980421
+Time difference (ms) = 980
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 768672
+Time difference (ms) = 768
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 779438
+Time difference (ms) = 779
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 806757
+Time difference (ms) = 806
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 826708
+Time difference (ms) = 826
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 1018977
+Time difference (ms) = 1018

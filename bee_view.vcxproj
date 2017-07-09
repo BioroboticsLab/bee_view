@@ -130,8 +130,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="data\elevation_azimuth_angles.cpp" />
-    <ClCompile Include="python\bee_view_api.cpp" />
+    <ClCompile Include="python\beeview_api.cpp" />
     <ClCompile Include="src\bee_eye.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\image.cpp" />
@@ -424,7 +423,7 @@
     <ClInclude Include="external\embree2\rtcore_ray.h" />
     <ClInclude Include="external\embree2\rtcore_scene.h" />
     <ClInclude Include="external\embree2\rtcore_version.h" />
-    <ClInclude Include="python\bee_view_api.h" />
+    <ClInclude Include="python\beeview_api.h" />
     <ClInclude Include="src\bee_eye.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\image.h" />
@@ -438,7 +437,6 @@
     <ClInclude Include="src\utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="python\bee_view.pyx" />
     <None Include="python\setup.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

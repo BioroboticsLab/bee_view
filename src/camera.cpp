@@ -41,6 +41,7 @@ namespace BeeView {
 		vec = t.linear() * vec;
 		vec.normalize();
 	}
+
 	/* transform input vector by rotating arround y-axis of camera (up axis), normalizes vector
 	 * positive values rotate to the right when looking forward */
 	void Camera::rotateVecY(Vec3f &vec, float angle)
@@ -120,7 +121,7 @@ namespace BeeView {
 
 		// vForward, vSide, and vUp are the 3 axis of the Camera coordinate system
 		Vec3f vForward = m_dir;
-		Vec3f vSide = vForward.cross(m_up).normalized(); // TODO: left or right handed?
+		Vec3f vSide = vForward.cross(m_up).normalized();
 		Vec3f vUp = vSide.cross(vForward).normalized();
 
 		Eigen::Matrix3f linearPart = Eigen::Matrix3f::Zero();
@@ -130,7 +131,7 @@ namespace BeeView {
 			vSide(0),vUp(0), vForward(0),
 			vSide(1), vUp(1), vForward(1),
 			vSide(2), vUp(2), vForward(2);
-		//-x to fix right hand vs lefthand? TODO: check, should reflect on y -> diagonal -1, 1 , 1, dont do it! breaks things
+		//-x to fix right hand vs lefthand? should reflect on y -> diagonal -1, 1 , 1, dont do it! breaks things
 
 		m_viewMatrix.linear() = linearPart;
 
@@ -140,4 +141,71 @@ namespace BeeView {
 		//std::cout << "Camera Matrix: " << std::endl << m_viewMatrix.matrix() << std::endl;
 
 	}
+
+	BeeEyeCamera::BeeEyeCamera(BeeEye::Ptr beeEye) : m_ommatidium_size(4)
+	{
+		m_type = Type::BEE_EYE;
+		m_leftEye = beeEye;
+		m_rightEye = std::make_shared<BeeEye>(beeEye->createOtherEye());
+
+		if (m_leftEye->m_side == Side::RIGHT)
+			m_leftEye.swap(m_rightEye);
+
+		m_sampler = Sampler(11, 2.6);
+
+	}
+
+	PinholeCamera::PinholeCamera(int width, int height)
+	{
+		m_type = Type::PINHOLE;
+		setWidth(width);
+		setHeight(height);
+		setFOV(50.f);
+	}
+
+	PinholeCamera::PinholeCamera(int width, int height, float fov) : m_fov(fov), m_width(width), m_height(height)
+	{
+		m_type = Type::PINHOLE;
+		setWidth(width);
+		setHeight(height);
+		setFOV(fov);
+	}
+
+	int PinholeCamera::getWidth() { return m_width; }
+
+	void PinholeCamera::setWidth(int width)
+	{
+		if (width == 0)
+		{
+			std::cerr << "camera width can't be 0!" << std::endl;
+			return;
+		}
+		m_width = width;
+		m_imageAspectRatio = m_width / (float)m_height;
+	}
+
+	int PinholeCamera::getHeight() { return m_height; }
+
+	void PinholeCamera::setHeight(int height)
+	{
+		if (height == 0)
+		{
+			std::cerr << "camera height can't be 0!" << std::endl;
+			return;
+		}
+		m_height = height;
+		m_imageAspectRatio = m_width / (float)m_height;
+	}
+
+	float PinholeCamera::getFOV() { return m_fov; }
+
+	void PinholeCamera::setFOV(float fov)
+	{
+		m_fov = fov;
+		m_scale = tan(deg2rad(m_fov * 0.5));
+	}
+
+	float PinholeCamera::getScale() { return m_scale; } // only getter
+
+	float PinholeCamera::getImageAspectRatio() { return m_imageAspectRatio; } // only getter
 }
