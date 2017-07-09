@@ -11,9 +11,10 @@ int main()
 
 	//BeeView::Test::testBeeEyeCam();
 
-	BeeView::Test::testPanoramicCamera();
+	//BeeView::Test::testPanoramicCamera();
 	//BeeView::Test::testCameraNoScene();
-	//BeeView::Test::testApi();
+	//
+	BeeView::Test::testApi();
 
 	std::cout << "Finished.";
 

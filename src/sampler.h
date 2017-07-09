@@ -65,6 +65,7 @@ namespace BeeView
 		void setSqrtNumSamplePoints(int sqrtNumSamplePoints);
 
 		int getNumSamplePoints();
+		int getTotalSamplePoints();
 
 		private:
 			void recalcSamplesAndWeights();

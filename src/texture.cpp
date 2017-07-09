@@ -7,7 +7,7 @@ namespace BeeView
 
 	Texture::Texture() : Image()
 	{
-		name = "empty Texture";
+		name = "No Name";
 	}
 
 	Texture::Texture(std::string fileName) : Image(fileName) { }

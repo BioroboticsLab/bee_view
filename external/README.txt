@@ -1,1 +1,1 @@
-This folder contains precompiled external dependencies
+This folder contains external dependency header files.

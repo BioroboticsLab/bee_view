@@ -17,8 +17,20 @@
 
 namespace BeeView {
 
+	extern int verbose_lvl;
+
 	std::unique_ptr<Image> Renderer::renderToImage()
 	{
+		if (verbose_lvl > 2)
+		{
+			Vec3f cam_dir = m_camera->getDir();
+			Vec3f cam_pos = m_camera->m_viewMatrix.translation();
+			std::cout << std::endl << "Camera Position " << "(" << cam_pos(0) << "," << cam_pos(1) << "," << cam_pos(2) << "), ";
+			std::cout << "Camera Direction " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) <<")";
+		}
+		if (verbose_lvl > 0)
+			std::cout << std::endl << "Start rendering Image... ";
+
 		if (m_camera->m_type == Camera::Type::PINHOLE)
 			return renderToImagePinhole();
 		else if (m_camera->m_type == Camera::Type::BEE_EYE)
@@ -67,14 +79,16 @@ namespace BeeView {
 			vAngle -= vAngleSpacing;
 		}
 
+		if (verbose_lvl > 0)
+			std::cout << "Done. " << std::endl;
+		if (verbose_lvl > 2)
+			std::cout << "Camera settings: Type PANORAMIC, xFov " << camera->m_xFov << ", yFov " << camera->m_yFov << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
+
 		return img;
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImagePinhole()
 	{
-
-		// TODO: global verbose
-		std::cout << "Start rendering Image with PINHOLE camera... ";
 		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
 
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getWidth(), camera->getHeight());
@@ -86,8 +100,11 @@ namespace BeeView {
 			}
 		}
 
-		// TODO: global verbose
-		std::cout << "Done" << std::endl;
+		if (verbose_lvl > 0)
+			std::cout << "Done. " << std::endl;
+		if (verbose_lvl > 2)
+			std::cout << "Camera settings: Type PINHOLE, Fov " << camera->getFOV() << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
+
 		return img;
 	}
 
@@ -174,7 +191,6 @@ namespace BeeView {
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
 	{
 
-		std::cout << "Start rendeing Image with BEE_EYE camera... ";
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
 		// compute image dimensions
@@ -198,20 +214,26 @@ namespace BeeView {
 		std::ofstream benchmarkLog;
 		benchmarkLog.open("log.txt", std::ios_base::app);
 		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
-		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 #endif
+		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
 		renderBeeEye(img, Side::RIGHT);
 
-#ifdef DEBUG
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+#ifdef DEBUG
+
 		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
 		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
 
-		std::cout << "Done." << std::endl;
-
+		if(verbose_lvl > 0)
+			std::cout << "Done." << std::endl;
+		if (verbose_lvl > 1)
+			std::cout << "Rendering Stats: Time " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << " ms, Number of Rays cast " << camera->m_sampler.getTotalSamplePoints()*camera->m_rightEye->m_ommatidia.size() * 2 << "." << std::endl;
+		if (verbose_lvl > 2)
+			std::cout << "Camera settings: Type BEE_EYE, Acceptance angle " << camera->m_sampler.getAcceptanceAngle() << ", Ommatidium size " << camera->m_ommatidium_size << ", Num Samples per Ommatidium " << camera->m_sampler.getTotalSamplePoints() << ", Number of Ommatidia " << camera->m_rightEye->m_ommatidia.size()*2 << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
 		return img;
 	}
 

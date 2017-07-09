@@ -675,7 +675,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_7beeview_API;
 
 /* "beeview.pyx":20
- * 		void getCameraDirVector(float &, float &, float &);
+ * 		void getCameraDirVector(float &, float &, float &)
  * 
  * cdef class API:             # <<<<<<<<<<<<<<
  * 	cdef BeeViewApplication *C_Class

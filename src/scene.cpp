@@ -4,6 +4,7 @@
 
 namespace BeeView
 {
+	extern int verbose_lvl;
 
 	Mesh::Mesh()
 	{
@@ -25,26 +26,26 @@ namespace BeeView
 		struct Vertex { float x, y, z, a; }; // vertex coordinates, 'a' not used
 		struct Triangle { int v0, v1, v2; }; // vertex indices
 
+		if (verbose_lvl > 0)
+			std::cout << std::endl << "Loading Scene into Embree... ";
 
-		 //std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\bee-eye-view\\models\\cornell\\cornell_box.obj";
-		 //std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\bee-eye-view\\models\\test\\test.obj";
-		 //std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\bee-eye-view\\models\\website\\website.obj";
-		//std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\bee-eye-view\\models\\hessen\\panorama_skydome_triang_smooth.obj";
-		std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\bee-eye-view\\models\\hessen\\skydome_minus_z_foward.obj";
-
-
-		std::cout << "Loading Scene into Embree... " << std::endl << std::endl;
-		std::cout << "Number of Objects in Scene: " << m_objects.size() << std::endl;
-
+		int total_verts = 0;
+		int total_triangles = 0;
 		for each (const std::shared_ptr<Mesh> &mesh in m_objects)
 		{
-			std::cout << std::endl;
-			std::cout << "### Loading Mesh: " << mesh->texture->name << " ###" << std::endl;
-			std::cout << std::endl;
-			std::cout << "Number of Vertices in Mesh: " << mesh->numVertices() << std::endl;
-			std::cout << "Number of Normals in Mesh: " << mesh->normals.size() << std::endl;
-			std::cout << "Number of Faces in Mesh: " << mesh->triangles.size() << std::endl;
-			std::cout << std::endl;
+			total_triangles += mesh->triangles.size();
+			total_verts += mesh->numVertices();
+
+			if (verbose_lvl > 2)
+			{
+				std::cout << std::endl;
+				std::cout << "Loading Mesh: " << mesh->texture->name << "..." << std::endl;
+				std::cout << std::endl;
+				std::cout << "Number of Vertices in Mesh: " << mesh->numVertices() << std::endl;
+				std::cout << "Number of Normals in Mesh: " << mesh->normals.size() << std::endl;
+				std::cout << "Number of Faces in Mesh: " << mesh->triangles.size() << std::endl;
+				std::cout << std::endl;
+			}
 
 			// create the mesh
 			unsigned int rtcmesh = rtcNewTriangleMesh(m_rtcscene, RTC_GEOMETRY_STATIC, mesh->triangles.size(), mesh->numVertices()); //n_tri: number of traingles, n_v: number of vertices
@@ -79,20 +80,26 @@ namespace BeeView
 		/* commit changes to scene */
 		rtcCommit(m_rtcscene);
 		
-		std::cout << std::endl << "Finished loading Scene into Embree." << std::endl << std::endl;
+		if (verbose_lvl > 0)
+			std::cout << "Done." << std::endl;
+		if (verbose_lvl > 1)
+			std::cout << "Scene stats: " << total_triangles << " triangles and " << total_verts << " vertices." << std::endl;
 
 		return;
 	}
 
 	void Scene::cleanupEmbree()
 	{
-		
+			if (verbose_lvl > 0)
+				std::cout << std::endl <<"Cleaning up Embree... ";
 			// cleanup
 			rtcDeleteScene(m_rtcscene);
 			m_rtcscene = nullptr;
 			rtcDeleteDevice(m_device);
 			m_device = nullptr;
 
+			if (verbose_lvl > 0)
+				std::cout << "Done." << std::endl;
 			return;
 	}
 }

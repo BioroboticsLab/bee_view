@@ -4,13 +4,14 @@
 
 namespace BeeView
 {
+	/* lvl 0: no output, lvl 1: basic output, lvl 2: stat output, lvl 3: Debug output */
+	int verbose_lvl = 2;
+
 	/* entry point of bee_view */
-	BeeViewApplication::BeeViewApplication(std::string sceneFile, std::string ommatidiaFile)
+	BeeViewApplication::BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, int verbose)
 		: m_sceneFile(sceneFile), m_ommatidiaFile(ommatidiaFile), m_renderer(nullptr, nullptr)
 	{
-
-		std::cout << "Scene: " << sceneFile << std::endl;
-		std::cout << "Ommatdia: " << ommatidiaFile << std::endl;
+		verbose_lvl = verbose;
 
 		// load scene
 		//std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj";

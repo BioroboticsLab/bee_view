@@ -151,6 +151,8 @@ namespace BeeView
 
 	int Sampler::getNumSamplePoints() { return m_numSamplePoints; }
 
+	int Sampler::getTotalSamplePoints() { return m_numSamplePoints * m_numSamplePoints + m_numSamplePoints; }
+
 	void Sampler::recalcSamplesAndWeights()
 	{
 		if (m_mode == Mode::DISK)

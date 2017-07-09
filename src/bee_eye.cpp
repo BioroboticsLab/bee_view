@@ -4,6 +4,8 @@
 
 namespace BeeView
 {
+	extern int verbose_lvl;
+
 	/* return the Vec3f direction vector, calculated from elevation and azimuth */
 	Vec3f Ommatidium::getDirVector() const
 	{
@@ -24,6 +26,9 @@ namespace BeeView
 
 	void BeeEye::loadFromCSV(std::string fileName)
 	{
+		if (verbose_lvl > 0)
+			std::cout << std::endl << "Loading elevation and azimuth angles from " << fileName << "... ";
+
 		/* open file */
 		std::ifstream  data;
 		data.open(fileName.c_str());
@@ -81,8 +86,8 @@ namespace BeeView
 		int size_after = m_ommatidia.size();
 		int nr_duplicates = size_before - size_after;
 
-		// TODO: if verbose
-		std::cout << "Removed " << nr_duplicates << " duplicates form Ommatidial array." << std::endl;
+		if(verbose_lvl > 2)
+			std::cout << std::endl << "Removed " << nr_duplicates << " duplicates form Ommatidial array." << std::endl;
 	
 		float cur_elevation = m_ommatidia[0].m_elevation;
 		int cur_zone = 1;
@@ -154,14 +159,19 @@ namespace BeeView
 		m_min_y = minmax_y.first->m_y;
 		m_max_y = minmax_y.second->m_y;
 
-		// TODO: if Verbose 
-		std::cout << "Minimum x: " << m_min_x << std::endl;
-		std::cout << "Maximum x: " << m_max_x << std::endl;
+		if (verbose_lvl > 2)
+		{
+			std::cout << "Minimum x: " << m_min_x << std::endl;
+			std::cout << "Maximum x: " << m_max_x << std::endl;
 
-		std::cout << "Minimum y: " << m_min_y << std::endl;
-		std::cout << "Maximum y: " << m_max_y << std::endl;
+			std::cout << "Minimum y: " << m_min_y << std::endl;
+			std::cout << "Maximum y: " << m_max_y << std::endl;
+		}
 
-		std::cout << std::endl << "Number of ommatidia per Eye: " << std::to_string(m_ommatidia.size()) << std::endl;
+		if (verbose_lvl > 0)
+			std::cout << "Done." << std::endl;
+		if (verbose_lvl > 1)
+			std::cout << "Number of ommatidia per Eye: " << std::to_string(m_ommatidia.size()) << std::endl;
 
 		return;
 	}

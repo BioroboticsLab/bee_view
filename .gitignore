@@ -9,16 +9,14 @@ build/
 *.PPM
 *.png
 *.PNG
+
 # Compiled source #
 ###################
 *.pdb
 *.obj
 *.com
 *.class
-*.dll
 *.exe
-*.o
-*.so
 
 # Packages #
 ############
@@ -36,8 +34,10 @@ build/
 # Logs and databases #
 ######################
 *.log
+*.tlog
 *.sql
 *.sqlite
+*.ilk
 
 # OS generated files #
 ######################

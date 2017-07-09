@@ -25,7 +25,7 @@ namespace BeeView
 
 	public:
 
-		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile);
+		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, int verbose = 2);
 
 		~BeeViewApplication();
 

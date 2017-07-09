@@ -24,6 +24,8 @@
 
 namespace BeeView {
 
+	extern int verbose_lvl;
+
 	/* for reading ppm file */
 	static void skipSpacesAndComments(std::fstream& file)
 	{
@@ -101,7 +103,9 @@ namespace BeeView {
 			m_width = 0;
 			return;
 		}
-		std::cout << "Image Loader: Loading " << fileName << std::endl;
+
+		if(verbose_lvl > 0)
+			std::cout << std::endl << "\tLoading " << fileName << "... ";
 
 		/* open file for reading */
 		std::fstream file;
@@ -161,7 +165,10 @@ namespace BeeView {
 			std::cerr << "Invalid magic value in PPM file";
 		}
 
-		std::cout << "Image Loader: Finished loading. w: " << m_width << ", h: " << m_height << ", len: " << m_data.size() << std::endl;
+		if(verbose_lvl > 0)
+			std::cout << "\tDone." << std::endl;
+		if(verbose_lvl > 1)
+			std::cout << "\tImage Stats: Width " << m_width << ", Height " << m_height << ", Number of Pixels " << m_data.size() << "." << std::endl;
 
 	}
 
@@ -169,7 +176,8 @@ namespace BeeView {
 	void Image::saveToPPM(const std::string fileName)
 	{
 
-		std::cout << "Writing image to " << fileName << std::endl;
+		if(verbose_lvl > 0)
+			std::cout << std::endl << "Saving " << fileName << "... ";
 
 		/* open file for writing */
 		std::fstream file;
@@ -188,7 +196,8 @@ namespace BeeView {
 			file << (unsigned char)(clamp(c.m_b)*255.0f);
 		}
 
-		std::cout << "Success: " << fileName << std::endl;
+		if(verbose_lvl > 0)
+			std::cout << "Done." << std::endl;
 
 	}
 }

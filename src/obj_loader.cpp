@@ -26,6 +26,8 @@
 
 namespace BeeView
 {
+	extern int verbose_lvl;
+
 	/*! Three-index vertex, indexing start at 0, -1 means invalid vertex. */
 	struct Vertex {
 		int v, vt, vn;
@@ -144,6 +146,9 @@ namespace BeeView
 	OBJLoader::OBJLoader(const std::string fileName)
 		: group(std::make_shared<Scene>(Scene())), path(fileName)
 	{
+		if (verbose_lvl > 0)
+			std::cout << "Loading " << fileName << "... " << std::endl;
+
 		/* open file */
 		std::ifstream cin;
 		cin.open(fileName.c_str());
@@ -209,15 +214,17 @@ namespace BeeView
 				flushFaceGroup(); // add previous object to scene
 				std::string name(parseSep(token += 6));
 
-				std::cout << "usemtl " << name << std::endl;
+				if(verbose_lvl > 2)
+					std::cout << std::endl << "usemtl " << name << std::endl;
 
 				// if no material exists
 				if (textureMap.find(name) == textureMap.end()) {
-					std::cout << "No material found, useing default material. " << std::endl;
+					if (verbose_lvl > 2)
+						std::cout << "No material found, useing default material. " << std::endl;
 					curMaterial = defaultMaterial;
 				}
-				else {
-					std::cout << "Material is in Texturemap! " << std::endl;
+				else 
+				{
 					curMaterial = textureMap[name];
 				}
 
@@ -237,6 +244,9 @@ namespace BeeView
 		flushFaceGroup();
 
 		cin.close();
+
+		if (verbose_lvl > 0)
+			std::cout << "Done. " << std::endl;
 	}
 
 	/*! handles relative indices and starts indexing from 0 */
@@ -311,7 +321,8 @@ namespace BeeView
 
 		if (curGroup.empty()) return;
 
-		std::cout << "Begin Flushing facegroup: " << curMaterial->name << std::endl;
+		if (verbose_lvl > 2)
+			std::cout << "Begin Flushing facegroup: " << curMaterial->name << "... ";
 
 		std::shared_ptr<Mesh> mesh = std::make_unique<Mesh>(Mesh());
 
@@ -343,17 +354,21 @@ namespace BeeView
 			//if (mesh.texcoords.size()) while (mesh.texcoords.size() < mesh.numVertices()) mesh.texcoords.push_back(0);
 
 		}
-		curGroup.clear();
-		std::cout << "Done"<< std::endl;
 
+		curGroup.clear();
 		mesh->texture = curMaterial;
 		group->addObject(mesh);
+
+		if (verbose_lvl > 2)
+			std::cout << "Done. " << std::endl;
 	}
 
 	/* load material file */
 	void OBJLoader::loadMTL(const std::string &fileName)
 	{
-		std::cout << "Opening file: " << fileName << std::endl;
+		if (verbose_lvl > 2)
+			std::cout << "Reading " << fileName << "... ";
+
 		std::ifstream cin;
 		cin.open(fileName.c_str());
 		if (!cin.is_open()) {
@@ -429,6 +444,11 @@ namespace BeeView
 			textureMap[name] = std::make_shared<Texture>(cur);
 
 		cin.close();
+
+		if (verbose_lvl > 2)
+			std::cout << "Done." << std::endl;
+
+		return;
 	}
 
 

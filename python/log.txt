@@ -46,3 +46,15 @@ Time difference (ms) = 803
 samples: 132, acceptance angle: 2.600000
 Time difference (microseconds) = 800406
 Time difference (ms) = 800
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 783326
+Time difference (ms) = 783
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 800233
+Time difference (ms) = 800
+
+samples: 132, acceptance angle: 2.600000
+Time difference (microseconds) = 780750
+Time difference (ms) = 780

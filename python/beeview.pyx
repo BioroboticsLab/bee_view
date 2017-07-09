@@ -12,10 +12,10 @@ cdef extern from "beeview_api.h" namespace "BeeView":
 		#Methods
 		vector[vector[vector[float]]] render()
 
-		void setCameraPosition(float, float, float);
-		void getCameraPosition(float &, float &, float &);
-		void setCameraDirVector(float, float, float);
-		void getCameraDirVector(float &, float &, float &);
+		void setCameraPosition(float, float, float)
+		void getCameraPosition(float &, float &, float &)
+		void setCameraDirVector(float, float, float)
+		void getCameraDirVector(float &, float &, float &)
 
 cdef class API:
 	cdef BeeViewApplication *C_Class
