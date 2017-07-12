@@ -5,10 +5,15 @@
 namespace BeeView {
 
 
-	void Camera::moveTo(Vec3f newPosition)
+	void Camera::setPosition(Vec3f newPosition)
 	{
 		m_position = newPosition;
 		recalcViewMatrix();
+	}
+
+	Vec3f Camera::getPosition()
+	{
+		return m_position;
 	}
 
 	void Camera::moveAndSetDirection(Vec3f point)

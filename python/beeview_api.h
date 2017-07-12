@@ -42,7 +42,9 @@ namespace BeeView
 		void setRenderModePinhole();
 		void setRenderModePanoramic();
 
-		void setMinusZ();
+		/* reutrns the camera height above ground. returns negativ values if camera is below ground. */
+		float heightAboveGround();
+
 #if 0
 		void rotateCameraUp(float degrees);
 		void rotateCameraDown(float degrees);
@@ -50,9 +52,6 @@ namespace BeeView
 		void rotateCameraLeft(float degrees);
 		void rollCameraRight(float degrees);
 		void rollCameraLeft(float degrees);
-
-		/* reutrns the camera height above ground. returns negativ values if camera is below ground. */
-		float getCameraHeightAboveGround();
 		
 		// camera options: pinhole: fov, width height; panoramic: xfov, yfov, width, height?; beeeye: acceptanceangle, numsamples, ommatidiumsize
 		void setPinholeCameraFov(float fov);

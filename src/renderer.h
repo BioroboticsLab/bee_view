@@ -31,6 +31,9 @@ namespace BeeView {
 			m_camera = camera;
 		}
 
+		/* get camera height above ground, returns -1 if no ground below camera. */
+		float heightAboveGround();
+
 	private:
 
 		/* render normal image according to parameters in pinholecamera*/
@@ -87,7 +90,6 @@ namespace BeeView {
 			}
 			return;
 		}
-
 	};
 
 }

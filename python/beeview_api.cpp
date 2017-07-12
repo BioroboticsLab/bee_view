@@ -63,11 +63,11 @@ namespace BeeView
 		Vec3f pos = Vec3f(x, y, z);
 
 		if (m_renderMode == Camera::Type::BEE_EYE)
-			m_beeEyeCamera->moveTo(pos);
+			m_beeEyeCamera->setPosition(pos);
 		else if (m_renderMode == Camera::Type::PINHOLE)
-			m_pinholeCamera->moveTo(pos);
+			m_pinholeCamera->setPosition(pos);
 		else if (m_renderMode == Camera::Type::PANORAMIC)
-			m_panoramicCamera->moveTo(pos);
+			m_panoramicCamera->setPosition(pos);
 
 		return;
 	}
@@ -140,4 +140,8 @@ namespace BeeView
 		return;
 	}
 
+	float BeeViewApplication::heightAboveGround()
+	{
+		return m_renderer.heightAboveGround();
+	}
 }

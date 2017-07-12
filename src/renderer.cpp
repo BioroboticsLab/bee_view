@@ -24,7 +24,7 @@ namespace BeeView {
 		if (verbose_lvl > 2)
 		{
 			Vec3f cam_dir = m_camera->getDir();
-			Vec3f cam_pos = m_camera->m_viewMatrix.translation();
+			Vec3f cam_pos = m_camera->getPosition();
 			std::cout << std::endl << "Camera Position " << "(" << cam_pos(0) << "," << cam_pos(1) << "," << cam_pos(2) << "), ";
 			std::cout << "Camera Direction " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) <<")";
 		}
@@ -134,7 +134,7 @@ namespace BeeView {
 	Color Renderer::shootRay(const Vec3f &dir)
 	{
 
-		Vec3f cam_pos = m_camera->m_viewMatrix.translation();
+		Vec3f cam_pos = m_camera->getPosition();
 
 		/* initialize ray */
 		RTCRay ray;
@@ -442,5 +442,40 @@ namespace BeeView {
 	Color Renderer::azimuthElevationColor(const int a, const int e)
 	{
 		return Color((e + 90) / 180.f, 0, (a + 270) / 360.f);
+	}
+
+	float Renderer::heightAboveGround()
+	{
+		Vec3f pos = m_camera->getPosition();
+
+		/* initialize ray */
+		RTCRay ray;
+
+		ray.org[0] = pos(0);
+		ray.org[1] = pos(1);
+		ray.org[2] = pos(2);
+		ray.dir[0] = 0.0f;
+		ray.dir[1] = -1.0f;
+		ray.dir[2] = 0.0f;
+
+		ray.tnear = 0.0f;
+		ray.tfar = std::numeric_limits<float>::infinity();
+		ray.geomID = RTC_INVALID_GEOMETRY_ID;
+		ray.primID = RTC_INVALID_GEOMETRY_ID;
+		ray.mask = -1;
+		ray.time = 0;
+
+		/* intersect ray with scene */
+		rtcIntersect(m_scene->m_rtcscene, ray);
+		/* shade pixels */
+
+		// no Objects hit -> Backgroundcolor
+		if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
+			return -1;
+		if (ray.tfar == std::numeric_limits<float>::infinity())
+			return -1;
+		if (ray.tfar < 0)
+			return -1;
+		return ray.tfar;
 	}
 }

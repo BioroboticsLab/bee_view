@@ -40,7 +40,9 @@ namespace BeeView {
 			recalcViewMatrix();
 		}
 
-		void moveTo(Vec3f newPosition);
+		void setPosition(Vec3f newPosition);
+
+		Vec3f getPosition();
 
 		/* moves the camera and sets the direcation vector to oldPosition-newPosition */
 		void moveAndSetDirection(Vec3f newPosition);
