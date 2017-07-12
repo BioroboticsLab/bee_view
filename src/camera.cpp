@@ -121,8 +121,14 @@ namespace BeeView {
 
 		// vForward, vSide, and vUp are the 3 axis of the Camera coordinate system
 		Vec3f vForward = m_dir;
+		Vec3f vSide = m_up.cross(vForward).normalized();
+		Vec3f vUp = vForward.cross(vSide).normalized();
+
+		/*
+		// Left handed Mode
 		Vec3f vSide = vForward.cross(m_up).normalized();
 		Vec3f vUp = vSide.cross(vForward).normalized();
+		*/
 
 		Eigen::Matrix3f linearPart = Eigen::Matrix3f::Zero();
 

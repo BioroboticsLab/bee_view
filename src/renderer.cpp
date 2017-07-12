@@ -13,7 +13,7 @@
 //#define RANDOM_SHADING
 //#define MATERIAL_KD_SHADING
 
-#define DEBUG
+//#define DEBUG
 
 namespace BeeView {
 
@@ -182,7 +182,7 @@ namespace BeeView {
 			const float u = ray.u, v = ray.v, w = 1.0f - ray.u - ray.v; // w = 1 - u - v
 			const Vec2f st = w*st0 + u*st1 + v*st2; // linearly interpolate the texture coordinates
 
-			return mesh->texture->getTexel(st(0), 1.0f - st(1));
+			return mesh->texture->getTexel(st(0), st(1)); // 1.0f - st(1) for lefthanded
 		}
 
 		return Color(0.5f, 0.5f, 0.5f);
@@ -215,6 +215,7 @@ namespace BeeView {
 		benchmarkLog.open("log.txt", std::ios_base::app);
 		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
 #endif
+
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
 		// draw bee eye on image

@@ -8,14 +8,14 @@ namespace BeeView
 	int verbose_lvl = 2;
 
 	/* entry point of bee_view */
-	BeeViewApplication::BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, int verbose)
+	BeeViewApplication::BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, bool leftHanded, int verbose)
 		: m_sceneFile(sceneFile), m_ommatidiaFile(ommatidiaFile), m_renderer(nullptr, nullptr)
 	{
 		verbose_lvl = verbose;
 
 		// load scene
 		//std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj";
-		std::shared_ptr<Scene> scene = loadOBJ(m_sceneFile);
+		std::shared_ptr<Scene> scene = loadOBJ(m_sceneFile, leftHanded);
 
 		// load beeEye
 		// load the ommatidial array from csv file
@@ -40,10 +40,6 @@ namespace BeeView
 
 	std::vector<std::vector<std::vector<float>>> BeeViewApplication::render()
 	{
-		// adjust cam position (5m above ground)
-		// sets camera to be 5 m above ground, returns camera y position
-		// prevent to much up and down: smooth out the flight, eg dont allow to large changes? problem with trees / bushes?
-
 		std::shared_ptr<Image> img = m_renderer.renderToImage();
 
 		// make return image a height x width x rgb matrix
@@ -64,7 +60,16 @@ namespace BeeView
 
 	void BeeViewApplication::setCameraPosition(float x, float y, float z)
 	{
-		m_beeEyeCamera->moveTo(Vec3f(x, y, z));
+		Vec3f pos = Vec3f(x, y, z);
+
+		if (m_renderMode == Camera::Type::BEE_EYE)
+			m_beeEyeCamera->moveTo(pos);
+		else if (m_renderMode == Camera::Type::PINHOLE)
+			m_pinholeCamera->moveTo(pos);
+		else if (m_renderMode == Camera::Type::PANORAMIC)
+			m_panoramicCamera->moveTo(pos);
+
+		return;
 	}
 	void BeeViewApplication::getCameraPosition(float &out_x, float &out_y, float &out_z)
 	{
@@ -97,6 +102,7 @@ namespace BeeView
 			m_panoramicCamera->setDir(dir);
 		return;
 	}
+
 	void BeeViewApplication::getCameraDirVector(float &out_x, float &out_y, float &out_z)
 	{
 		Vec3f dir = Vec3f::Zero();
@@ -112,6 +118,25 @@ namespace BeeView
 		out_y = dir(1);
 		out_z = dir(2);
 
+		return;
+	}
+
+	void BeeViewApplication::setRenderModeBeeEye()
+	{
+		m_renderMode = Camera::Type::BEE_EYE;
+		m_renderer.setCamera(m_beeEyeCamera);
+		return;
+	}
+	void BeeViewApplication::setRenderModePinhole()
+	{
+		m_renderMode = Camera::Type::PINHOLE;
+		m_renderer.setCamera(m_pinholeCamera);
+		return;
+	}
+	void BeeViewApplication::setRenderModePanoramic()
+	{
+		m_renderMode = Camera::Type::PANORAMIC;
+		m_renderer.setCamera(m_panoramicCamera);
 		return;
 	}
 

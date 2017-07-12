@@ -108,7 +108,7 @@ namespace BeeView
 	public:
 
 		/*! Constructor. */
-		OBJLoader(const std::string fileName);
+		OBJLoader(const std::string fileName, bool leftHanded);
 
 		/*! output model */
 		std::shared_ptr<Scene> group;
@@ -132,7 +132,6 @@ namespace BeeView
 		/* maps material name to Texture */
 		std::map<std::string, std::shared_ptr<Texture>> textureMap;
 
-
 	private:
 		void loadMTL(const std::string& fileName);
 		int fix_v(int index);
@@ -144,7 +143,7 @@ namespace BeeView
 
 	};
 
-	OBJLoader::OBJLoader(const std::string fileName)
+	OBJLoader::OBJLoader(const std::string fileName, bool leftHanded)
 		: group(std::make_shared<Scene>(Scene())), path(fileName)
 	{
 		if (verbose_lvl > 0)
@@ -184,17 +183,50 @@ namespace BeeView
 
 			/*! parse position */
 			if (token[0] == 'v' && isSep(token[1])) {
-				v.push_back(getVec3f(token += 2)); continue;
+				if (leftHanded)
+				{
+					Vec3f pos = getVec3f(token += 2);
+					pos(2) *= (-1);
+					v.push_back(pos);
+				}
+				else
+				{
+					v.push_back(getVec3f(token += 2));
+				}
+				continue;
+
 			}
 
 			/* parse normal */
 			if (token[0] == 'v' && token[1] == 'n' && isSep(token[2])) {
-				vn.push_back(getVec3f(token += 3));
+				if (leftHanded)
+				{
+					Vec3f normal = getVec3f(token += 3);
+					normal(2) *= (-1);
+					vn.push_back(normal);
+				}
+				else
+				{
+					vn.push_back(getVec3f(token += 3));
+				}
 				continue;
 			}
 
 			/* parse texcoord */
-			if (token[0] == 'v' && token[1] == 't' && isSep(token[2])) { vt.push_back(getVec2f(token += 3)); continue; }
+			if (token[0] == 'v' && token[1] == 't' && isSep(token[2]))
+			{ 
+				if (leftHanded)
+				{
+					Vec2f textureCoordinate = getVec2f(token += 3);
+					textureCoordinate(1) = 1.0f - textureCoordinate(1);
+					vt.push_back(textureCoordinate);
+				}
+				else
+				{
+					vt.push_back(getVec2f(token += 3));
+				}
+				continue; 
+			}
 
 			/*! parse face */
 			if (token[0] == 'f' && isSep(token[1]))
@@ -455,8 +487,8 @@ namespace BeeView
 	}
 
 
-	std::shared_ptr<Scene> loadOBJ(const std::string fileName) {
-		OBJLoader loader(fileName);
+	std::shared_ptr<Scene> loadOBJ(const std::string fileName, bool leftHanded) {
+		OBJLoader loader(fileName,leftHanded);
 		return loader.group;
 	}
 }

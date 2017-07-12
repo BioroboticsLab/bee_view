@@ -25,7 +25,7 @@ namespace BeeView
 
 	public:
 
-		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, int verbose = 2);
+		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, bool leftHanded = false, int verbose = 2);
 
 		~BeeViewApplication();
 
@@ -37,12 +37,13 @@ namespace BeeView
 		void setCameraDirVector(float x, float y, float z);
 		void getCameraDirVector(float &out_x, float &out_y, float &out_z);
 
-#if 0
-		// camera setters: position, rotation, cameratype (int)
+		// camera setters: position, rotation, cameratype
 		void setRenderModeBeeEye();
 		void setRenderModePinhole();
 		void setRenderModePanoramic();
 
+		void setMinusZ();
+#if 0
 		void rotateCameraUp(float degrees);
 		void rotateCameraDown(float degrees);
 		void rotateCameraRight(float degrees);
