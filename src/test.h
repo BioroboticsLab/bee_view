@@ -18,7 +18,7 @@ namespace BeeView {
 			// setup the camera
 			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>(1500,270,170);			
 
-			camera->moveTo(Vec3f(0, -70, 0));
+			camera->setPosition(Vec3f(0, -70, 0));
 
 			Vec3f dir = Vec3f(0, 0, 1).normalized();
 			camera->setDir(dir);
@@ -33,7 +33,7 @@ namespace BeeView {
 
 		}
 
-		// for shading where the scene doesnt have to be loaded, ude #define ... in renderer to define shading type
+		// for shading where the scene doesnt have to be loaded, use #define ... in renderer to define shading type
 		void testCameraNoScene()
 		{
 			// load the ommatidial array from csv file
@@ -68,8 +68,8 @@ namespace BeeView {
 			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); 
 			//std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
 
-			//camera->moveTo(Vec3f(278, 273, -800)); // cornell box defalut
-			camera->moveTo(Vec3f(0, -70, 0));
+			//camera->setPosition(Vec3f(278, 273, -800)); // cornell box defalut
+			camera->setPosition(Vec3f(0, -70, 0));
 
 			Vec3f dir = Vec3f(0, 0, 1).normalized();
 			camera->setDir(dir);
@@ -81,13 +81,13 @@ namespace BeeView {
 			img->saveToPPM("test_cam12.ppm");
 
 			// test directions: move along neg z
-			camera->moveTo(Vec3f(0, -70, -40));
+			camera->setPosition(Vec3f(0, -70, -40));
 			
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam22_m_negz.ppm");
 
 			// move along pos x
-			camera->moveTo(Vec3f(40, -70, -40));
+			camera->setPosition(Vec3f(40, -70, -40));
 
 			img = renderer.renderToImage();
 			img->saveToPPM("test_cam32_m_x.ppm");
@@ -191,7 +191,7 @@ namespace BeeView {
 			camera->m_sampler.setAcceptanceAngle(0);
 			camera->m_sampler.setSqrtNumSamplePoints(1);
 		
-			camera->moveTo(Vec3f(0, -70, 0));
+			camera->setPosition(Vec3f(0, -70, 0));
 
 			Vec3f dir = Vec3f(0, 0, 1).normalized();
 			camera->setDir(dir);
@@ -511,20 +511,23 @@ namespace BeeView {
 
 		void testApi()
 		{
-			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\skydome_minus_z_forward.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv");
-
-			beeView.setCameraPosition(0, -70, 0);
-
-			beeView.setCameraDirVector(0, 0, 1);
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
 			
+			//beeView.setRenderModePinhole();
+			//beeView.setRenderModePanoramic();
+
+			beeView.setCameraPosition(0, 0, 0);
+			float h = beeView.heightAboveGround();
+			beeView.setCameraPosition(0, (0-h)+15, 0); // 5m above ground
+
+			beeView.setCameraDirVector(0, 0, -1);
+			beeView.setPanoramicCameraXfov(60);
+			beeView.setPanoramicCameraYfov(30);
+
+			// convert python image to my image format
 			PyImage img = beeView.render();
-
 			int width = img[0].size();
-
-
 			int height = img.size();
-
-
 			Image c_img = Image(width, height);
 			for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++)
@@ -532,7 +535,7 @@ namespace BeeView {
 				Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
 				c_img.set(x, y, color);
 			}
-			c_img.saveToPPM("test_api_c.ppm");
+			c_img.saveToPPM("bee_eye_bi_linear.ppm");
 			return;
 		}
 

@@ -45,6 +45,10 @@ namespace BeeView
 		/* reutrns the camera height above ground. returns negativ values if camera is below ground. */
 		float heightAboveGround();
 
+		void setPanoramicCameraXfov(float xFov);
+		/* overwrites height */
+		void setPanoramicCameraYfov(float yFov);
+
 #if 0
 		void rotateCameraUp(float degrees);
 		void rotateCameraDown(float degrees);
@@ -58,9 +62,7 @@ namespace BeeView
 		void setPinholeCameraWidth(int width);
 		void setPinholeCameraHeight(int height);
 
-		void setPanoramicCameraXfov(float xFov);
-		/* overwrites height */
-		void setPanoramicCameraYfov(float yFov);
+		
 		void setPanoramicCameraWidth(int width);
 		/* overwrites yFov */
 		void setPanoramicCameraHeight(int height);

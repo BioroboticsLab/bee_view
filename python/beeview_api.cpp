@@ -62,11 +62,11 @@ namespace BeeView
 	{
 		Vec3f pos = Vec3f(x, y, z);
 
-		if (m_renderMode == Camera::Type::BEE_EYE)
+		//if (m_renderMode == Camera::Type::BEE_EYE)
 			m_beeEyeCamera->setPosition(pos);
-		else if (m_renderMode == Camera::Type::PINHOLE)
+		//else if (m_renderMode == Camera::Type::PINHOLE)
 			m_pinholeCamera->setPosition(pos);
-		else if (m_renderMode == Camera::Type::PANORAMIC)
+		//else if (m_renderMode == Camera::Type::PANORAMIC)
 			m_panoramicCamera->setPosition(pos);
 
 		return;
@@ -75,12 +75,14 @@ namespace BeeView
 	{
 		Vec3f pos = Vec3f::Zero();
 
+		/*
 		if(m_renderMode == Camera::Type::BEE_EYE)
 			pos = m_beeEyeCamera->m_viewMatrix.translation();
 		else if (m_renderMode == Camera::Type::PINHOLE)
 			pos = m_pinholeCamera->m_viewMatrix.translation();
 		else if (m_renderMode == Camera::Type::PANORAMIC)
-			pos = m_panoramicCamera->m_viewMatrix.translation();
+		*/
+			pos = m_panoramicCamera->getPosition();
 
 		out_x = pos(0);
 		out_y = pos(1);
@@ -94,11 +96,11 @@ namespace BeeView
 
 		dir.normalize();
 
-		if (m_renderMode == Camera::Type::BEE_EYE)
+		//if (m_renderMode == Camera::Type::BEE_EYE)
 			m_beeEyeCamera->setDir(dir);
-		else if (m_renderMode == Camera::Type::PINHOLE)
+		//else if (m_renderMode == Camera::Type::PINHOLE)
 			m_pinholeCamera->setDir(dir);
-		else if (m_renderMode == Camera::Type::PANORAMIC)
+		//else if (m_renderMode == Camera::Type::PANORAMIC)
 			m_panoramicCamera->setDir(dir);
 		return;
 	}
@@ -107,11 +109,12 @@ namespace BeeView
 	{
 		Vec3f dir = Vec3f::Zero();
 
+		/*
 		if (m_renderMode == Camera::Type::BEE_EYE)
 			dir = m_beeEyeCamera->getDir();
 		else if (m_renderMode == Camera::Type::PINHOLE)
 			dir = m_pinholeCamera->getDir();
-		else if (m_renderMode == Camera::Type::PANORAMIC)
+		else if (m_renderMode == Camera::Type::PANORAMIC)*/
 			dir = m_panoramicCamera->getDir();
 
 		out_x = dir(0);
@@ -144,4 +147,16 @@ namespace BeeView
 	{
 		return m_renderer.heightAboveGround();
 	}
+
+	void BeeViewApplication::setPanoramicCameraXfov(float xFov)
+	{
+		m_panoramicCamera->m_xFov = xFov;
+	}
+
+	/* overwrites height */
+	void BeeViewApplication::setPanoramicCameraYfov(float yFov)
+	{
+		m_panoramicCamera->m_yFov = yFov;
+	}
+
 }

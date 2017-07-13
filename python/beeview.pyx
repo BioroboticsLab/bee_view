@@ -23,7 +23,12 @@ cdef extern from "beeview_api.h" namespace "BeeView":
 		void setRenderModePanoramic()
 		float heightAboveGround()
 
-cdef class API:
+cdef class Renderer:
+	"""This class wraps the C++ BeeViewApplication class.
+
+	It provides all the functions necessary for rendering Images from a loaded scene.
+
+	"""
 
 	cdef BeeViewApplication *C_Class
 	
@@ -114,12 +119,12 @@ cdef class API:
 		self.C_Class.getCameraDirVector(x,y,z)
 		return [x,y,z]
 
-	def set_render_mode_beeeye(self):
+	def set_beeeye_mode(self):
 		"""Sets the renderer to use beeEye camera for rendering. """
 
 		self.C_Class.setRenderModeBeeEye()
 
-	def set_render_mode_pinhole(self):
+	def set_pinhole_mode(self):
 		"""Sets the renderer to use pinhole camera for rendering. 
 
 		Max FOV is 89 degrees. Use panoramic camera for wider angles.
@@ -128,7 +133,7 @@ cdef class API:
 
 		self.C_Class.setRenderModePinhole()
 
-	def set_render_mode_panoramic(self):
+	def set_panoramic_mode(self):
 		"""Sets the renderer to use panoramic camera for rendering. """
 
 		self.C_Class.setRenderModePanoramic()

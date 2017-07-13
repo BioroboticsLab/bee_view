@@ -63,20 +63,21 @@ namespace BeeView {
 
 		for (int y = 0; y < height; y++)
 		{
-			hAngle = -camera->m_xFov / 2;
+			float hAngle = -camera->m_xFov / 2 + 180;
 
 			for (int x = 0; x < camera->m_width; x++)
 			{
 				Vec3f dir = camera->getDir();
-				camera->rotateVecX(dir, vAngle);
+				camera->rotateVecX(dir, -vAngle);
 				camera->rotateVecY(dir, hAngle);
 
 				dir = camera->m_viewMatrix.linear() * dir;
+
 				Color color = shootRay(dir);
 				img->set(x, y, color);
 				hAngle += hAngleSpacing;
 			}
-			vAngle -= vAngleSpacing;
+			vAngle -= vAngleSpacing; // + instead of - for vert flip problem when lefthand?
 		}
 
 		if (verbose_lvl > 0)
@@ -180,7 +181,7 @@ namespace BeeView {
 			const Vec2f st1 = mesh->texcoords[tri->v1]; // get the texcoordinate for vertex 2 
 			const Vec2f st2 = mesh->texcoords[tri->v2]; // get the texcoordinate for vertex 3 
 			const float u = ray.u, v = ray.v, w = 1.0f - ray.u - ray.v; // w = 1 - u - v
-			const Vec2f st = w*st0 + u*st1 + v*st2; // linearly interpolate the texture coordinates
+			const Vec2f st = w*st0 + u*st1 + v*st2; // calc texture coordinate of hitpoint
 
 			return mesh->texture->getTexel(st(0), st(1)); // 1.0f - st(1) for lefthanded
 		}

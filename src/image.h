@@ -16,6 +16,8 @@ namespace BeeView {
 
 		/* changes the color values */
 		void set(float r, float g, float b)	{ m_r = r; m_g = g; m_b = b; }
+		void set(Vec3f vec){ m_r = vec(0); m_g = vec(1); m_b = vec(2); }
+		Vec3f toVec3f() { return Vec3f(m_r,m_g,m_b); }
 	};
 
 	/* simple image class */
