@@ -6,6 +6,7 @@ import os
 project_path =  os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 sourcefiles  = [
+    #os.path.join(project_path,'python','beeview.pxd'),
     os.path.join(project_path,'python','beeview.pyx'), 
     os.path.join(project_path,'python','beeview_api.cpp'),
     os.path.join(project_path,'src','bee_eye.cpp'),

@@ -45,34 +45,35 @@ namespace BeeView
 		/* reutrns the camera height above ground. returns negativ values if camera is below ground. */
 		float heightAboveGround();
 
-		void setPanoramicCameraXfov(float xFov);
-		/* overwrites height */
-		void setPanoramicCameraYfov(float yFov);
+		// camera options: 
+		// pinhole: fov, width height; 
+		// panoramic: xfov, yfov, width, height?; 
+		// beeeye: acceptanceangle, numsamples, ommatidiumsize
 
-#if 0
+		void setPanoramicCameraXfov(float xFov);
+		void setPanoramicCameraYfov(float yFov);
+		void setPanoramicCameraWidth(int width);
+
+
 		void rotateCameraUp(float degrees);
 		void rotateCameraDown(float degrees);
 		void rotateCameraRight(float degrees);
 		void rotateCameraLeft(float degrees);
 		void rollCameraRight(float degrees);
 		void rollCameraLeft(float degrees);
-		
-		// camera options: pinhole: fov, width height; panoramic: xfov, yfov, width, height?; beeeye: acceptanceangle, numsamples, ommatidiumsize
+
 		void setPinholeCameraFov(float fov);
 		void setPinholeCameraWidth(int width);
 		void setPinholeCameraHeight(int height);
-
-		
-		void setPanoramicCameraWidth(int width);
-		/* overwrites yFov */
-		void setPanoramicCameraHeight(int height);
 
 		void setBeeEyeCameraAcceptanceAngle(float acceptanceAngle);
 		/* set the number of samplepoints taken per ommatidium */
 		void setBeeEyeCameraNumSamplePoints(int numSamples);
 		/* ommatidium size in pixels, must be an even number */
 		void setBeeEyeCameraOmmatidiumSize(int size);
-#endif
+
+		/* overwrites yFov, not implemented */
+		//void setPanoramicCameraHeight(int height);
 
 	};
 }

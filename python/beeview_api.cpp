@@ -62,27 +62,16 @@ namespace BeeView
 	{
 		Vec3f pos = Vec3f(x, y, z);
 
-		//if (m_renderMode == Camera::Type::BEE_EYE)
-			m_beeEyeCamera->setPosition(pos);
-		//else if (m_renderMode == Camera::Type::PINHOLE)
-			m_pinholeCamera->setPosition(pos);
-		//else if (m_renderMode == Camera::Type::PANORAMIC)
-			m_panoramicCamera->setPosition(pos);
+		m_beeEyeCamera->setPosition(pos);
+		m_pinholeCamera->setPosition(pos);
+		m_panoramicCamera->setPosition(pos);
 
 		return;
 	}
+
 	void BeeViewApplication::getCameraPosition(float &out_x, float &out_y, float &out_z)
 	{
-		Vec3f pos = Vec3f::Zero();
-
-		/*
-		if(m_renderMode == Camera::Type::BEE_EYE)
-			pos = m_beeEyeCamera->m_viewMatrix.translation();
-		else if (m_renderMode == Camera::Type::PINHOLE)
-			pos = m_pinholeCamera->m_viewMatrix.translation();
-		else if (m_renderMode == Camera::Type::PANORAMIC)
-		*/
-			pos = m_panoramicCamera->getPosition();
+		Vec3f pos = m_panoramicCamera->getPosition();
 
 		out_x = pos(0);
 		out_y = pos(1);
@@ -90,32 +79,23 @@ namespace BeeView
 
 		return;
 	}
+
 	void BeeViewApplication::setCameraDirVector(float x, float y, float z)
 	{
 		Vec3f dir = Vec3f(x, y, z);
 
 		dir.normalize();
 
-		//if (m_renderMode == Camera::Type::BEE_EYE)
-			m_beeEyeCamera->setDir(dir);
-		//else if (m_renderMode == Camera::Type::PINHOLE)
-			m_pinholeCamera->setDir(dir);
-		//else if (m_renderMode == Camera::Type::PANORAMIC)
-			m_panoramicCamera->setDir(dir);
+		m_beeEyeCamera->setDir(dir);
+		m_pinholeCamera->setDir(dir);
+		m_panoramicCamera->setDir(dir);
+
 		return;
 	}
 
 	void BeeViewApplication::getCameraDirVector(float &out_x, float &out_y, float &out_z)
 	{
-		Vec3f dir = Vec3f::Zero();
-
-		/*
-		if (m_renderMode == Camera::Type::BEE_EYE)
-			dir = m_beeEyeCamera->getDir();
-		else if (m_renderMode == Camera::Type::PINHOLE)
-			dir = m_pinholeCamera->getDir();
-		else if (m_renderMode == Camera::Type::PANORAMIC)*/
-			dir = m_panoramicCamera->getDir();
+		Vec3f dir = m_panoramicCamera->getDir();
 
 		out_x = dir(0);
 		out_y = dir(1);
@@ -150,13 +130,132 @@ namespace BeeView
 
 	void BeeViewApplication::setPanoramicCameraXfov(float xFov)
 	{
+		if (xFov < 0.0f)
+		{
+			std::cerr << "Invalid value for xFov." << std::endl;
+		}
+
 		m_panoramicCamera->m_xFov = xFov;
 	}
 
 	/* overwrites height */
 	void BeeViewApplication::setPanoramicCameraYfov(float yFov)
 	{
+		if (yFov < 0.0f)
+		{
+			std::cerr << "Invalid value for yFov." << std::endl ;
+		}
 		m_panoramicCamera->m_yFov = yFov;
+	}
+
+	void BeeViewApplication::setPanoramicCameraWidth(int width)
+	{
+		if (width < 0)
+		{
+			std::cerr << "Invalid width." << std::endl;
+			return;
+		}
+		m_panoramicCamera->m_width = width;
+	}
+
+	void BeeViewApplication::rotateCameraUp(float degrees)
+	{
+		m_beeEyeCamera->rotateUp(degrees);
+		m_panoramicCamera->rotateUp(degrees);
+		m_pinholeCamera->rotateUp(degrees);
+	}
+
+	void BeeViewApplication::rotateCameraDown(float degrees)
+	{
+		m_beeEyeCamera->rotateDown(degrees);
+		m_panoramicCamera->rotateDown(degrees);
+		m_pinholeCamera->rotateDown(degrees);
+	}
+
+	void BeeViewApplication::rotateCameraRight(float degrees)
+	{
+		m_beeEyeCamera->rotateRight(degrees);
+		m_panoramicCamera->rotateRight(degrees);
+		m_pinholeCamera->rotateRight(degrees);
+	}
+
+	void BeeViewApplication::rotateCameraLeft(float degrees)
+	{
+		m_beeEyeCamera->rotateLeft(degrees);
+		m_panoramicCamera->rotateLeft(degrees);
+		m_pinholeCamera->rotateLeft(degrees);
+	}
+
+	void BeeViewApplication::rollCameraRight(float degrees)
+	{
+		m_beeEyeCamera->rollRight(degrees);
+		m_panoramicCamera->rollRight(degrees);
+		m_pinholeCamera->rollRight(degrees);
+	}
+
+	void BeeViewApplication::rollCameraLeft(float degrees)
+	{
+		m_beeEyeCamera->rollLeft(degrees);
+		m_panoramicCamera->rollLeft(degrees);
+		m_pinholeCamera->rollLeft(degrees);
+	}
+
+	void BeeViewApplication::setPinholeCameraFov(float fov)
+	{
+		if (fov > 179.0f || fov < 0.0f)
+		{
+			std::cerr << "Invalid fov for PINHOLE camera. Use Panoramic camera instead" << std::endl;
+		}
+		m_pinholeCamera->setFOV(fov);
+	}
+
+	void BeeViewApplication::setPinholeCameraWidth(int width)
+	{
+		if (width < 0)
+		{
+			std::cerr << "Invalid width. " << std::endl;
+			return;
+		}
+		m_pinholeCamera->setWidth(width);
+	}
+
+	void BeeViewApplication::setPinholeCameraHeight(int height)
+	{
+		if (height < 0)
+		{
+			std::cerr << "Invalid height." << std::endl;
+			return;
+		}
+		m_pinholeCamera->setHeight(height);
+	}
+
+	void BeeViewApplication::setBeeEyeCameraAcceptanceAngle(float acceptanceAngle)
+	{
+		if (acceptanceAngle > 180 || acceptanceAngle < 0)
+		{
+			std::cerr << "Invalid acceptance Angle." << std::endl;
+			return;
+		}
+		m_beeEyeCamera->m_sampler.setAcceptanceAngle(acceptanceAngle);
+	}
+
+	/* set the number of samplepoints taken per ommatidium */
+	void BeeViewApplication::setBeeEyeCameraNumSamplePoints(int numSamples)
+	{
+		int sqrtNumSamples = (int)floor(std::sqrt(numSamples)) - numSamples;
+		if (sqrtNumSamples < 1)
+			sqrtNumSamples = 1;
+		m_beeEyeCamera->m_sampler.setSqrtNumSamplePoints(sqrtNumSamples);
+	}
+
+	/* ommatidium size in pixels, should be an even number (if not: incremented to next number) */
+	void BeeViewApplication::setBeeEyeCameraOmmatidiumSize(int size)
+	{
+		if (size < 1)
+			size = 2;
+		if (size % 2 != 0)
+			size++;
+		m_beeEyeCamera->m_ommatidium_size = size;
 	}
 
 }

@@ -1,27 +1,6 @@
-from libcpp.string cimport string
-from libcpp.vector cimport vector
-from libcpp cimport bool
-
 import numpy as np
 from PIL import Image
-
-# this should go into a seperate .pxd file
-cdef extern from "beeview_api.h" namespace "BeeView":
-
-	cdef cppclass BeeViewApplication:
-		BeeViewApplication(string, string, bool) except +
-
-		#Methods
-		vector[vector[vector[float]]] render()
-
-		void setCameraPosition(float, float, float)
-		void getCameraPosition(float &, float &, float &)
-		void setCameraDirVector(float, float, float)
-		void getCameraDirVector(float &, float &, float &)
-		void setRenderModeBeeEye()
-		void setRenderModePinhole()
-		void setRenderModePanoramic()
-		float heightAboveGround()
+from  beeview_api cimport *
 
 cdef class Renderer:
 	"""This class wraps the C++ BeeViewApplication class.
@@ -138,6 +117,24 @@ cdef class Renderer:
 
 		self.C_Class.setRenderModePanoramic()
 
+	def rotate_camera_up(self, degrees):
+		self.C_Class.rotateCameraUp(degrees)
+
+	def rotate_camera_down(self, degrees):
+		self.C_Class.rotateCameraDown(degrees)
+
+	def rotate_camera_left(self, degrees):
+		self.C_Class.rotateCameraLeft(degrees)
+
+	def rotate_camera_right(self, degrees):
+		self.C_Class.rotateCameraRight(degrees)
+
+	def roll_camera_left(self, degrees):
+		self.C_Class.rollCameraLeft(degrees)
+
+	def roll_camera_right(self, degrees):
+		self.C_Class.rollCameraRight(degrees)
+
 	def height_above_ground(self):
 		"""
 		Returns
@@ -148,4 +145,31 @@ cdef class Renderer:
 		"""
 
 		return self.C_Class.heightAboveGround()
+
+	def set_panoramic_xfov(self, xfov):
+		self.C_Class.setPanoramicCameraXfov(xfov)
+
+	def set_panoramic_yfov(self, yfov):
+		self.C_Class.setPanoramicCameraYfov(yfov)
+
+	def set_panoramic_width(self, width):
+		self.C_Class.setPanoramicCameraWidth(width)
+
+	def set_pinhole_fov(self, fov):
+		self.C_Class.setPinholeCameraFov(fov)
+
+	def set_pinhole_width(self, width):
+		self.C_Class.setPinholeCameraWidth(width)
+
+	def set_pinhole_height(self, height):
+		self.C_Class.setPinholeCameraHeight(height)
+
+	def set_beeeye_acceptance_angle(self, acceptance_angle):
+		self.C_Class.setPinholeCameraHeight(acceptance_angle)
+
+	def set_beeeye_sample_points(self, num_sample_points):
+		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)
+
+	def set_beeeye_ommatidium_size(self, ommatidium_size):
+		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
 

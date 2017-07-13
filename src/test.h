@@ -535,7 +535,7 @@ namespace BeeView {
 				Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
 				c_img.set(x, y, color);
 			}
-			c_img.saveToPPM("bee_eye_bi_linear.ppm");
+			c_img.saveToPPM("bee_eye_nn.ppm");
 			return;
 		}
 
