@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="beeview.pyx" />
+    <Content Include="beeview_api.pxd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

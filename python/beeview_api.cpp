@@ -60,8 +60,14 @@ namespace BeeView
 
 	void BeeViewApplication::setCameraPosition(float x, float y, float z)
 	{
+
 		Vec3f pos = Vec3f(x, y, z);
 
+		if(!validate(pos))
+		{
+			std::cerr << "Invalid Vector. ";
+			return;
+		}
 		m_beeEyeCamera->setPosition(pos);
 		m_pinholeCamera->setPosition(pos);
 		m_panoramicCamera->setPosition(pos);
@@ -83,8 +89,13 @@ namespace BeeView
 	void BeeViewApplication::setCameraDirVector(float x, float y, float z)
 	{
 		Vec3f dir = Vec3f(x, y, z);
-
+		if (!validate(dir))
+		{
+			std::cerr << "Invalid Vector. ";
+			return;
+		}
 		dir.normalize();
+
 
 		m_beeEyeCamera->setDir(dir);
 		m_pinholeCamera->setDir(dir);
@@ -130,7 +141,7 @@ namespace BeeView
 
 	void BeeViewApplication::setPanoramicCameraXfov(float xFov)
 	{
-		if (xFov < 0.0f)
+		if (xFov < 0.0f || std::isnan(xFov) || std::isinf(xFov))
 		{
 			std::cerr << "Invalid value for xFov." << std::endl;
 		}
@@ -141,7 +152,7 @@ namespace BeeView
 	/* overwrites height */
 	void BeeViewApplication::setPanoramicCameraYfov(float yFov)
 	{
-		if (yFov < 0.0f)
+		if (yFov < 0.0f || std::isnan(yFov) || std::isinf(yFov))
 		{
 			std::cerr << "Invalid value for yFov." << std::endl ;
 		}
@@ -160,6 +171,11 @@ namespace BeeView
 
 	void BeeViewApplication::rotateCameraUp(float degrees)
 	{
+		if(std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rotateUp(degrees);
 		m_panoramicCamera->rotateUp(degrees);
 		m_pinholeCamera->rotateUp(degrees);
@@ -167,6 +183,11 @@ namespace BeeView
 
 	void BeeViewApplication::rotateCameraDown(float degrees)
 	{
+		if (std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rotateDown(degrees);
 		m_panoramicCamera->rotateDown(degrees);
 		m_pinholeCamera->rotateDown(degrees);
@@ -174,6 +195,11 @@ namespace BeeView
 
 	void BeeViewApplication::rotateCameraRight(float degrees)
 	{
+		if (std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rotateRight(degrees);
 		m_panoramicCamera->rotateRight(degrees);
 		m_pinholeCamera->rotateRight(degrees);
@@ -181,6 +207,11 @@ namespace BeeView
 
 	void BeeViewApplication::rotateCameraLeft(float degrees)
 	{
+		if (std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rotateLeft(degrees);
 		m_panoramicCamera->rotateLeft(degrees);
 		m_pinholeCamera->rotateLeft(degrees);
@@ -188,6 +219,11 @@ namespace BeeView
 
 	void BeeViewApplication::rollCameraRight(float degrees)
 	{
+		if (std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rollRight(degrees);
 		m_panoramicCamera->rollRight(degrees);
 		m_pinholeCamera->rollRight(degrees);
@@ -195,6 +231,11 @@ namespace BeeView
 
 	void BeeViewApplication::rollCameraLeft(float degrees)
 	{
+		if (std::isnan(degrees) || std::isinf(degrees))
+		{
+			std::cerr << "Invalid input (degrees)." << std::endl;
+			return;
+		}
 		m_beeEyeCamera->rollLeft(degrees);
 		m_panoramicCamera->rollLeft(degrees);
 		m_pinholeCamera->rollLeft(degrees);
@@ -202,7 +243,7 @@ namespace BeeView
 
 	void BeeViewApplication::setPinholeCameraFov(float fov)
 	{
-		if (fov > 179.0f || fov < 0.0f)
+		if (fov > 179.0f || fov < 0.0f || std::isnan(fov) || std::isinf(fov))
 		{
 			std::cerr << "Invalid fov for PINHOLE camera. Use Panoramic camera instead" << std::endl;
 		}
@@ -231,7 +272,7 @@ namespace BeeView
 
 	void BeeViewApplication::setBeeEyeCameraAcceptanceAngle(float acceptanceAngle)
 	{
-		if (acceptanceAngle > 180 || acceptanceAngle < 0)
+		if (acceptanceAngle > 180 || acceptanceAngle < 0 || std::isnan(acceptanceAngle) || std::isinf(acceptanceAngle))
 		{
 			std::cerr << "Invalid acceptance Angle." << std::endl;
 			return;
@@ -256,6 +297,11 @@ namespace BeeView
 		if (size % 2 != 0)
 			size++;
 		m_beeEyeCamera->m_ommatidium_size = size;
+	}
+
+	void BeeViewApplication::setVerboseLvl(int verboseLvl)
+	{
+		verbose_lvl = verboseLvl;
 	}
 
 }

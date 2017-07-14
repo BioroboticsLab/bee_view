@@ -25,8 +25,8 @@ namespace BeeView {
 		{
 			Vec3f cam_dir = m_camera->getDir();
 			Vec3f cam_pos = m_camera->getPosition();
-			std::cout << std::endl << "Camera Position " << "(" << cam_pos(0) << "," << cam_pos(1) << "," << cam_pos(2) << "), ";
-			std::cout << "Camera Direction " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) <<")";
+			std::cout << std::endl << "Pos" << "(" << cam_pos(0) << "," << cam_pos(1) << "," << cam_pos(2) << "), ";
+			std::cout << "Dir " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) <<")";
 		}
 		if (verbose_lvl > 0)
 			std::cout << std::endl << "Start rendering Image... ";
@@ -216,12 +216,16 @@ namespace BeeView {
 		benchmarkLog.open("log.txt", std::ios_base::app);
 		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
 #endif
-
+		std::cout << "1 ";
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+		std::cout << "2 ";
 
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
+		std::cout << "3 ";
+
 		renderBeeEye(img, Side::RIGHT);
+		std::cout << "4 ";
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 #ifdef DEBUG
@@ -229,6 +233,7 @@ namespace BeeView {
 		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
 		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
+		std::cout << "5 ";
 
 		if(verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
@@ -260,6 +265,9 @@ namespace BeeView {
 		params.x_max = beeEye->m_max_x;
 		params.y_min = beeEye->m_min_y;
 		params.y_max = beeEye->m_max_y;
+
+		std::cout << "7 ";
+
 
 		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
@@ -384,6 +392,7 @@ namespace BeeView {
 				center = Vec2f(rel_x + camera->m_ommatidium_size / 2, rel_y + camera->m_ommatidium_size / 2);
 
 		}
+		std::cout << "8 ";
 
 		// draw cross at eye center
 		drawCross(img, floor(center(0)), floor(center(1)));

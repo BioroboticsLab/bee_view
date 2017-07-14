@@ -173,3 +173,5 @@ cdef class Renderer:
 	def set_beeeye_ommatidium_size(self, ommatidium_size):
 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
 
+	def set_verbose_lvl(self, verbose_lvl):
+		self.C_Class.setVerboseLvl(verbose_lvl)

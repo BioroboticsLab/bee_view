@@ -6,10 +6,9 @@ import os
 project_path =  os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 sourcefiles  = [
-    #os.path.join(project_path,'python','beeview.pxd'),
     os.path.join(project_path,'python','beeview.pyx'), 
     os.path.join(project_path,'python','beeview_api.cpp'),
-    os.path.join(project_path,'src','bee_eye.cpp'),
+    os.path.join(project_path,'src','bee_eye.cpp'), # better use regex to list all cpp files in src
     os.path.join(project_path,'src','camera.cpp'),
     os.path.join(project_path,'src','image.cpp'),
     os.path.join(project_path,'src','obj_loader.cpp'),
@@ -23,10 +22,16 @@ sourcefiles  = [
 ext=[Extension('beeview',
             sources = sourcefiles,
             libraries=["embree"],  
-            extra_link_args=["/LIBPATH:"+ os.path.join(project_path,'lib')],
+            extra_link_args=["/LIBPATH:"+ os.path.join(project_path,'lib')], # for linux -L
             extra_compile_args=["-I" + os.path.join(project_path,'external')],
             language='c++')]
 
 setup(
-  ext_modules=cythonize(ext)
+  name = 'beeview',
+  version = '0.1',
+  author = 'Johannes Polster',
+  url = 'https://github.com/tschopo/bee_view',
+  description = 'Bee Eye Camera for Virtual Environments',
+  ext_modules=cythonize(ext),
+  py_modules = ['beeview']
 )

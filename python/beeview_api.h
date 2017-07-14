@@ -25,6 +25,8 @@ namespace BeeView
 
 	public:
 
+		/* Sets up the scene and renderer. If leftHanded = true: flips the z coordinate and the texture coordinates. 
+		   verbose controls the verbose lvl: if 0 no output, if 1 basic output, if 2 stat output, if > 2 debug output. */
 		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, bool leftHanded = false, int verbose = 2);
 
 		~BeeViewApplication();
@@ -32,12 +34,12 @@ namespace BeeView
 		/* renders an image with the current active camera and the settings specified be the camera */
 		std::vector<std::vector<std::vector<float>>> render();
 
+		// camera setters: position, rotation, cameratype
 		void setCameraPosition(float x, float y, float z);
 		void getCameraPosition(float &out_x, float &out_y, float &out_z);
 		void setCameraDirVector(float x, float y, float z);
 		void getCameraDirVector(float &out_x, float &out_y, float &out_z);
 
-		// camera setters: position, rotation, cameratype
 		void setRenderModeBeeEye();
 		void setRenderModePinhole();
 		void setRenderModePanoramic();
@@ -74,6 +76,6 @@ namespace BeeView
 
 		/* overwrites yFov, not implemented */
 		//void setPanoramicCameraHeight(int height);
-
+		void setVerboseLvl(int verboseLvl);
 	};
 }

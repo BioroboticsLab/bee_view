@@ -1024,6 +1024,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_44set_pinhole_height(struct __pyx_o
 static PyObject *__pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_acceptance_angle); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_num_sample_points); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_ommatidium_size); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_52set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /* proto */
 static PyObject *__pyx_tp_new_7beeview_Renderer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_int_255;
 static PyObject *__pyx_tuple_;
@@ -2876,6 +2877,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct
  * 	def set_beeeye_ommatidium_size(self, ommatidium_size):
  * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)             # <<<<<<<<<<<<<<
  * 
+ * 	def set_verbose_lvl(self, verbose_lvl):
  */
   __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_ommatidium_size); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 174, __pyx_L1_error)
   __pyx_v_self->C_Class->setBeeEyeCameraOmmatidiumSize(__pyx_t_1);
@@ -2893,6 +2895,59 @@ static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_AddTraceback("beeview.Renderer.set_beeeye_ommatidium_size", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "beeview.pyx":176
+ * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 
+ * 	def set_verbose_lvl(self, verbose_lvl):             # <<<<<<<<<<<<<<
+ * 		self.C_Class.setVerboseLvl(verbose_lvl)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7beeview_8Renderer_53set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_53set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_verbose_lvl (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_52set_verbose_lvl(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_verbose_lvl));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7beeview_8Renderer_52set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("set_verbose_lvl", 0);
+
+  /* "beeview.pyx":177
+ * 
+ * 	def set_verbose_lvl(self, verbose_lvl):
+ * 		self.C_Class.setVerboseLvl(verbose_lvl)             # <<<<<<<<<<<<<<
+ */
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_verbose_lvl); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_v_self->C_Class->setVerboseLvl(__pyx_t_1);
+
+  /* "beeview.pyx":176
+ * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 
+ * 	def set_verbose_lvl(self, verbose_lvl):             # <<<<<<<<<<<<<<
+ * 		self.C_Class.setVerboseLvl(verbose_lvl)
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("beeview.Renderer.set_verbose_lvl", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3173,6 +3228,7 @@ static PyMethodDef __pyx_methods_7beeview_Renderer[] = {
   {"set_beeeye_acceptance_angle", (PyCFunction)__pyx_pw_7beeview_8Renderer_47set_beeeye_acceptance_angle, METH_O, 0},
   {"set_beeeye_sample_points", (PyCFunction)__pyx_pw_7beeview_8Renderer_49set_beeeye_sample_points, METH_O, 0},
   {"set_beeeye_ommatidium_size", (PyCFunction)__pyx_pw_7beeview_8Renderer_51set_beeeye_ommatidium_size, METH_O, 0},
+  {"set_verbose_lvl", (PyCFunction)__pyx_pw_7beeview_8Renderer_53set_verbose_lvl, METH_O, 0},
   {0, 0, 0, 0}
 };
 

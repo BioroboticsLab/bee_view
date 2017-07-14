@@ -18,6 +18,12 @@ namespace BeeView
 	
 	inline float deg2rad(const float &deg)	{ return deg * M_PI / 180.0f; }
 
+	inline bool validate(Vec3f vec)
+	{
+		return !(std::isnan(vec(0)) || std::isinf(vec(0)) || std::isnan(vec(1)) || std::isinf(vec(1)) || std::isnan(vec(2)) || std::isinf(vec(2)));
+
+	}
+
 	/* C:\\Users\\Documents\\file.txt -> return C:\\Users\\Documents\\,
 	 * home/user/Docements/file.txt -> return home/user/Docements/ */
 	inline std::string getFilePath(std::string fullPath)
