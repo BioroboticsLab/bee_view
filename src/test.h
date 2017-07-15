@@ -516,13 +516,13 @@ namespace BeeView {
 			//beeView.setRenderModePinhole();
 			//beeView.setRenderModePanoramic();
 
-			beeView.setCameraPosition(0, 0, 0);
-			float h = beeView.heightAboveGround();
+			beeView.setCameraPosition(0,0,0);
+			float h = beeView.getDistance(0,0,0,0,-1,0);
 			beeView.setCameraPosition(0, (0-h)+15, 0); // 5m above ground
 
 			beeView.setCameraDirVector(0, 0, -1);
-			beeView.setPanoramicCameraXfov(60);
-			beeView.setPanoramicCameraYfov(30);
+
+			beeView.setBeeEyeCameraNumSamplePoints(132);
 
 			// convert python image to my image format
 			PyImage img = beeView.render();

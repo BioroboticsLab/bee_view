@@ -194,21 +194,10 @@ namespace BeeView {
 
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
-		// compute image dimensions
-		int x_dim = (camera->m_leftEye->m_max_x + abs(camera->m_leftEye->m_min_x) + 1) * camera->m_ommatidium_size;
-		int y_dim = (camera->m_leftEye->m_max_y + abs(camera->m_leftEye->m_min_y) + 1)*camera->m_ommatidium_size;
-
-		// add to x_dim because of ommatidia shift
-		x_dim += camera->m_ommatidium_size / 2;
-
-		// 2 eyes
-		x_dim = x_dim * 2;
-
-		// space between eyes
-		x_dim += 2 * camera->m_ommatidium_size;
-
 		// create black image
-		std::unique_ptr<Image> img = std::make_unique<Image>(x_dim, y_dim);
+		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
+
+		int ommatidiumSize = camera->getOmmatidiumSize();
 
 #ifdef DEBUG
 		// benchmark
@@ -216,16 +205,12 @@ namespace BeeView {
 		benchmarkLog.open("log.txt", std::ios_base::app);
 		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
 #endif
-		std::cout << "1 ";
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		std::cout << "2 ";
 
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
-		std::cout << "3 ";
 
 		renderBeeEye(img, Side::RIGHT);
-		std::cout << "4 ";
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 #ifdef DEBUG
@@ -233,14 +218,13 @@ namespace BeeView {
 		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
 		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
-		std::cout << "5 ";
 
 		if(verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
 		if (verbose_lvl > 1)
 			std::cout << "Rendering Stats: Time " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << " ms, Number of Rays cast " << camera->m_sampler.getTotalSamplePoints()*camera->m_rightEye->m_ommatidia.size() * 2 << "." << std::endl;
 		if (verbose_lvl > 2)
-			std::cout << "Camera settings: Type BEE_EYE, Acceptance angle " << camera->m_sampler.getAcceptanceAngle() << ", Ommatidium size " << camera->m_ommatidium_size << ", Num Samples per Ommatidium " << camera->m_sampler.getTotalSamplePoints() << ", Number of Ommatidia " << camera->m_rightEye->m_ommatidia.size()*2 << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
+			std::cout << "Camera settings: Type BEE_EYE, Acceptance angle " << camera->m_sampler.getAcceptanceAngle() << ", Ommatidium size " << ommatidiumSize << ", Num Samples per Ommatidium " << camera->m_sampler.getTotalSamplePoints() << ", Number of Ommatidia " << camera->m_rightEye->m_ommatidia.size()*2 << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
 		return img;
 	}
 
@@ -250,24 +234,17 @@ namespace BeeView {
 		int y;
 
 		Vec2f center;
-
+		
 		// need beeeyecamera methods
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
+
+		int ommatidiumSize = camera->getOmmatidiumSize();
 
 		BeeEye::Ptr beeEye;
 		if (side == Side::LEFT)
 			beeEye = camera->m_leftEye;
 		else
 			beeEye = camera->m_rightEye;
-
-		ConvertCoordsParams params;
-		params.x_min = beeEye->m_min_x; //TODO refactor inconsistent order, should be beeEye.m_x_min
-		params.x_max = beeEye->m_max_x;
-		params.y_min = beeEye->m_min_y;
-		params.y_max = beeEye->m_max_y;
-
-		std::cout << "7 ";
-
 
 		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
@@ -361,38 +338,37 @@ namespace BeeView {
 			#endif
 
 			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
-			convert2ImageCoords(ommatidium, params, x, y);
+			convert2ImageCoords(ommatidium, beeEye, x, y);
 
-			int rel_x = x * camera->m_ommatidium_size;
-			int rel_y = y * camera->m_ommatidium_size;
+			int rel_x = x * ommatidiumSize;
+			int rel_y = y * ommatidiumSize;
 
 			// shift every second row, to simulate hexagonal shape
 			if (beeEye->m_side == Side::RIGHT)
 			{
 				if (y % 2 == 0)
-					rel_x += camera->m_ommatidium_size / 2;
+					rel_x += ommatidiumSize / 2;
 
 				// also add offset to right side
 				rel_x += (img->m_width / 2);
 
 				// space between the two eyes
-				rel_x += camera->m_ommatidium_size;
+				rel_x += ommatidiumSize;
 			}
 			else // left eye
 			{
 				if (y % 2 == 1)
-					rel_x += camera->m_ommatidium_size / 2;
+					rel_x += ommatidiumSize / 2;
 			}
 
 			/* draw the ommatidium as square */
-			drawSquare(img, rel_x, rel_y, camera->m_ommatidium_size, color);
+			drawSquare(img, rel_x, rel_y, ommatidiumSize, color);
 
 			/* for the crosses at center of eye */
 			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
-				center = Vec2f(rel_x + camera->m_ommatidium_size / 2, rel_y + camera->m_ommatidium_size / 2);
+				center = Vec2f(rel_x + ommatidiumSize / 2, rel_y + ommatidiumSize / 2);
 
 		}
-		std::cout << "8 ";
 
 		// draw cross at eye center
 		drawCross(img, floor(center(0)), floor(center(1)));
@@ -417,7 +393,7 @@ namespace BeeView {
 	(+y)
 
 	*/
-	void Renderer::convert2ImageCoords(const Ommatidium &ommatidium, const ConvertCoordsParams &params, int &out_x, int &out_y)
+	void Renderer::convert2ImageCoords(const Ommatidium &ommatidium, const BeeEye::Ptr beeEye, int &out_x, int &out_y)
 	{
 		/*
 		convert to:
@@ -426,8 +402,8 @@ namespace BeeView {
 		|
 		+-------(+x)
 		*/
-		out_x = ommatidium.m_x + abs(params.x_min);
-		out_y = ommatidium.m_y + abs(params.y_min);
+		out_x = ommatidium.m_x + abs(beeEye->m_x_min);
+		out_y = ommatidium.m_y + abs(beeEye->m_y_min);
 
 		/*
 		convert to:
@@ -436,7 +412,7 @@ namespace BeeView {
 		|
 		(+y)
 		*/
-		out_y = abs(out_y - (params.y_max + abs(params.y_min)));
+		out_y = abs(out_y - (beeEye->m_y_max + abs(beeEye->m_y_min)));
 		assert(out_x >= 0 && out_y >= 0);
 	}
 
@@ -454,19 +430,19 @@ namespace BeeView {
 		return Color((e + 90) / 180.f, 0, (a + 270) / 360.f);
 	}
 
-	float Renderer::heightAboveGround()
+	float Renderer::getDistance(Vec3f pos, Vec3f dir)
 	{
-		Vec3f pos = m_camera->getPosition();
-
 		/* initialize ray */
 		RTCRay ray;
+
+		dir.normalize();
 
 		ray.org[0] = pos(0);
 		ray.org[1] = pos(1);
 		ray.org[2] = pos(2);
-		ray.dir[0] = 0.0f;
-		ray.dir[1] = -1.0f;
-		ray.dir[2] = 0.0f;
+		ray.dir[0] = dir(0);
+		ray.dir[1] = dir(1);
+		ray.dir[2] = dir(2);
 
 		ray.tnear = 0.0f;
 		ray.tfar = std::numeric_limits<float>::infinity();

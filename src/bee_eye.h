@@ -60,10 +60,10 @@ namespace BeeView
 		Side m_side;
 
 		// max expanse of bee eye coordinate system, gets set when csv is loaded
-		int m_max_x = 0; 
-		int m_min_x = -0;
-		int m_max_y = 0;
-		int m_min_y = -0;
+		int m_x_max = 0; 
+		int m_x_min = -0;
+		int m_y_max = 0;
+		int m_y_min = -0;
 
 		/* creates the right bee eye. use createOtherEye() to construct the left eye. */
 		BeeEye() : m_side(Side::RIGHT) 	{}

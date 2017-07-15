@@ -154,18 +154,18 @@ namespace BeeView
 		auto minmax_y = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
 			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_y < rhs.m_y; });
 
-		m_min_x = minmax_x.first->m_x;
-		m_max_x = minmax_x.second->m_x;
-		m_min_y = minmax_y.first->m_y;
-		m_max_y = minmax_y.second->m_y;
+		m_x_min = minmax_x.first->m_x;
+		m_x_max = minmax_x.second->m_x;
+		m_y_min = minmax_y.first->m_y;
+		m_y_max = minmax_y.second->m_y;
 
 		if (verbose_lvl > 2)
 		{
-			std::cout << "Minimum x: " << m_min_x << std::endl;
-			std::cout << "Maximum x: " << m_max_x << std::endl;
+			std::cout << "Minimum x: " << m_x_min << std::endl;
+			std::cout << "Maximum x: " << m_x_max << std::endl;
 
-			std::cout << "Minimum y: " << m_min_y << std::endl;
-			std::cout << "Maximum y: " << m_max_y << std::endl;
+			std::cout << "Minimum y: " << m_y_min << std::endl;
+			std::cout << "Maximum y: " << m_y_max << std::endl;
 		}
 
 		if (verbose_lvl > 0)
@@ -191,10 +191,10 @@ namespace BeeView
 			otherEye.m_ommatidia.push_back(other_o);
 			//TODO:  sort?
 		}
-		otherEye.m_max_x = abs(m_min_x);
-		otherEye.m_max_y = m_max_y;
-		otherEye.m_min_x = -m_max_x;
-		otherEye.m_min_y = m_min_y;
+		otherEye.m_x_max = abs(m_x_min);
+		otherEye.m_y_max = m_y_max;
+		otherEye.m_x_min = -m_x_max;
+		otherEye.m_y_min = m_y_min;
 
 		return otherEye;
 	}

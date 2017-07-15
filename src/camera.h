@@ -79,17 +79,30 @@ namespace BeeView {
 	class BeeEyeCamera : public Camera
 	{
 
+	private:
+		int m_ommatidium_size;
+
+		/* the output image width and height */
+		int m_image_width;
+		int m_image_height;
+
+		void calculateImageDimensions();
+
 	public:
 
 		BeeEye::Ptr m_leftEye;
 		BeeEye::Ptr m_rightEye;
 
-		int m_ommatidium_size;
-
 		// the sampler to draw directions from
 		Sampler m_sampler;
 
 		BeeEyeCamera(BeeEye::Ptr beeEye);
+
+
+		int getImageHeight();
+		int getImageWidth();
+		void setOmmatidiumSize(int size);
+		int getOmmatidiumSize();
 	};
 
 	class PinholeCamera : public Camera

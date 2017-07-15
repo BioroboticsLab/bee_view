@@ -887,9 +887,6 @@
     <ClInclude Include="external\embree2\rtcore_version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\test.h">
       <Filter>Header Files\bee_view</Filter>
     </ClInclude>
@@ -921,6 +918,9 @@
       <Filter>Header Files\bee_view</Filter>
     </ClInclude>
     <ClInclude Include="python\beeview_api.h">
+      <Filter>Header Files\bee_view</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer.h">
       <Filter>Header Files\bee_view</Filter>
     </ClInclude>
   </ItemGroup>

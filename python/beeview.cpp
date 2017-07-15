@@ -927,6 +927,9 @@ static void __Pyx_CppExn2PyErr() {
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
+
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
@@ -966,6 +969,8 @@ int __pyx_module_is_main_beeview = 0;
 static PyObject *__pyx_builtin_range;
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_PIL[] = "PIL";
+static const char __pyx_k_dir[] = "dir";
+static const char __pyx_k_pos[] = "pos";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_Image[] = "Image";
@@ -986,6 +991,7 @@ static PyObject *__pyx_n_s_PIL;
 static PyObject *__pyx_kp_s_UTF_8;
 static PyObject *__pyx_n_s_array;
 static PyObject *__pyx_n_s_astype;
+static PyObject *__pyx_n_s_dir;
 static PyObject *__pyx_n_s_encode;
 static PyObject *__pyx_n_s_fromarray;
 static PyObject *__pyx_n_s_import;
@@ -994,6 +1000,7 @@ static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_ommatidia_file;
+static PyObject *__pyx_n_s_pos;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_scene_file;
 static PyObject *__pyx_n_s_test;
@@ -1001,30 +1008,32 @@ static PyObject *__pyx_n_s_uint8;
 static int __pyx_pf_7beeview_8Renderer___cinit__(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_scene_file, PyObject *__pyx_v_ommatidia_file, PyObject *__pyx_v_left_handed); /* proto */
 static void __pyx_pf_7beeview_8Renderer_2__dealloc__(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_4render(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_6set_camera_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_10set_camera_dir(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_dir); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_12get_camera_dir(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_6set_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_8get_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_10set_direction(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_dir); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_12get_direction(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_14set_beeeye_mode(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_16set_pinhole_mode(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_18set_panoramic_mode(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_camera_up(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_camera_down(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_camera_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_camera_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_28roll_camera_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_30roll_camera_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_32height_above_ground(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_up(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_down(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_28roll_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_30roll_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_32measure_distance(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos, PyObject *__pyx_v_dir); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_34set_panoramic_xfov(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_xfov); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_36set_panoramic_yfov(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_yfov); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_38set_panoramic_width(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_width); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_40set_pinhole_fov(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_fov); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_42set_pinhole_width(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_width); /* proto */
 static PyObject *__pyx_pf_7beeview_8Renderer_44set_pinhole_height(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_height); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_acceptance_angle); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_num_sample_points); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_ommatidium_size); /* proto */
-static PyObject *__pyx_pf_7beeview_8Renderer_52set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_46set_acceptance_angle(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_acceptance_angle); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_48set_num_samples(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_num_samples); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_50set_ommatidium_size(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_ommatidium_size); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_52get_beeeye_image_height(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_54get_beeeye_image_width(struct __pyx_obj_7beeview_Renderer *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7beeview_8Renderer_56set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /* proto */
 static PyObject *__pyx_tp_new_7beeview_Renderer(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_int_255;
 static PyObject *__pyx_tuple_;
@@ -1398,7 +1407,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_4render(struct __pyx_obj_7beeview_R
  * 		img = (np.array(img) * 255).astype(np.uint8)
  * 		return Image.fromarray(img)             # <<<<<<<<<<<<<<
  * 
- * 	def set_camera_position(self,pos):
+ * 	def set_position(self,pos):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_Image); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
@@ -1480,40 +1489,40 @@ static PyObject *__pyx_pf_7beeview_8Renderer_4render(struct __pyx_obj_7beeview_R
 /* "beeview.pyx":55
  * 		return Image.fromarray(img)
  * 
- * 	def set_camera_position(self,pos):             # <<<<<<<<<<<<<<
+ * 	def set_position(self,pos):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Parameters
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_7set_camera_position(PyObject *__pyx_v_self, PyObject *__pyx_v_pos); /*proto*/
-static char __pyx_doc_7beeview_8Renderer_6set_camera_position[] = "\t\n\t\tParameters\n\t\t----------\n\t\tpos : sequence of float\n\t\t\tThe x, y, z coordinates\n\t\t";
-static PyObject *__pyx_pw_7beeview_8Renderer_7set_camera_position(PyObject *__pyx_v_self, PyObject *__pyx_v_pos) {
+static PyObject *__pyx_pw_7beeview_8Renderer_7set_position(PyObject *__pyx_v_self, PyObject *__pyx_v_pos); /*proto*/
+static char __pyx_doc_7beeview_8Renderer_6set_position[] = "\t\n\t\tParameters\n\t\t----------\n\t\tpos : sequence of float\n\t\t\tThe x, y, z coordinates\n\t\t";
+static PyObject *__pyx_pw_7beeview_8Renderer_7set_position(PyObject *__pyx_v_self, PyObject *__pyx_v_pos) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_camera_position (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_6set_camera_position(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_pos));
+  __Pyx_RefNannySetupContext("set_position (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_6set_position(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_pos));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_6set_camera_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos) {
+static PyObject *__pyx_pf_7beeview_8Renderer_6set_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   float __pyx_t_2;
   float __pyx_t_3;
   float __pyx_t_4;
-  __Pyx_RefNannySetupContext("set_camera_position", 0);
+  __Pyx_RefNannySetupContext("set_position", 0);
 
   /* "beeview.pyx":62
  * 			The x, y, z coordinates
  * 		"""
  * 		self.C_Class.setCameraPosition(pos[0],pos[1],pos[2]);             # <<<<<<<<<<<<<<
  * 
- * 	def get_camera_position(self):
+ * 	def get_position(self):
  */
   __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1532,7 +1541,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_6set_camera_position(struct __pyx_o
   /* "beeview.pyx":55
  * 		return Image.fromarray(img)
  * 
- * 	def set_camera_position(self,pos):             # <<<<<<<<<<<<<<
+ * 	def set_position(self,pos):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Parameters
  */
@@ -1542,7 +1551,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_6set_camera_position(struct __pyx_o
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("beeview.Renderer.set_camera_position", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.set_position", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1553,26 +1562,26 @@ static PyObject *__pyx_pf_7beeview_8Renderer_6set_camera_position(struct __pyx_o
 /* "beeview.pyx":64
  * 		self.C_Class.setCameraPosition(pos[0],pos[1],pos[2]);
  * 
- * 	def get_camera_position(self):             # <<<<<<<<<<<<<<
+ * 	def get_position(self):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Returns
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_9get_camera_position(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_7beeview_8Renderer_8get_camera_position[] = "\n\t\tReturns\n\t\t-------\n\t\tlist of float\n\t\t\tThe x, y, z coordinates.\n\n\t\t";
-static PyObject *__pyx_pw_7beeview_8Renderer_9get_camera_position(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7beeview_8Renderer_9get_position(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_7beeview_8Renderer_8get_position[] = "\n\t\tReturns\n\t\t-------\n\t\tlist of float\n\t\t\tThe x, y, z coordinates.\n\n\t\t";
+static PyObject *__pyx_pw_7beeview_8Renderer_9get_position(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_camera_position (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_8get_camera_position(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("get_position (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_8get_position(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
+static PyObject *__pyx_pf_7beeview_8Renderer_8get_position(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
   float __pyx_v_x;
   float __pyx_v_y;
   float __pyx_v_z;
@@ -1582,7 +1591,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_o
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("get_camera_position", 0);
+  __Pyx_RefNannySetupContext("get_position", 0);
 
   /* "beeview.pyx":73
  * 		"""
@@ -1609,7 +1618,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_o
  * 		self.C_Class.getCameraPosition(x,y,z);
  * 		return [x,y,z]             # <<<<<<<<<<<<<<
  * 
- * 	def set_camera_dir(self,dir):
+ * 	def set_direction(self,dir):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = PyFloat_FromDouble(__pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 75, __pyx_L1_error)
@@ -1636,7 +1645,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_o
   /* "beeview.pyx":64
  * 		self.C_Class.setCameraPosition(pos[0],pos[1],pos[2]);
  * 
- * 	def get_camera_position(self):             # <<<<<<<<<<<<<<
+ * 	def get_position(self):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Returns
  */
@@ -1647,7 +1656,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_o
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("beeview.Renderer.get_camera_position", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.get_position", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1658,40 +1667,40 @@ static PyObject *__pyx_pf_7beeview_8Renderer_8get_camera_position(struct __pyx_o
 /* "beeview.pyx":77
  * 		return [x,y,z]
  * 
- * 	def set_camera_dir(self,dir):             # <<<<<<<<<<<<<<
+ * 	def set_direction(self,dir):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Parameters
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_11set_camera_dir(PyObject *__pyx_v_self, PyObject *__pyx_v_dir); /*proto*/
-static char __pyx_doc_7beeview_8Renderer_10set_camera_dir[] = "\n\t\tParameters\n\t\t----------\n\t\tdir : list of float\n\t\t\tThe x, y, z coordinates of dir Vector. Will be normalized by the function.\n\n\t\t";
-static PyObject *__pyx_pw_7beeview_8Renderer_11set_camera_dir(PyObject *__pyx_v_self, PyObject *__pyx_v_dir) {
+static PyObject *__pyx_pw_7beeview_8Renderer_11set_direction(PyObject *__pyx_v_self, PyObject *__pyx_v_dir); /*proto*/
+static char __pyx_doc_7beeview_8Renderer_10set_direction[] = "\n\t\tParameters\n\t\t----------\n\t\tdir : list of float\n\t\t\tThe x, y, z coordinates of dir Vector. Will be normalized by the function.\n\n\t\t";
+static PyObject *__pyx_pw_7beeview_8Renderer_11set_direction(PyObject *__pyx_v_self, PyObject *__pyx_v_dir) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_camera_dir (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_10set_camera_dir(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_dir));
+  __Pyx_RefNannySetupContext("set_direction (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_10set_direction(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_dir));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_10set_camera_dir(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_dir) {
+static PyObject *__pyx_pf_7beeview_8Renderer_10set_direction(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_dir) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   float __pyx_t_2;
   float __pyx_t_3;
   float __pyx_t_4;
-  __Pyx_RefNannySetupContext("set_camera_dir", 0);
+  __Pyx_RefNannySetupContext("set_direction", 0);
 
   /* "beeview.pyx":86
  * 		"""
  * 
  * 		self.C_Class.setCameraDirVector(dir[0],dir[1],dir[2]);             # <<<<<<<<<<<<<<
  * 
- * 	def get_camera_dir(self):
+ * 	def get_direction(self):
  */
   __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_dir, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1710,7 +1719,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_10set_camera_dir(struct __pyx_obj_7
   /* "beeview.pyx":77
  * 		return [x,y,z]
  * 
- * 	def set_camera_dir(self,dir):             # <<<<<<<<<<<<<<
+ * 	def set_direction(self,dir):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Parameters
  */
@@ -1720,7 +1729,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_10set_camera_dir(struct __pyx_obj_7
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("beeview.Renderer.set_camera_dir", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.set_direction", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1731,26 +1740,26 @@ static PyObject *__pyx_pf_7beeview_8Renderer_10set_camera_dir(struct __pyx_obj_7
 /* "beeview.pyx":88
  * 		self.C_Class.setCameraDirVector(dir[0],dir[1],dir[2]);
  * 
- * 	def get_camera_dir(self):             # <<<<<<<<<<<<<<
+ * 	def get_direction(self):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Returns
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_13get_camera_dir(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_7beeview_8Renderer_12get_camera_dir[] = "\n\t\tReturns\n\t\t-------\n\t\tlist of float\n\t\t\tThe x, y, z coordinates of dir Vector.\n\n\t\t";
-static PyObject *__pyx_pw_7beeview_8Renderer_13get_camera_dir(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7beeview_8Renderer_13get_direction(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_7beeview_8Renderer_12get_direction[] = "\n\t\tReturns\n\t\t-------\n\t\tlist of float\n\t\t\tThe x, y, z coordinates of dir Vector.\n\n\t\t";
+static PyObject *__pyx_pw_7beeview_8Renderer_13get_direction(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_camera_dir (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_12get_camera_dir(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("get_direction (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_12get_direction(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_12get_camera_dir(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
+static PyObject *__pyx_pf_7beeview_8Renderer_12get_direction(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
   float __pyx_v_x;
   float __pyx_v_y;
   float __pyx_v_z;
@@ -1760,7 +1769,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_12get_camera_dir(struct __pyx_obj_7
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("get_camera_dir", 0);
+  __Pyx_RefNannySetupContext("get_direction", 0);
 
   /* "beeview.pyx":97
  * 		"""
@@ -1814,7 +1823,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_12get_camera_dir(struct __pyx_obj_7
   /* "beeview.pyx":88
  * 		self.C_Class.setCameraDirVector(dir[0],dir[1],dir[2]);
  * 
- * 	def get_camera_dir(self):             # <<<<<<<<<<<<<<
+ * 	def get_direction(self):             # <<<<<<<<<<<<<<
  * 		"""
  * 		Returns
  */
@@ -1825,7 +1834,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_12get_camera_dir(struct __pyx_obj_7
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("beeview.Renderer.get_camera_dir", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.get_direction", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1967,7 +1976,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_18set_panoramic_mode(struct __pyx_o
  * 
  * 		self.C_Class.setRenderModePanoramic()             # <<<<<<<<<<<<<<
  * 
- * 	def rotate_camera_up(self, degrees):
+ * 	def rotate_up(self, degrees):
  */
   __pyx_v_self->C_Class->setRenderModePanoramic();
 
@@ -1989,36 +1998,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_18set_panoramic_mode(struct __pyx_o
 /* "beeview.pyx":120
  * 		self.C_Class.setRenderModePanoramic()
  * 
- * 	def rotate_camera_up(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_up(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraUp(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_21rotate_camera_up(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_21rotate_camera_up(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_21rotate_up(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_21rotate_up(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("rotate_camera_up (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_20rotate_camera_up(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("rotate_up (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_20rotate_up(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_camera_up(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_up(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("rotate_camera_up", 0);
+  __Pyx_RefNannySetupContext("rotate_up", 0);
 
   /* "beeview.pyx":121
  * 
- * 	def rotate_camera_up(self, degrees):
+ * 	def rotate_up(self, degrees):
  * 		self.C_Class.rotateCameraUp(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def rotate_camera_down(self, degrees):
+ * 	def rotate_down(self, degrees):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 121, __pyx_L1_error)
   __pyx_v_self->C_Class->rotateCameraUp(__pyx_t_1);
@@ -2026,7 +2035,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_camera_up(struct __pyx_obj
   /* "beeview.pyx":120
  * 		self.C_Class.setRenderModePanoramic()
  * 
- * 	def rotate_camera_up(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_up(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraUp(degrees)
  * 
  */
@@ -2035,7 +2044,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_camera_up(struct __pyx_obj
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.rotate_camera_up", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.rotate_up", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2046,36 +2055,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_20rotate_camera_up(struct __pyx_obj
 /* "beeview.pyx":123
  * 		self.C_Class.rotateCameraUp(degrees)
  * 
- * 	def rotate_camera_down(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_down(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraDown(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_23rotate_camera_down(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_23rotate_camera_down(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_23rotate_down(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_23rotate_down(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("rotate_camera_down (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_22rotate_camera_down(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("rotate_down (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_22rotate_down(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_camera_down(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_down(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("rotate_camera_down", 0);
+  __Pyx_RefNannySetupContext("rotate_down", 0);
 
   /* "beeview.pyx":124
  * 
- * 	def rotate_camera_down(self, degrees):
+ * 	def rotate_down(self, degrees):
  * 		self.C_Class.rotateCameraDown(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def rotate_camera_left(self, degrees):
+ * 	def rotate_left(self, degrees):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
   __pyx_v_self->C_Class->rotateCameraDown(__pyx_t_1);
@@ -2083,7 +2092,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_camera_down(struct __pyx_o
   /* "beeview.pyx":123
  * 		self.C_Class.rotateCameraUp(degrees)
  * 
- * 	def rotate_camera_down(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_down(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraDown(degrees)
  * 
  */
@@ -2092,7 +2101,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_camera_down(struct __pyx_o
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.rotate_camera_down", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.rotate_down", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2103,36 +2112,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_22rotate_camera_down(struct __pyx_o
 /* "beeview.pyx":126
  * 		self.C_Class.rotateCameraDown(degrees)
  * 
- * 	def rotate_camera_left(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_left(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraLeft(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_25rotate_camera_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_25rotate_camera_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_25rotate_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_25rotate_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("rotate_camera_left (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_24rotate_camera_left(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("rotate_left (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_24rotate_left(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_camera_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("rotate_camera_left", 0);
+  __Pyx_RefNannySetupContext("rotate_left", 0);
 
   /* "beeview.pyx":127
  * 
- * 	def rotate_camera_left(self, degrees):
+ * 	def rotate_left(self, degrees):
  * 		self.C_Class.rotateCameraLeft(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def rotate_camera_right(self, degrees):
+ * 	def rotate_right(self, degrees):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 127, __pyx_L1_error)
   __pyx_v_self->C_Class->rotateCameraLeft(__pyx_t_1);
@@ -2140,7 +2149,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_camera_left(struct __pyx_o
   /* "beeview.pyx":126
  * 		self.C_Class.rotateCameraDown(degrees)
  * 
- * 	def rotate_camera_left(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_left(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraLeft(degrees)
  * 
  */
@@ -2149,7 +2158,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_camera_left(struct __pyx_o
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.rotate_camera_left", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.rotate_left", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2160,36 +2169,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_24rotate_camera_left(struct __pyx_o
 /* "beeview.pyx":129
  * 		self.C_Class.rotateCameraLeft(degrees)
  * 
- * 	def rotate_camera_right(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_right(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraRight(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_27rotate_camera_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_27rotate_camera_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_27rotate_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_27rotate_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("rotate_camera_right (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_26rotate_camera_right(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("rotate_right (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_26rotate_right(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_camera_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("rotate_camera_right", 0);
+  __Pyx_RefNannySetupContext("rotate_right", 0);
 
   /* "beeview.pyx":130
  * 
- * 	def rotate_camera_right(self, degrees):
+ * 	def rotate_right(self, degrees):
  * 		self.C_Class.rotateCameraRight(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def roll_camera_left(self, degrees):
+ * 	def roll_left(self, degrees):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 130, __pyx_L1_error)
   __pyx_v_self->C_Class->rotateCameraRight(__pyx_t_1);
@@ -2197,7 +2206,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_camera_right(struct __pyx_
   /* "beeview.pyx":129
  * 		self.C_Class.rotateCameraLeft(degrees)
  * 
- * 	def rotate_camera_right(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def rotate_right(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraRight(degrees)
  * 
  */
@@ -2206,7 +2215,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_camera_right(struct __pyx_
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.rotate_camera_right", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.rotate_right", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2217,36 +2226,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_26rotate_camera_right(struct __pyx_
 /* "beeview.pyx":132
  * 		self.C_Class.rotateCameraRight(degrees)
  * 
- * 	def roll_camera_left(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def roll_left(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rollCameraLeft(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_29roll_camera_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_29roll_camera_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_29roll_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_29roll_left(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("roll_camera_left (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_28roll_camera_left(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("roll_left (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_28roll_left(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_28roll_camera_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_28roll_left(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("roll_camera_left", 0);
+  __Pyx_RefNannySetupContext("roll_left", 0);
 
   /* "beeview.pyx":133
  * 
- * 	def roll_camera_left(self, degrees):
+ * 	def roll_left(self, degrees):
  * 		self.C_Class.rollCameraLeft(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def roll_camera_right(self, degrees):
+ * 	def roll_right(self, degrees):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 133, __pyx_L1_error)
   __pyx_v_self->C_Class->rollCameraLeft(__pyx_t_1);
@@ -2254,7 +2263,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_28roll_camera_left(struct __pyx_obj
   /* "beeview.pyx":132
  * 		self.C_Class.rotateCameraRight(degrees)
  * 
- * 	def roll_camera_left(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def roll_left(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rollCameraLeft(degrees)
  * 
  */
@@ -2263,7 +2272,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_28roll_camera_left(struct __pyx_obj
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.roll_camera_left", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.roll_left", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2274,36 +2283,36 @@ static PyObject *__pyx_pf_7beeview_8Renderer_28roll_camera_left(struct __pyx_obj
 /* "beeview.pyx":135
  * 		self.C_Class.rollCameraLeft(degrees)
  * 
- * 	def roll_camera_right(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def roll_right(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rollCameraRight(degrees)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_31roll_camera_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_31roll_camera_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pw_7beeview_8Renderer_31roll_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_31roll_right(PyObject *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("roll_camera_right (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_30roll_camera_right(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
+  __Pyx_RefNannySetupContext("roll_right (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_30roll_right(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_degrees));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_30roll_camera_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
+static PyObject *__pyx_pf_7beeview_8Renderer_30roll_right(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_degrees) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   float __pyx_t_1;
-  __Pyx_RefNannySetupContext("roll_camera_right", 0);
+  __Pyx_RefNannySetupContext("roll_right", 0);
 
   /* "beeview.pyx":136
  * 
- * 	def roll_camera_right(self, degrees):
+ * 	def roll_right(self, degrees):
  * 		self.C_Class.rollCameraRight(degrees)             # <<<<<<<<<<<<<<
  * 
- * 	def height_above_ground(self):
+ * 	def measure_distance(self, pos, dir):
  */
   __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_degrees); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 136, __pyx_L1_error)
   __pyx_v_self->C_Class->rollCameraRight(__pyx_t_1);
@@ -2311,7 +2320,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_30roll_camera_right(struct __pyx_ob
   /* "beeview.pyx":135
  * 		self.C_Class.rollCameraLeft(degrees)
  * 
- * 	def roll_camera_right(self, degrees):             # <<<<<<<<<<<<<<
+ * 	def roll_right(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rollCameraRight(degrees)
  * 
  */
@@ -2320,7 +2329,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_30roll_camera_right(struct __pyx_ob
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.roll_camera_right", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.roll_right", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2331,40 +2340,115 @@ static PyObject *__pyx_pf_7beeview_8Renderer_30roll_camera_right(struct __pyx_ob
 /* "beeview.pyx":138
  * 		self.C_Class.rollCameraRight(degrees)
  * 
- * 	def height_above_ground(self):             # <<<<<<<<<<<<<<
- * 		"""
- * 		Returns
+ * 	def measure_distance(self, pos, dir):             # <<<<<<<<<<<<<<
+ * 		"""Measures distance to next object in direction of dir.
+ * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_33height_above_ground(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_7beeview_8Renderer_32height_above_ground[] = "\n\t\tReturns\n\t\t-------\n\t\tfloat\n\t\t\tThe height of the camera above ground. If not above ground return -1.\n\n\t\t";
-static PyObject *__pyx_pw_7beeview_8Renderer_33height_above_ground(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7beeview_8Renderer_33measure_distance(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7beeview_8Renderer_32measure_distance[] = "Measures distance to next object in direction of dir.\n\n\t\tParameters\n\t\t----------\n\t\tpos : list of float\n\t\t\tThe x, y, z coordinates of position. \n\t\tdir : list of float\n\t\t\tThe x, y, z coordinates of dir Vector. Will be normalized by the function.\n\n\t\tReturns\n\t\t-------\n\t\tfloat\n\t\t\tThe distance from pos to the next object in direction of dir. If no object in that direction return -1.\n\n\t\t";
+static PyObject *__pyx_pw_7beeview_8Renderer_33measure_distance(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_pos = 0;
+  PyObject *__pyx_v_dir = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("height_above_ground (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_32height_above_ground(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("measure_distance (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_pos,&__pyx_n_s_dir,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_pos)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_dir)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("measure_distance", 1, 2, 2, 1); __PYX_ERR(0, 138, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "measure_distance") < 0)) __PYX_ERR(0, 138, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_pos = values[0];
+    __pyx_v_dir = values[1];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("measure_distance", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 138, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("beeview.Renderer.measure_distance", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_7beeview_8Renderer_32measure_distance(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), __pyx_v_pos, __pyx_v_dir);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_32height_above_ground(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
+static PyObject *__pyx_pf_7beeview_8Renderer_32measure_distance(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_pos, PyObject *__pyx_v_dir) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("height_above_ground", 0);
+  float __pyx_t_2;
+  float __pyx_t_3;
+  float __pyx_t_4;
+  float __pyx_t_5;
+  float __pyx_t_6;
+  float __pyx_t_7;
+  __Pyx_RefNannySetupContext("measure_distance", 0);
 
-  /* "beeview.pyx":147
+  /* "beeview.pyx":155
  * 		"""
  * 
- * 		return self.C_Class.heightAboveGround()             # <<<<<<<<<<<<<<
+ * 		return self.C_Class.getDistance(pos[0],pos[1],pos[2],dir[0],dir[1],dir[2])             # <<<<<<<<<<<<<<
  * 
  * 	def set_panoramic_xfov(self, xfov):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->C_Class->heightAboveGround()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_2 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_pos, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_3 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_pos, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_4 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_dir, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_5 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_dir, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_6 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_6 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_dir, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->C_Class->getDistance(__pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2373,15 +2457,15 @@ static PyObject *__pyx_pf_7beeview_8Renderer_32height_above_ground(struct __pyx_
   /* "beeview.pyx":138
  * 		self.C_Class.rollCameraRight(degrees)
  * 
- * 	def height_above_ground(self):             # <<<<<<<<<<<<<<
- * 		"""
- * 		Returns
+ * 	def measure_distance(self, pos, dir):             # <<<<<<<<<<<<<<
+ * 		"""Measures distance to next object in direction of dir.
+ * 
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("beeview.Renderer.height_above_ground", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.measure_distance", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2389,8 +2473,8 @@ static PyObject *__pyx_pf_7beeview_8Renderer_32height_above_ground(struct __pyx_
   return __pyx_r;
 }
 
-/* "beeview.pyx":149
- * 		return self.C_Class.heightAboveGround()
+/* "beeview.pyx":157
+ * 		return self.C_Class.getDistance(pos[0],pos[1],pos[2],dir[0],dir[1],dir[2])
  * 
  * 	def set_panoramic_xfov(self, xfov):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setPanoramicCameraXfov(xfov)
@@ -2416,18 +2500,18 @@ static PyObject *__pyx_pf_7beeview_8Renderer_34set_panoramic_xfov(struct __pyx_o
   float __pyx_t_1;
   __Pyx_RefNannySetupContext("set_panoramic_xfov", 0);
 
-  /* "beeview.pyx":150
+  /* "beeview.pyx":158
  * 
  * 	def set_panoramic_xfov(self, xfov):
  * 		self.C_Class.setPanoramicCameraXfov(xfov)             # <<<<<<<<<<<<<<
  * 
  * 	def set_panoramic_yfov(self, yfov):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_xfov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_xfov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 158, __pyx_L1_error)
   __pyx_v_self->C_Class->setPanoramicCameraXfov(__pyx_t_1);
 
-  /* "beeview.pyx":149
- * 		return self.C_Class.heightAboveGround()
+  /* "beeview.pyx":157
+ * 		return self.C_Class.getDistance(pos[0],pos[1],pos[2],dir[0],dir[1],dir[2])
  * 
  * 	def set_panoramic_xfov(self, xfov):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setPanoramicCameraXfov(xfov)
@@ -2446,7 +2530,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_34set_panoramic_xfov(struct __pyx_o
   return __pyx_r;
 }
 
-/* "beeview.pyx":152
+/* "beeview.pyx":160
  * 		self.C_Class.setPanoramicCameraXfov(xfov)
  * 
  * 	def set_panoramic_yfov(self, yfov):             # <<<<<<<<<<<<<<
@@ -2473,17 +2557,17 @@ static PyObject *__pyx_pf_7beeview_8Renderer_36set_panoramic_yfov(struct __pyx_o
   float __pyx_t_1;
   __Pyx_RefNannySetupContext("set_panoramic_yfov", 0);
 
-  /* "beeview.pyx":153
+  /* "beeview.pyx":161
  * 
  * 	def set_panoramic_yfov(self, yfov):
  * 		self.C_Class.setPanoramicCameraYfov(yfov)             # <<<<<<<<<<<<<<
  * 
  * 	def set_panoramic_width(self, width):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_yfov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_yfov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 161, __pyx_L1_error)
   __pyx_v_self->C_Class->setPanoramicCameraYfov(__pyx_t_1);
 
-  /* "beeview.pyx":152
+  /* "beeview.pyx":160
  * 		self.C_Class.setPanoramicCameraXfov(xfov)
  * 
  * 	def set_panoramic_yfov(self, yfov):             # <<<<<<<<<<<<<<
@@ -2503,7 +2587,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_36set_panoramic_yfov(struct __pyx_o
   return __pyx_r;
 }
 
-/* "beeview.pyx":155
+/* "beeview.pyx":163
  * 		self.C_Class.setPanoramicCameraYfov(yfov)
  * 
  * 	def set_panoramic_width(self, width):             # <<<<<<<<<<<<<<
@@ -2530,17 +2614,17 @@ static PyObject *__pyx_pf_7beeview_8Renderer_38set_panoramic_width(struct __pyx_
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_panoramic_width", 0);
 
-  /* "beeview.pyx":156
+  /* "beeview.pyx":164
  * 
  * 	def set_panoramic_width(self, width):
  * 		self.C_Class.setPanoramicCameraWidth(width)             # <<<<<<<<<<<<<<
  * 
  * 	def set_pinhole_fov(self, fov):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_width); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_width); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 164, __pyx_L1_error)
   __pyx_v_self->C_Class->setPanoramicCameraWidth(__pyx_t_1);
 
-  /* "beeview.pyx":155
+  /* "beeview.pyx":163
  * 		self.C_Class.setPanoramicCameraYfov(yfov)
  * 
  * 	def set_panoramic_width(self, width):             # <<<<<<<<<<<<<<
@@ -2560,7 +2644,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_38set_panoramic_width(struct __pyx_
   return __pyx_r;
 }
 
-/* "beeview.pyx":158
+/* "beeview.pyx":166
  * 		self.C_Class.setPanoramicCameraWidth(width)
  * 
  * 	def set_pinhole_fov(self, fov):             # <<<<<<<<<<<<<<
@@ -2587,17 +2671,17 @@ static PyObject *__pyx_pf_7beeview_8Renderer_40set_pinhole_fov(struct __pyx_obj_
   float __pyx_t_1;
   __Pyx_RefNannySetupContext("set_pinhole_fov", 0);
 
-  /* "beeview.pyx":159
+  /* "beeview.pyx":167
  * 
  * 	def set_pinhole_fov(self, fov):
  * 		self.C_Class.setPinholeCameraFov(fov)             # <<<<<<<<<<<<<<
  * 
  * 	def set_pinhole_width(self, width):
  */
-  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_fov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsFloat(__pyx_v_fov); if (unlikely((__pyx_t_1 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 167, __pyx_L1_error)
   __pyx_v_self->C_Class->setPinholeCameraFov(__pyx_t_1);
 
-  /* "beeview.pyx":158
+  /* "beeview.pyx":166
  * 		self.C_Class.setPanoramicCameraWidth(width)
  * 
  * 	def set_pinhole_fov(self, fov):             # <<<<<<<<<<<<<<
@@ -2617,7 +2701,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_40set_pinhole_fov(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "beeview.pyx":161
+/* "beeview.pyx":169
  * 		self.C_Class.setPinholeCameraFov(fov)
  * 
  * 	def set_pinhole_width(self, width):             # <<<<<<<<<<<<<<
@@ -2644,17 +2728,17 @@ static PyObject *__pyx_pf_7beeview_8Renderer_42set_pinhole_width(struct __pyx_ob
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_pinhole_width", 0);
 
-  /* "beeview.pyx":162
+  /* "beeview.pyx":170
  * 
  * 	def set_pinhole_width(self, width):
  * 		self.C_Class.setPinholeCameraWidth(width)             # <<<<<<<<<<<<<<
  * 
  * 	def set_pinhole_height(self, height):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_width); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 162, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_width); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L1_error)
   __pyx_v_self->C_Class->setPinholeCameraWidth(__pyx_t_1);
 
-  /* "beeview.pyx":161
+  /* "beeview.pyx":169
  * 		self.C_Class.setPinholeCameraFov(fov)
  * 
  * 	def set_pinhole_width(self, width):             # <<<<<<<<<<<<<<
@@ -2674,7 +2758,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_42set_pinhole_width(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "beeview.pyx":164
+/* "beeview.pyx":172
  * 		self.C_Class.setPinholeCameraWidth(width)
  * 
  * 	def set_pinhole_height(self, height):             # <<<<<<<<<<<<<<
@@ -2701,17 +2785,17 @@ static PyObject *__pyx_pf_7beeview_8Renderer_44set_pinhole_height(struct __pyx_o
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_pinhole_height", 0);
 
-  /* "beeview.pyx":165
+  /* "beeview.pyx":173
  * 
  * 	def set_pinhole_height(self, height):
  * 		self.C_Class.setPinholeCameraHeight(height)             # <<<<<<<<<<<<<<
  * 
- * 	def set_beeeye_acceptance_angle(self, acceptance_angle):
+ * 	def set_acceptance_angle(self, acceptance_angle):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_height); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_height); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
   __pyx_v_self->C_Class->setPinholeCameraHeight(__pyx_t_1);
 
-  /* "beeview.pyx":164
+  /* "beeview.pyx":172
  * 		self.C_Class.setPinholeCameraWidth(width)
  * 
  * 	def set_pinhole_height(self, height):             # <<<<<<<<<<<<<<
@@ -2731,47 +2815,47 @@ static PyObject *__pyx_pf_7beeview_8Renderer_44set_pinhole_height(struct __pyx_o
   return __pyx_r;
 }
 
-/* "beeview.pyx":167
+/* "beeview.pyx":175
  * 		self.C_Class.setPinholeCameraHeight(height)
  * 
- * 	def set_beeeye_acceptance_angle(self, acceptance_angle):             # <<<<<<<<<<<<<<
+ * 	def set_acceptance_angle(self, acceptance_angle):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setPinholeCameraHeight(acceptance_angle)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_47set_beeeye_acceptance_angle(PyObject *__pyx_v_self, PyObject *__pyx_v_acceptance_angle); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_47set_beeeye_acceptance_angle(PyObject *__pyx_v_self, PyObject *__pyx_v_acceptance_angle) {
+static PyObject *__pyx_pw_7beeview_8Renderer_47set_acceptance_angle(PyObject *__pyx_v_self, PyObject *__pyx_v_acceptance_angle); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_47set_acceptance_angle(PyObject *__pyx_v_self, PyObject *__pyx_v_acceptance_angle) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_beeeye_acceptance_angle (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_acceptance_angle));
+  __Pyx_RefNannySetupContext("set_acceptance_angle (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_46set_acceptance_angle(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_acceptance_angle));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_acceptance_angle) {
+static PyObject *__pyx_pf_7beeview_8Renderer_46set_acceptance_angle(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_acceptance_angle) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __Pyx_RefNannySetupContext("set_beeeye_acceptance_angle", 0);
+  __Pyx_RefNannySetupContext("set_acceptance_angle", 0);
 
-  /* "beeview.pyx":168
+  /* "beeview.pyx":176
  * 
- * 	def set_beeeye_acceptance_angle(self, acceptance_angle):
+ * 	def set_acceptance_angle(self, acceptance_angle):
  * 		self.C_Class.setPinholeCameraHeight(acceptance_angle)             # <<<<<<<<<<<<<<
  * 
- * 	def set_beeeye_sample_points(self, num_sample_points):
+ * 	def set_num_samples(self, num_samples):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_acceptance_angle); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 168, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_acceptance_angle); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
   __pyx_v_self->C_Class->setPinholeCameraHeight(__pyx_t_1);
 
-  /* "beeview.pyx":167
+  /* "beeview.pyx":175
  * 		self.C_Class.setPinholeCameraHeight(height)
  * 
- * 	def set_beeeye_acceptance_angle(self, acceptance_angle):             # <<<<<<<<<<<<<<
+ * 	def set_acceptance_angle(self, acceptance_angle):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setPinholeCameraHeight(acceptance_angle)
  * 
  */
@@ -2780,7 +2864,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(struc
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.set_beeeye_acceptance_angle", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.set_acceptance_angle", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2788,48 +2872,48 @@ static PyObject *__pyx_pf_7beeview_8Renderer_46set_beeeye_acceptance_angle(struc
   return __pyx_r;
 }
 
-/* "beeview.pyx":170
+/* "beeview.pyx":178
  * 		self.C_Class.setPinholeCameraHeight(acceptance_angle)
  * 
- * 	def set_beeeye_sample_points(self, num_sample_points):             # <<<<<<<<<<<<<<
- * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)
+ * 	def set_num_samples(self, num_samples):             # <<<<<<<<<<<<<<
+ * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_49set_beeeye_sample_points(PyObject *__pyx_v_self, PyObject *__pyx_v_num_sample_points); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_49set_beeeye_sample_points(PyObject *__pyx_v_self, PyObject *__pyx_v_num_sample_points) {
+static PyObject *__pyx_pw_7beeview_8Renderer_49set_num_samples(PyObject *__pyx_v_self, PyObject *__pyx_v_num_samples); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_49set_num_samples(PyObject *__pyx_v_self, PyObject *__pyx_v_num_samples) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_beeeye_sample_points (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_num_sample_points));
+  __Pyx_RefNannySetupContext("set_num_samples (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_48set_num_samples(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_num_samples));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_num_sample_points) {
+static PyObject *__pyx_pf_7beeview_8Renderer_48set_num_samples(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_num_samples) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __Pyx_RefNannySetupContext("set_beeeye_sample_points", 0);
+  __Pyx_RefNannySetupContext("set_num_samples", 0);
 
-  /* "beeview.pyx":171
+  /* "beeview.pyx":179
  * 
- * 	def set_beeeye_sample_points(self, num_sample_points):
- * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)             # <<<<<<<<<<<<<<
+ * 	def set_num_samples(self, num_samples):
+ * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)             # <<<<<<<<<<<<<<
  * 
- * 	def set_beeeye_ommatidium_size(self, ommatidium_size):
+ * 	def set_ommatidium_size(self, ommatidium_size):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_num_sample_points); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_num_samples); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 179, __pyx_L1_error)
   __pyx_v_self->C_Class->setBeeEyeCameraNumSamplePoints(__pyx_t_1);
 
-  /* "beeview.pyx":170
+  /* "beeview.pyx":178
  * 		self.C_Class.setPinholeCameraHeight(acceptance_angle)
  * 
- * 	def set_beeeye_sample_points(self, num_sample_points):             # <<<<<<<<<<<<<<
- * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)
+ * 	def set_num_samples(self, num_samples):             # <<<<<<<<<<<<<<
+ * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)
  * 
  */
 
@@ -2837,7 +2921,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(struct _
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.set_beeeye_sample_points", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("beeview.Renderer.set_num_samples", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2845,56 +2929,176 @@ static PyObject *__pyx_pf_7beeview_8Renderer_48set_beeeye_sample_points(struct _
   return __pyx_r;
 }
 
-/* "beeview.pyx":173
- * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)
+/* "beeview.pyx":181
+ * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)
  * 
- * 	def set_beeeye_ommatidium_size(self, ommatidium_size):             # <<<<<<<<<<<<<<
+ * 	def set_ommatidium_size(self, ommatidium_size):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_51set_beeeye_ommatidium_size(PyObject *__pyx_v_self, PyObject *__pyx_v_ommatidium_size); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_51set_beeeye_ommatidium_size(PyObject *__pyx_v_self, PyObject *__pyx_v_ommatidium_size) {
+static PyObject *__pyx_pw_7beeview_8Renderer_51set_ommatidium_size(PyObject *__pyx_v_self, PyObject *__pyx_v_ommatidium_size); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_51set_ommatidium_size(PyObject *__pyx_v_self, PyObject *__pyx_v_ommatidium_size) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_beeeye_ommatidium_size (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_ommatidium_size));
+  __Pyx_RefNannySetupContext("set_ommatidium_size (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_50set_ommatidium_size(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_ommatidium_size));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_ommatidium_size) {
+static PyObject *__pyx_pf_7beeview_8Renderer_50set_ommatidium_size(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_ommatidium_size) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  __Pyx_RefNannySetupContext("set_beeeye_ommatidium_size", 0);
+  __Pyx_RefNannySetupContext("set_ommatidium_size", 0);
 
-  /* "beeview.pyx":174
+  /* "beeview.pyx":182
  * 
- * 	def set_beeeye_ommatidium_size(self, ommatidium_size):
+ * 	def set_ommatidium_size(self, ommatidium_size):
  * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)             # <<<<<<<<<<<<<<
+ * 
+ * 	def get_beeeye_image_height(self):
+ */
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_ommatidium_size); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
+  __pyx_v_self->C_Class->setBeeEyeCameraOmmatidiumSize(__pyx_t_1);
+
+  /* "beeview.pyx":181
+ * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)
+ * 
+ * 	def set_ommatidium_size(self, ommatidium_size):             # <<<<<<<<<<<<<<
+ * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("beeview.Renderer.set_ommatidium_size", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "beeview.pyx":184
+ * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 
+ * 	def get_beeeye_image_height(self):             # <<<<<<<<<<<<<<
+ * 		return self.C_Class.getBeeEyeImageHeight();
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7beeview_8Renderer_53get_beeeye_image_height(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_53get_beeeye_image_height(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_beeeye_image_height (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_52get_beeeye_image_height(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7beeview_8Renderer_52get_beeeye_image_height(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("get_beeeye_image_height", 0);
+
+  /* "beeview.pyx":185
+ * 
+ * 	def get_beeeye_image_height(self):
+ * 		return self.C_Class.getBeeEyeImageHeight();             # <<<<<<<<<<<<<<
+ * 
+ * 	def get_beeeye_image_width(self):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->C_Class->getBeeEyeImageHeight()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "beeview.pyx":184
+ * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 
+ * 	def get_beeeye_image_height(self):             # <<<<<<<<<<<<<<
+ * 		return self.C_Class.getBeeEyeImageHeight();
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("beeview.Renderer.get_beeeye_image_height", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "beeview.pyx":187
+ * 		return self.C_Class.getBeeEyeImageHeight();
+ * 
+ * 	def get_beeeye_image_width(self):             # <<<<<<<<<<<<<<
+ * 		return self.C_Class.getBeeEyeImageWidth();
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7beeview_8Renderer_55get_beeeye_image_width(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_55get_beeeye_image_width(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_beeeye_image_width (wrapper)", 0);
+  __pyx_r = __pyx_pf_7beeview_8Renderer_54get_beeeye_image_width(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7beeview_8Renderer_54get_beeeye_image_width(struct __pyx_obj_7beeview_Renderer *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("get_beeeye_image_width", 0);
+
+  /* "beeview.pyx":188
+ * 
+ * 	def get_beeeye_image_width(self):
+ * 		return self.C_Class.getBeeEyeImageWidth();             # <<<<<<<<<<<<<<
  * 
  * 	def set_verbose_lvl(self, verbose_lvl):
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_ommatidium_size); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 174, __pyx_L1_error)
-  __pyx_v_self->C_Class->setBeeEyeCameraOmmatidiumSize(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->C_Class->getBeeEyeImageWidth()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
 
-  /* "beeview.pyx":173
- * 		self.C_Class.setBeeEyeCameraNumSamplePoints(num_sample_points)
+  /* "beeview.pyx":187
+ * 		return self.C_Class.getBeeEyeImageHeight();
  * 
- * 	def set_beeeye_ommatidium_size(self, ommatidium_size):             # <<<<<<<<<<<<<<
- * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+ * 	def get_beeeye_image_width(self):             # <<<<<<<<<<<<<<
+ * 		return self.C_Class.getBeeEyeImageWidth();
  * 
  */
 
   /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("beeview.Renderer.set_beeeye_ommatidium_size", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("beeview.Renderer.get_beeeye_image_width", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2902,42 +3106,42 @@ static PyObject *__pyx_pf_7beeview_8Renderer_50set_beeeye_ommatidium_size(struct
   return __pyx_r;
 }
 
-/* "beeview.pyx":176
- * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+/* "beeview.pyx":190
+ * 		return self.C_Class.getBeeEyeImageWidth();
  * 
  * 	def set_verbose_lvl(self, verbose_lvl):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setVerboseLvl(verbose_lvl)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7beeview_8Renderer_53set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /*proto*/
-static PyObject *__pyx_pw_7beeview_8Renderer_53set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
+static PyObject *__pyx_pw_7beeview_8Renderer_57set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl); /*proto*/
+static PyObject *__pyx_pw_7beeview_8Renderer_57set_verbose_lvl(PyObject *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_verbose_lvl (wrapper)", 0);
-  __pyx_r = __pyx_pf_7beeview_8Renderer_52set_verbose_lvl(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_verbose_lvl));
+  __pyx_r = __pyx_pf_7beeview_8Renderer_56set_verbose_lvl(((struct __pyx_obj_7beeview_Renderer *)__pyx_v_self), ((PyObject *)__pyx_v_verbose_lvl));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7beeview_8Renderer_52set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
+static PyObject *__pyx_pf_7beeview_8Renderer_56set_verbose_lvl(struct __pyx_obj_7beeview_Renderer *__pyx_v_self, PyObject *__pyx_v_verbose_lvl) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_verbose_lvl", 0);
 
-  /* "beeview.pyx":177
+  /* "beeview.pyx":191
  * 
  * 	def set_verbose_lvl(self, verbose_lvl):
  * 		self.C_Class.setVerboseLvl(verbose_lvl)             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_verbose_lvl); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_verbose_lvl); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 191, __pyx_L1_error)
   __pyx_v_self->C_Class->setVerboseLvl(__pyx_t_1);
 
-  /* "beeview.pyx":176
- * 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+  /* "beeview.pyx":190
+ * 		return self.C_Class.getBeeEyeImageWidth();
  * 
  * 	def set_verbose_lvl(self, verbose_lvl):             # <<<<<<<<<<<<<<
  * 		self.C_Class.setVerboseLvl(verbose_lvl)
@@ -3205,30 +3409,32 @@ static void __pyx_tp_dealloc_7beeview_Renderer(PyObject *o) {
 
 static PyMethodDef __pyx_methods_7beeview_Renderer[] = {
   {"render", (PyCFunction)__pyx_pw_7beeview_8Renderer_5render, METH_NOARGS, __pyx_doc_7beeview_8Renderer_4render},
-  {"set_camera_position", (PyCFunction)__pyx_pw_7beeview_8Renderer_7set_camera_position, METH_O, __pyx_doc_7beeview_8Renderer_6set_camera_position},
-  {"get_camera_position", (PyCFunction)__pyx_pw_7beeview_8Renderer_9get_camera_position, METH_NOARGS, __pyx_doc_7beeview_8Renderer_8get_camera_position},
-  {"set_camera_dir", (PyCFunction)__pyx_pw_7beeview_8Renderer_11set_camera_dir, METH_O, __pyx_doc_7beeview_8Renderer_10set_camera_dir},
-  {"get_camera_dir", (PyCFunction)__pyx_pw_7beeview_8Renderer_13get_camera_dir, METH_NOARGS, __pyx_doc_7beeview_8Renderer_12get_camera_dir},
+  {"set_position", (PyCFunction)__pyx_pw_7beeview_8Renderer_7set_position, METH_O, __pyx_doc_7beeview_8Renderer_6set_position},
+  {"get_position", (PyCFunction)__pyx_pw_7beeview_8Renderer_9get_position, METH_NOARGS, __pyx_doc_7beeview_8Renderer_8get_position},
+  {"set_direction", (PyCFunction)__pyx_pw_7beeview_8Renderer_11set_direction, METH_O, __pyx_doc_7beeview_8Renderer_10set_direction},
+  {"get_direction", (PyCFunction)__pyx_pw_7beeview_8Renderer_13get_direction, METH_NOARGS, __pyx_doc_7beeview_8Renderer_12get_direction},
   {"set_beeeye_mode", (PyCFunction)__pyx_pw_7beeview_8Renderer_15set_beeeye_mode, METH_NOARGS, __pyx_doc_7beeview_8Renderer_14set_beeeye_mode},
   {"set_pinhole_mode", (PyCFunction)__pyx_pw_7beeview_8Renderer_17set_pinhole_mode, METH_NOARGS, __pyx_doc_7beeview_8Renderer_16set_pinhole_mode},
   {"set_panoramic_mode", (PyCFunction)__pyx_pw_7beeview_8Renderer_19set_panoramic_mode, METH_NOARGS, __pyx_doc_7beeview_8Renderer_18set_panoramic_mode},
-  {"rotate_camera_up", (PyCFunction)__pyx_pw_7beeview_8Renderer_21rotate_camera_up, METH_O, 0},
-  {"rotate_camera_down", (PyCFunction)__pyx_pw_7beeview_8Renderer_23rotate_camera_down, METH_O, 0},
-  {"rotate_camera_left", (PyCFunction)__pyx_pw_7beeview_8Renderer_25rotate_camera_left, METH_O, 0},
-  {"rotate_camera_right", (PyCFunction)__pyx_pw_7beeview_8Renderer_27rotate_camera_right, METH_O, 0},
-  {"roll_camera_left", (PyCFunction)__pyx_pw_7beeview_8Renderer_29roll_camera_left, METH_O, 0},
-  {"roll_camera_right", (PyCFunction)__pyx_pw_7beeview_8Renderer_31roll_camera_right, METH_O, 0},
-  {"height_above_ground", (PyCFunction)__pyx_pw_7beeview_8Renderer_33height_above_ground, METH_NOARGS, __pyx_doc_7beeview_8Renderer_32height_above_ground},
+  {"rotate_up", (PyCFunction)__pyx_pw_7beeview_8Renderer_21rotate_up, METH_O, 0},
+  {"rotate_down", (PyCFunction)__pyx_pw_7beeview_8Renderer_23rotate_down, METH_O, 0},
+  {"rotate_left", (PyCFunction)__pyx_pw_7beeview_8Renderer_25rotate_left, METH_O, 0},
+  {"rotate_right", (PyCFunction)__pyx_pw_7beeview_8Renderer_27rotate_right, METH_O, 0},
+  {"roll_left", (PyCFunction)__pyx_pw_7beeview_8Renderer_29roll_left, METH_O, 0},
+  {"roll_right", (PyCFunction)__pyx_pw_7beeview_8Renderer_31roll_right, METH_O, 0},
+  {"measure_distance", (PyCFunction)__pyx_pw_7beeview_8Renderer_33measure_distance, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7beeview_8Renderer_32measure_distance},
   {"set_panoramic_xfov", (PyCFunction)__pyx_pw_7beeview_8Renderer_35set_panoramic_xfov, METH_O, 0},
   {"set_panoramic_yfov", (PyCFunction)__pyx_pw_7beeview_8Renderer_37set_panoramic_yfov, METH_O, 0},
   {"set_panoramic_width", (PyCFunction)__pyx_pw_7beeview_8Renderer_39set_panoramic_width, METH_O, 0},
   {"set_pinhole_fov", (PyCFunction)__pyx_pw_7beeview_8Renderer_41set_pinhole_fov, METH_O, 0},
   {"set_pinhole_width", (PyCFunction)__pyx_pw_7beeview_8Renderer_43set_pinhole_width, METH_O, 0},
   {"set_pinhole_height", (PyCFunction)__pyx_pw_7beeview_8Renderer_45set_pinhole_height, METH_O, 0},
-  {"set_beeeye_acceptance_angle", (PyCFunction)__pyx_pw_7beeview_8Renderer_47set_beeeye_acceptance_angle, METH_O, 0},
-  {"set_beeeye_sample_points", (PyCFunction)__pyx_pw_7beeview_8Renderer_49set_beeeye_sample_points, METH_O, 0},
-  {"set_beeeye_ommatidium_size", (PyCFunction)__pyx_pw_7beeview_8Renderer_51set_beeeye_ommatidium_size, METH_O, 0},
-  {"set_verbose_lvl", (PyCFunction)__pyx_pw_7beeview_8Renderer_53set_verbose_lvl, METH_O, 0},
+  {"set_acceptance_angle", (PyCFunction)__pyx_pw_7beeview_8Renderer_47set_acceptance_angle, METH_O, 0},
+  {"set_num_samples", (PyCFunction)__pyx_pw_7beeview_8Renderer_49set_num_samples, METH_O, 0},
+  {"set_ommatidium_size", (PyCFunction)__pyx_pw_7beeview_8Renderer_51set_ommatidium_size, METH_O, 0},
+  {"get_beeeye_image_height", (PyCFunction)__pyx_pw_7beeview_8Renderer_53get_beeeye_image_height, METH_NOARGS, 0},
+  {"get_beeeye_image_width", (PyCFunction)__pyx_pw_7beeview_8Renderer_55get_beeeye_image_width, METH_NOARGS, 0},
+  {"set_verbose_lvl", (PyCFunction)__pyx_pw_7beeview_8Renderer_57set_verbose_lvl, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -3318,6 +3524,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_UTF_8, __pyx_k_UTF_8, sizeof(__pyx_k_UTF_8), 0, 0, 1, 0},
   {&__pyx_n_s_array, __pyx_k_array, sizeof(__pyx_k_array), 0, 0, 1, 1},
   {&__pyx_n_s_astype, __pyx_k_astype, sizeof(__pyx_k_astype), 0, 0, 1, 1},
+  {&__pyx_n_s_dir, __pyx_k_dir, sizeof(__pyx_k_dir), 0, 0, 1, 1},
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
   {&__pyx_n_s_fromarray, __pyx_k_fromarray, sizeof(__pyx_k_fromarray), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -3326,6 +3533,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_ommatidia_file, __pyx_k_ommatidia_file, sizeof(__pyx_k_ommatidia_file), 0, 0, 1, 1},
+  {&__pyx_n_s_pos, __pyx_k_pos, sizeof(__pyx_k_pos), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_scene_file, __pyx_k_scene_file, sizeof(__pyx_k_scene_file), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
@@ -4343,6 +4551,37 @@ bad:
         }\
         return (target_type) value;\
     }
+
+/* CIntToPy */
+    static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) -1, const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
+}
 
 /* CIntFromPy */
     static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {

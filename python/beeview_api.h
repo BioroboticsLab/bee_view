@@ -44,8 +44,8 @@ namespace BeeView
 		void setRenderModePinhole();
 		void setRenderModePanoramic();
 
-		/* reutrns the camera height above ground. returns negativ values if camera is below ground. */
-		float heightAboveGround();
+		/* gets distance to next object in direction of dir. returns -1 if no object is in direction of dir. */
+		float getDistance(float posX, float posY, float posZ, float dirX, float dirY, float dirZ);
 
 		// camera options: 
 		// pinhole: fov, width height; 
@@ -73,6 +73,9 @@ namespace BeeView
 		void setBeeEyeCameraNumSamplePoints(int numSamples);
 		/* ommatidium size in pixels, must be an even number */
 		void setBeeEyeCameraOmmatidiumSize(int size);
+
+		int getBeeEyeImageWidth();
+		int getBeeEyeImageHeight();
 
 		/* overwrites yFov, not implemented */
 		//void setPanoramicCameraHeight(int height);

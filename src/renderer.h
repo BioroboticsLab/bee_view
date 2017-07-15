@@ -31,8 +31,8 @@ namespace BeeView {
 			m_camera = camera;
 		}
 
-		/* get camera height above ground, returns -1 if no ground below camera. */
-		float heightAboveGround();
+		/* gets distance to next object in direction of dir. returns -1 if no object is in direction of dir. */
+		float getDistance(Vec3f pos, Vec3f dir);
 
 	private:
 
@@ -68,7 +68,7 @@ namespace BeeView {
 		};
 
 		/* converts ommatidium.m_x and ommatidium.m_y to image coordinates, saves them in out_x, out_y */
-		void convert2ImageCoords(const Ommatidium &ommatidium, const ConvertCoordsParams &params, int &out_x, int &out_y);
+		void convert2ImageCoords(const Ommatidium &ommatidium, const BeeEye::Ptr beeEye, int &out_x, int &out_y);
 
 		/* draw a square a x,y (top left corner of sqaure) position, size a square side length */
 		void drawSquare(std::unique_ptr<Image> &img, const int x, const int y, const int size, Color color)

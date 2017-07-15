@@ -164,6 +164,52 @@ namespace BeeView {
 
 		m_sampler = Sampler(11, 2.6);
 
+		calculateImageDimensions();
+	}
+
+	void BeeEyeCamera::setOmmatidiumSize(int size)
+	{
+		if (size < 1)
+			size = 2;
+		if (size % 2 != 0)
+			size++;
+		m_ommatidium_size = size;
+		calculateImageDimensions();
+
+		return;
+	}
+
+	int BeeEyeCamera::getOmmatidiumSize()
+	{
+		return m_ommatidium_size;
+	}
+
+	void BeeEyeCamera::calculateImageDimensions()
+	{
+		// compute image dimensions
+		m_image_width = (m_leftEye->m_x_max + abs(m_leftEye->m_x_min) + 1) * m_ommatidium_size;
+		m_image_height = (m_leftEye->m_y_max + abs(m_leftEye->m_y_min) + 1)*m_ommatidium_size;
+
+		// add to x_dim because of ommatidia shift
+		m_image_width += m_ommatidium_size / 2;
+
+		// 2 eyes
+		m_image_width *= 2;
+
+		// space between eyes
+		m_image_width += 2 * m_ommatidium_size;
+
+		return;
+	}
+
+	int BeeEyeCamera::getImageWidth()
+	{
+		return m_image_width;
+	}
+
+	int BeeEyeCamera::getImageHeight()
+	{
+		return m_image_height;
 	}
 
 	PinholeCamera::PinholeCamera(int width, int height)

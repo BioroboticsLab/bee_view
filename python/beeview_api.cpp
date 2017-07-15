@@ -134,9 +134,11 @@ namespace BeeView
 		return;
 	}
 
-	float BeeViewApplication::heightAboveGround()
+	float BeeViewApplication::getDistance(float posX, float posY, float posZ, float dirX, float dirY, float dirZ)
 	{
-		return m_renderer.heightAboveGround();
+		Vec3f pos = Vec3f(posX, posY, posZ);
+		Vec3f dir = Vec3f(dirX, dirY, dirZ);
+		return m_renderer.getDistance(pos,dir);
 	}
 
 	void BeeViewApplication::setPanoramicCameraXfov(float xFov)
@@ -283,9 +285,10 @@ namespace BeeView
 	/* set the number of samplepoints taken per ommatidium */
 	void BeeViewApplication::setBeeEyeCameraNumSamplePoints(int numSamples)
 	{
-		int sqrtNumSamples = (int)floor(std::sqrt(numSamples)) - numSamples;
+		int sqrtNumSamples = numSamples - (int)std::sqrt(numSamples);
+		sqrtNumSamples = (int)floor(std::sqrt(sqrtNumSamples));
 		if (sqrtNumSamples < 1)
-			sqrtNumSamples = 1;
+			sqrtNumSamples = 1; // TODO bug when 1 -> endless rendering
 		m_beeEyeCamera->m_sampler.setSqrtNumSamplePoints(sqrtNumSamples);
 	}
 
@@ -296,12 +299,22 @@ namespace BeeView
 			size = 2;
 		if (size % 2 != 0)
 			size++;
-		m_beeEyeCamera->m_ommatidium_size = size;
+		m_beeEyeCamera->setOmmatidiumSize(size);
 	}
 
 	void BeeViewApplication::setVerboseLvl(int verboseLvl)
 	{
 		verbose_lvl = verboseLvl;
+	}
+
+	int BeeViewApplication::getBeeEyeImageWidth()
+	{
+		return m_beeEyeCamera->getImageWidth();
+	}
+
+	int BeeViewApplication::getBeeEyeImageHeight()
+	{
+		return m_beeEyeCamera->getImageHeight();
 	}
 
 }
