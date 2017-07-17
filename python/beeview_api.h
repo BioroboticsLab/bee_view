@@ -74,8 +74,8 @@ namespace BeeView
 		/* ommatidium size in pixels, must be an even number */
 		void setBeeEyeCameraOmmatidiumSize(int size);
 
-		int getBeeEyeImageWidth();
-		int getBeeEyeImageHeight();
+		int getImageWidth();
+		int getImageHeight();
 
 		/* overwrites yFov, not implemented */
 		//void setPanoramicCameraHeight(int height);

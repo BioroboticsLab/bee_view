@@ -160,6 +160,11 @@ namespace BeeView {
 		{
 			m_type = Type::PANORAMIC;
 		}
+
+		int getHeight()
+		{
+			return (int)ceil(m_width * m_yFov / m_xFov);
+		}
 	};
 
 }

@@ -307,14 +307,24 @@ namespace BeeView
 		verbose_lvl = verboseLvl;
 	}
 
-	int BeeViewApplication::getBeeEyeImageWidth()
+	int BeeViewApplication::getImageHeight()
 	{
-		return m_beeEyeCamera->getImageWidth();
+		if (m_renderMode == Camera::Type::BEE_EYE)
+			return m_beeEyeCamera->getImageHeight();
+		else if (m_renderMode == Camera::Type::PANORAMIC)
+			return m_panoramicCamera->getHeight();
+		else if (m_renderMode == Camera::Type::PINHOLE)
+			return m_pinholeCamera->getHeight();
 	}
 
-	int BeeViewApplication::getBeeEyeImageHeight()
+	int BeeViewApplication::getImageWidth()
 	{
-		return m_beeEyeCamera->getImageHeight();
+		if (m_renderMode == Camera::Type::BEE_EYE)
+			return m_beeEyeCamera->getImageWidth();
+		else if (m_renderMode == Camera::Type::PANORAMIC)
+			return m_panoramicCamera->m_width;
+		else if (m_renderMode == Camera::Type::PINHOLE)
+			return m_pinholeCamera->getWidth();
 	}
 
 }

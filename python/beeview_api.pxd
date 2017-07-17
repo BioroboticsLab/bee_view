@@ -12,16 +12,15 @@ cdef extern from "beeview_api.h" namespace "BeeView":
 
 		void setCameraPosition(float, float, float)
 		void getCameraPosition(float &, float &, float &)
+
 		void setCameraDirVector(float, float, float)
 		void getCameraDirVector(float &, float &, float &)
+
 		void setRenderModeBeeEye()
 		void setRenderModePinhole()
 		void setRenderModePanoramic()
+
 		float getDistance(float, float, float, float, float, float);
-		
-		void setPanoramicCameraXfov(float)
-		void setPanoramicCameraYfov(float)
-		void setPanoramicCameraWidth(int)
 
 		void rotateCameraUp(float)
 		void rotateCameraDown(float)
@@ -38,7 +37,11 @@ cdef extern from "beeview_api.h" namespace "BeeView":
 		void setBeeEyeCameraNumSamplePoints(int)
 		void setBeeEyeCameraOmmatidiumSize(int)
 
-		int getBeeEyeImageWidth()
-		int getBeeEyeImageHeight()
+		void setPanoramicCameraXfov(float)
+		void setPanoramicCameraYfov(float)
+		void setPanoramicCameraWidth(int)
+
+		int getImageWidth()
+		int getImageHeight()
 		
 		void setVerboseLvl(int)

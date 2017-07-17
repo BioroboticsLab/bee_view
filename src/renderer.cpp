@@ -50,7 +50,7 @@ namespace BeeView {
 		// vertical spacing: width/height = xFov/yFov -> height = width * yFov / xFov
 
 		std::shared_ptr<PanoramicCamera> camera = std::static_pointer_cast<PanoramicCamera>(m_camera);
-		int height = (int)ceil(camera->m_width * camera->m_yFov / camera->m_xFov);
+		int height = camera->getHeight();
 
 		float hAngleSpacing = camera->m_xFov / camera->m_width;
 		float vAngleSpacing = camera->m_yFov / height;

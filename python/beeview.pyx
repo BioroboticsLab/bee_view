@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+#from PIL import Image
 from  beeview_api cimport *
 
 cdef class Renderer:
@@ -43,14 +43,16 @@ cdef class Renderer:
 
 		Returns
 		-------
-		PIL.Image object
-			The rendered PIL image.
+		array_like
+			Array of height x width x 3. Color data is uint8 with range 0-255.
+			
 
 		"""
 
 		img = self.C_Class.render()
 		img = (np.array(img) * 255).astype(np.uint8)
-		return Image.fromarray(img)
+		return img
+		#return Image.fromarray(img)
 
 	def set_position(self,pos):
 		"""	
@@ -181,11 +183,17 @@ cdef class Renderer:
 	def set_ommatidium_size(self, ommatidium_size):
 		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
 
-	def get_beeeye_image_height(self):
-		return self.C_Class.getBeeEyeImageHeight();
+	def get_image_size(self):
+		"""Get the rendered Image Dimensions (width, height)
+		
+		Returns
+		-------
+		Tuple of ints
+			Width, Height of rendered Image in Pixels.
 
-	def get_beeeye_image_width(self):
-		return self.C_Class.getBeeEyeImageWidth();
+		"""
+		return (self.C_Class.getImageWidth(),self.C_Class.getImageHeight())
+
 
 	def set_verbose_lvl(self, verbose_lvl):
 		self.C_Class.setVerboseLvl(verbose_lvl)
