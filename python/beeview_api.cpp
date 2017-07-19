@@ -115,22 +115,23 @@ namespace BeeView
 		return;
 	}
 
-	void BeeViewApplication::setRenderModeBeeEye()
+	void BeeViewApplication::setRenderMode(int mode)
 	{
-		m_renderMode = Camera::Type::BEE_EYE;
-		m_renderer.setCamera(m_beeEyeCamera);
-		return;
-	}
-	void BeeViewApplication::setRenderModePinhole()
-	{
-		m_renderMode = Camera::Type::PINHOLE;
-		m_renderer.setCamera(m_pinholeCamera);
-		return;
-	}
-	void BeeViewApplication::setRenderModePanoramic()
-	{
-		m_renderMode = Camera::Type::PANORAMIC;
-		m_renderer.setCamera(m_panoramicCamera);
+		if (mode == 1)
+		{
+			m_renderMode = Camera::Type::PANORAMIC;
+			m_renderer.setCamera(m_panoramicCamera);
+		}
+		else if (mode == 2)
+		{
+			m_renderMode = Camera::Type::PINHOLE;
+			m_renderer.setCamera(m_pinholeCamera);
+		}
+		else
+		{
+			m_renderMode = Camera::Type::BEE_EYE;
+			m_renderer.setCamera(m_beeEyeCamera);
+		}
 		return;
 	}
 

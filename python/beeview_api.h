@@ -40,9 +40,8 @@ namespace BeeView
 		void setCameraDirVector(float x, float y, float z);
 		void getCameraDirVector(float &out_x, float &out_y, float &out_z);
 
-		void setRenderModeBeeEye();
-		void setRenderModePinhole();
-		void setRenderModePanoramic();
+		/* 0 = BEE_EYE, 1 = PANORAMIC, 2 = PINHOLE */
+		void setRenderMode(int mode);
 
 		/* gets distance to next object in direction of dir. returns -1 if no object is in direction of dir. */
 		float getDistance(float posX, float posY, float posZ, float dirX, float dirY, float dirZ);
