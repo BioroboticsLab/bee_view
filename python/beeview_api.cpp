@@ -25,7 +25,7 @@ namespace BeeView
 		// setup the cameras
 		m_beeEyeCamera = std::make_shared<BeeEyeCamera>(beeEye);
 		m_panoramicCamera = std::make_shared<PanoramicCamera>(1000);
-		m_pinholeCamera = std::make_shared<PinholeCamera>(500,400);
+		m_pinholeCamera = std::make_shared<PinholeCamera>(500, 400);
 
 		// setup renderer
 		m_renderer = Renderer(scene, m_beeEyeCamera);
@@ -63,7 +63,7 @@ namespace BeeView
 
 		Vec3f pos = Vec3f(x, y, z);
 
-		if(!validate(pos))
+		if (!validate(pos))
 		{
 			std::cerr << "Invalid Vector. ";
 			return;
@@ -135,11 +135,23 @@ namespace BeeView
 		return;
 	}
 
+	int BeeViewApplication::getRenderMode()
+	{
+		if (m_renderMode == Camera::Type::BEE_EYE)
+			return 0;
+		if (m_renderMode == Camera::Type::PANORAMIC)
+			return 1;
+		if (m_renderMode == Camera::Type::PINHOLE)
+			return 2;
+		return -1;
+	}
+
+
 	float BeeViewApplication::getDistance(float posX, float posY, float posZ, float dirX, float dirY, float dirZ)
 	{
 		Vec3f pos = Vec3f(posX, posY, posZ);
 		Vec3f dir = Vec3f(dirX, dirY, dirZ);
-		return m_renderer.getDistance(pos,dir);
+		return m_renderer.getDistance(pos, dir);
 	}
 
 	void BeeViewApplication::setPanoramicCameraXfov(float xFov)
@@ -157,7 +169,7 @@ namespace BeeView
 	{
 		if (yFov < 0.0f || std::isnan(yFov) || std::isinf(yFov))
 		{
-			std::cerr << "Invalid value for yFov." << std::endl ;
+			std::cerr << "Invalid value for yFov." << std::endl;
 		}
 		m_panoramicCamera->m_yFov = yFov;
 	}
@@ -174,7 +186,7 @@ namespace BeeView
 
 	void BeeViewApplication::rotateCameraUp(float degrees)
 	{
-		if(std::isnan(degrees) || std::isinf(degrees))
+		if (std::isnan(degrees) || std::isinf(degrees))
 		{
 			std::cerr << "Invalid input (degrees)." << std::endl;
 			return;
@@ -314,7 +326,7 @@ namespace BeeView
 			return m_beeEyeCamera->getImageHeight();
 		else if (m_renderMode == Camera::Type::PANORAMIC)
 			return m_panoramicCamera->getHeight();
-		else if (m_renderMode == Camera::Type::PINHOLE)
+		else
 			return m_pinholeCamera->getHeight();
 	}
 
@@ -324,8 +336,62 @@ namespace BeeView
 			return m_beeEyeCamera->getImageWidth();
 		else if (m_renderMode == Camera::Type::PANORAMIC)
 			return m_panoramicCamera->m_width;
-		else if (m_renderMode == Camera::Type::PINHOLE)
+		else
 			return m_pinholeCamera->getWidth();
 	}
 
+	void BeeViewApplication::getSceneBounds(float &out_lower_x, float &out_lower_y, float &out_lower_z, float &out_upper_x, float &out_upper_y, float &out_upper_z)
+	{
+		RTCBounds aabb = m_renderer.m_scene->m_bounds;
+
+		out_lower_x = aabb.lower_x;
+		out_lower_y = aabb.lower_y;
+		out_lower_z = aabb.lower_z;
+		out_upper_x = aabb.upper_x;
+		out_upper_y = aabb.upper_y;
+		out_upper_z = aabb.upper_z;
+
+		return;
+	}
+
+	RenderSettings BeeViewApplication::getSettings()
+	{
+		RenderSettings settings;
+
+		if (m_renderMode == Camera::Type::BEE_EYE)
+			settings.renderMode = 0;
+		if (m_renderMode == Camera::Type::PANORAMIC)
+			settings.renderMode = 1;
+		if (m_renderMode == Camera::Type::PINHOLE)
+			settings.renderMode = 2;
+
+		Vec3f pos = m_panoramicCamera->getPosition();
+		settings.xPos = pos(0);
+		settings.yPos = pos(1);
+		settings.zPos = pos(2);
+
+		Vec3f dir = m_panoramicCamera->getDir();
+		settings.xDir = dir(0);
+		settings.yDir = dir(1);
+		settings.zDir = dir(2);
+
+		settings.acceptanceAngle = m_beeEyeCamera->m_sampler.getAcceptanceAngle();
+		settings.ommatidiumSize = m_beeEyeCamera->getOmmatidiumSize();
+		settings.beeImageWidth = m_beeEyeCamera->getImageWidth();
+		settings.beeImageHeight = m_beeEyeCamera->getImageHeight();
+		settings.numSamples = m_beeEyeCamera->m_sampler.getTotalSamplePoints();
+
+		settings.xFov = m_panoramicCamera->m_xFov;
+		settings.yFov = m_panoramicCamera->m_yFov;
+		settings.panoramicWidth = m_panoramicCamera->m_width;
+		settings.panoramicHeight = m_panoramicCamera->getHeight();
+
+		settings.aspectRatio = m_pinholeCamera->getImageAspectRatio();
+		settings.fov = m_pinholeCamera->getFOV();
+		settings.scale = m_pinholeCamera->getScale();
+		settings.pinholeWidth = m_pinholeCamera->getWidth();
+		settings.pinholeHeight = m_pinholeCamera->getHeight();
+
+		return settings;
+	}
 }

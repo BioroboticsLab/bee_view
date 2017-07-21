@@ -100,8 +100,8 @@ namespace BeeView
 	{
 		float dist = sqrt(x*x + y*y);
 		// have to change to 3.333, so that FWHM ist correct
-		float var = hw / 3.333;
-		return std::exp(-pow(0.5 * dist / var, 2));	
+		float var = hw / 3.333f;
+		return std::exp(-pow(0.5f * dist / var, 2));	
 	}
 
 	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle)
@@ -116,7 +116,7 @@ namespace BeeView
 		}
 
 		// normalize weights to sum 1
-		double sum = std::accumulate(weights.begin(), weights.end(), 0.0);
+		float sum = std::accumulate(weights.begin(), weights.end(), 0.0f);
 
 		for (float &w : weights)
 			w = w / sum;

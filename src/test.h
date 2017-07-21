@@ -16,7 +16,7 @@ namespace BeeView {
 			std::shared_ptr<Scene> scene = loadOBJ(file);
 
 			// setup the camera
-			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>(1500,270,170);			
+			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>(1500,270.0f,170.0f);			
 
 			camera->setPosition(Vec3f(0, -70, 0));
 
@@ -65,7 +65,7 @@ namespace BeeView {
 			beeEye->loadFromCSV(csvfile);
 
 			// setup the camera
-			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60); 
+			std::shared_ptr<PinholeCamera> camera = std::make_shared<PinholeCamera>(600, 400, 60.0f); 
 			//std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
 
 			//camera->setPosition(Vec3f(278, 273, -800)); // cornell box defalut
@@ -203,7 +203,7 @@ namespace BeeView {
 			//img->saveToPPM("test_beeEye_square_single_ray.ppm");
 
 #if 1
-			camera->m_sampler.setAcceptanceAngle(2.6);
+			camera->m_sampler.setAcceptanceAngle(2.6f);
 			camera->m_sampler.setMode(Sampler::Mode::DISK);
 
 			// render the image
@@ -223,12 +223,12 @@ namespace BeeView {
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(11);
-			camera->m_sampler.setAcceptanceAngle(5.2);
+			camera->m_sampler.setAcceptanceAngle(5.2f);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_s11_a52.ppm");
 
 			// render the image
-			camera->m_sampler.setAcceptanceAngle(1.3);
+			camera->m_sampler.setAcceptanceAngle(1.3f);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_s11_a13.ppm");
 #endif
@@ -239,7 +239,7 @@ namespace BeeView {
 
 		void test_gauss_sampler()
 		{
-			int version = 3;
+
 			Image img = Image(21, 21);
 			float sum = 0;
 			for (int i = -img.m_width/2; i < img.m_width/2; i++)
@@ -304,7 +304,7 @@ namespace BeeView {
 			float seedx = in(0);
 			float seedy = in(1);
 
-			double phi, r;
+			double phi, r = 1.0;
 
 			double a = 2 * seedx - 1; /* (a,b) is now on [-1,1]^2 */
 			double b = 2 * seedy - 1;
@@ -388,7 +388,7 @@ namespace BeeView {
 			// create the data for the plots
 
 			Sampler sampler = Sampler();
-			float acceptanceAngle = 2.6;
+			float acceptanceAngle = 2.6f;
 			int sqrtSamples = 0;
 			std::vector<Vec2f> points;
 			std::vector<float> weights;
@@ -453,7 +453,7 @@ namespace BeeView {
 		*/
 		Color getRainbowColor(float max, float input)
 		{
-			float inc = 6.0 / input;
+			float inc = 6.0f / input;
 			float x = max * inc;
 
 			float r = 0.0f;
@@ -498,7 +498,7 @@ namespace BeeView {
 			for (Vec2f &p : samples)
 			{
 
-				img.set(floor(p(0) + 250), floor(p(1) + 250), getRainbowColor(weights[i], 1.0)); //Color(weights[i],0,0));// getRainbowColor(1000,weights[i]*1000)); //
+				img.set(static_cast<int>(floor(p(0) + 250)), static_cast<int>(floor(p(1) + 250)), getRainbowColor(weights[i], 1.0)); //Color(weights[i],0,0));// getRainbowColor(1000,weights[i]*1000)); //
 				//std::cout << floor(p(0) * 249 + 250) << " " << floor(p(1) * 249 + 250) << std::endl;
 				//std::cout << weights[i] << std::endl;
 				i++;
@@ -518,16 +518,16 @@ namespace BeeView {
 
 			beeView.setCameraPosition(0,0,0);
 			float h = beeView.getDistance(0,0,0,0,-1,0);
-			beeView.setCameraPosition(0, (0-h)+15, 0); // 5m above ground
+			beeView.setCameraPosition(0.0f, (0.0f-h)+15.0f, 0.0f); // 5m above ground
 
-			beeView.setCameraDirVector(0, 0, -1);
+			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
 
 			beeView.setBeeEyeCameraNumSamplePoints(132);
 
 			// convert python image to my image format
 			PyImage img = beeView.render();
-			int width = img[0].size();
-			int height = img.size();
+			int width = static_cast<int>(img[0].size());
+			int height = static_cast<int>(img.size());
 			Image c_img = Image(width, height);
 			for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++)

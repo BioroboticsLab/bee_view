@@ -28,10 +28,17 @@ namespace BeeView {
 
 		Mesh();
 
-		int numVertices() const 
+		size_t numVertices() const
 		{
 			return positions.size();
 		}
+	};
+
+	/* AABB of scene */
+	struct SceneBounds
+	{
+		float lower_x, lower_y, lower_z;
+		float upper_x, upper_y, upper_z;
 	};
 
 	/* Scene class, holds the triangleMeshes and embree scene */
@@ -41,6 +48,7 @@ namespace BeeView {
 		RTCDevice m_device; // embree
 		RTCScene m_rtcscene; // embree scene
 		std::vector<std::shared_ptr<Mesh>> m_objects;
+		RTCBounds m_bounds; // initialized with embree
 
 		Scene() { }
 

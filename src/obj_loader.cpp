@@ -293,30 +293,30 @@ namespace BeeView
 	/*! All indices are converted to C-style (from 0). Missing entries are assigned -1. */
 	Vertex OBJLoader::getInt3(const char*& token)
 	{
-		Vertex v(-1);
-		v.v = fix_v(atoi(token));
+		Vertex vertex(-1);
+		vertex.v = fix_v(atoi(token));
 		token += strcspn(token, "/ \t\r");
-		if (token[0] != '/') return(v);
+		if (token[0] != '/') return(vertex);
 		token++;
 
 		// it is i//n
 		if (token[0] == '/') {
 			token++;
-			v.vn = fix_vn(atoi(token));
+			vertex.vn = fix_vn(atoi(token));
 			token += strcspn(token, " \t\r");
-			return(v);
+			return(vertex);
 		}
 
 		// it is i/t/n or i/t
-		v.vt = fix_vt(atoi(token));
+		vertex.vt = fix_vt(atoi(token));
 		token += strcspn(token, "/ \t\r");
-		if (token[0] != '/') return(v);
+		if (token[0] != '/') return(vertex);
 		token++;
 
 		// it is i/t/n
-		v.vn = fix_vn(atoi(token));
+		vertex.vn = fix_vn(atoi(token));
 		token += strcspn(token, " \t\r");
-		return(v);
+		return(vertex);
 	}
 
 	/*! prevents vertex duplicates and aligns position and texture buffer */

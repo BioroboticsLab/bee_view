@@ -29,8 +29,8 @@ namespace BeeView
 		if (verbose_lvl > 0)
 			std::cout << std::endl << "Loading Scene into Embree... ";
 
-		int total_verts = 0;
-		int total_triangles = 0;
+		size_t total_verts = 0;
+		size_t total_triangles = 0;
 		for each (const std::shared_ptr<Mesh> &mesh in m_objects)
 		{
 			total_triangles += mesh->triangles.size();
@@ -53,7 +53,7 @@ namespace BeeView
 			Vertex* vertices = (Vertex*)rtcMapBuffer(m_rtcscene, rtcmesh, RTC_VERTEX_BUFFER);
 
 			// fill vertices
-			for (int i = 0; i < mesh->numVertices(); i++)
+			for (size_t i = 0; i < mesh->numVertices(); i++)
 			{
 				vertices[i].x = mesh->positions[i](0);
 				vertices[i].y = mesh->positions[i](1);
@@ -65,7 +65,7 @@ namespace BeeView
 			// fill triangle indices
 			Triangle* triangles = (Triangle*)rtcMapBuffer(m_rtcscene, rtcmesh, RTC_INDEX_BUFFER);
 
-			//TODO check if simple copy (=) works
+
 			for (int i = 0; i < mesh->triangles.size(); i++)
 			{
 				triangles[i].v0 = mesh->triangles[i].v0;
@@ -80,11 +80,14 @@ namespace BeeView
 		/* commit changes to scene */
 		rtcCommit(m_rtcscene);
 		
+		// calc AABB
+		rtcGetBounds(m_rtcscene, m_bounds);
+
 		if (verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
-		if (verbose_lvl > 1)
+		if (verbose_lvl > 1) {
 			std::cout << "Scene stats: " << total_triangles << " triangles and " << total_verts << " vertices." << std::endl;
-
+		}
 		return;
 	}
 

@@ -117,7 +117,7 @@
       <AdditionalDependencies>embree.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -126,11 +126,13 @@
       <AdditionalDependencies>embree.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <WarningLevel>Level1</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="python\beeview_api.cpp" />
+    <ClCompile Include="python\beeview_api.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../src/stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="src\bee_eye.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\image.cpp" />

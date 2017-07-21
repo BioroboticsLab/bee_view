@@ -1,11 +1,19 @@
 import numpy as np
-#from PIL import Image
 from  beeview_api cimport *
 
 cdef class Renderer:
 	"""This class wraps the C++ BeeViewApplication class.
 
 	It provides all the functions necessary for rendering Images from a loaded scene.
+
+	Properties
+	----------
+	mode : int
+		Current render mode. 0 : Renderer.BeeEye, 1 : Renderer.Panoramic, 2 : Renderer.Pinhole
+	position : sequence of floats
+		x,y,z coordinates
+	direction : sequence of floats
+		x,y,z coordinate. Auto normalized.
 
 	"""
 	
@@ -79,6 +87,8 @@ cdef class Renderer:
 		self.C_Class.getCameraPosition(x,y,z);
 		return [x,y,z]
 
+	position = property(get_position, set_position)
+
 	def set_direction(self,dir):
 		"""
 		Parameters
@@ -103,6 +113,8 @@ cdef class Renderer:
 		self.C_Class.getCameraDirVector(x,y,z)
 		return [x,y,z]
 
+	direction = property(get_direction, set_direction)
+
 	def set_mode(self, mode):
 		"""Sets the camera mode for rendering. 
 		
@@ -117,6 +129,11 @@ cdef class Renderer:
 		"""
 
 		self.C_Class.setRenderMode(mode)
+
+	def get_mode(self):
+		return self.C_Class.getRenderMode()
+
+	mode = property(get_mode, set_mode)
 
 	def rotate_up(self, degrees):
 		self.C_Class.rotateCameraUp(degrees)
@@ -155,11 +172,11 @@ cdef class Renderer:
 
 		return self.C_Class.getDistance(pos[0],pos[1],pos[2],dir[0],dir[1],dir[2])
 
-	def set_panoramic_xfov(self, xfov):
-		self.C_Class.setPanoramicCameraXfov(xfov)
+	def set_panoramic_hfov(self, hfov):
+		self.C_Class.setPanoramicCameraXfov(hfov)
 
-	def set_panoramic_yfov(self, yfov):
-		self.C_Class.setPanoramicCameraYfov(yfov)
+	def set_panoramic_vfov(self, vfov):
+		self.C_Class.setPanoramicCameraYfov(vfov)
 
 	def set_panoramic_width(self, width):
 		self.C_Class.setPanoramicCameraWidth(width)
@@ -196,3 +213,33 @@ cdef class Renderer:
 
 	def set_verbose_lvl(self, verbose_lvl):
 		self.C_Class.setVerboseLvl(verbose_lvl)
+
+	def get_scene_bounds(self):
+		""" Returns the axis aligned bounding box of the scene.
+
+		Returns
+		-------
+		List of Tuples
+			The upper x,y,z coordinates and the lower x,y,z coordinates of the bounding box.
+
+		"""
+
+		cdef float lower_x = 0.0, lower_y = 0.0, lower_z = 0.0
+		cdef float upper_x = 0.0, upper_y = 0.0, upper_z = 0.0
+
+		self.C_Class.getSceneBounds(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z)
+
+		return [(lower_x, lower_y, lower_z), (upper_x, upper_y, upper_z)]
+
+	def get_settings(self):
+		"""Get all render settings as Dictionary.
+
+		Returns : dict
+			Dictionary of render settings.
+
+		"""
+
+		cdef RenderSettings s = self.C_Class.getSettings()
+		cdef object sobj = s 
+		return s
+		

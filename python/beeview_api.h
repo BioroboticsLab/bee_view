@@ -6,6 +6,36 @@
 
 namespace BeeView
 {
+	// auto converted to python dict, -> python naming conventions
+	struct RenderSettings
+	{
+		int renderMode; // 0 BEEEYE, 1 PANORAMIC, 2 PINHOLE
+		
+		float xPos, yPos, zPos;
+		float xDir, yDir, zDir;
+
+		// bee eye settings
+		int numSamples;
+		float acceptanceAngle;
+		int ommatidiumSize;
+		int beeImageWidth;
+		int beeImageHeight;
+
+		// Panoramic settings
+		float xFov;
+		float yFov;
+		int panoramicWidth;
+		int panoramicHeight;
+
+		// pinhole settings
+		float fov;
+		float aspectRatio;
+		float scale;
+		float pinholeWidth;
+		float pinholeHeight;
+
+	};
+
 	class BeeViewApplication
 	{
 
@@ -24,7 +54,7 @@ namespace BeeView
 		std::string m_ommatidiaFile; 
 
 	public:
-
+		
 		/* Sets up the scene and renderer. If leftHanded = true: flips the z coordinate and the texture coordinates. 
 		   verbose controls the verbose lvl: if 0 no output, if 1 basic output, if 2 stat output, if > 2 debug output. */
 		BeeViewApplication(std::string sceneFile, std::string ommatidiaFile, bool leftHanded = false, int verbose = 2);
@@ -34,7 +64,7 @@ namespace BeeView
 		/* renders an image with the current active camera and the settings specified be the camera */
 		std::vector<std::vector<std::vector<float>>> render();
 
-		// camera setters: position, rotation, cameratype
+		// camera setters and getter: position, rotation, cameratype
 		void setCameraPosition(float x, float y, float z);
 		void getCameraPosition(float &out_x, float &out_y, float &out_z);
 		void setCameraDirVector(float x, float y, float z);
@@ -42,8 +72,9 @@ namespace BeeView
 
 		/* 0 = BEE_EYE, 1 = PANORAMIC, 2 = PINHOLE */
 		void setRenderMode(int mode);
+		int getRenderMode();
 
-		/* gets distance to next object in direction of dir. returns -1 if no object is in direction of dir. */
+		/* gets distance from pos to next object in direction of dir. returns -1 if no object is in direction of dir. */
 		float getDistance(float posX, float posY, float posZ, float dirX, float dirY, float dirZ);
 
 		// camera options: 
@@ -76,8 +107,13 @@ namespace BeeView
 		int getImageWidth();
 		int getImageHeight();
 
+		void getSceneBounds(float &out_lower_x, float &out_lower_y, float &out_lower_z, float &out_upper_x, float &out_upper_y, float &out_upper_z);
+
 		/* overwrites yFov, not implemented */
 		//void setPanoramicCameraHeight(int height);
+
 		void setVerboseLvl(int verboseLvl);
+
+		RenderSettings getSettings();
 	};
 }

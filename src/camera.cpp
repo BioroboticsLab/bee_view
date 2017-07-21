@@ -162,7 +162,7 @@ namespace BeeView {
 		if (m_leftEye->m_side == Side::RIGHT)
 			m_leftEye.swap(m_rightEye);
 
-		m_sampler = Sampler(11, 2.6);
+		m_sampler = Sampler(11, 2.6f);
 
 		calculateImageDimensions();
 	}
@@ -259,7 +259,7 @@ namespace BeeView {
 	void PinholeCamera::setFOV(float fov)
 	{
 		m_fov = fov;
-		m_scale = tan(deg2rad(m_fov * 0.5));
+		m_scale = tan(deg2rad(m_fov * 0.5f));
 	}
 
 	float PinholeCamera::getScale() { return m_scale; } // only getter

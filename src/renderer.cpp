@@ -58,12 +58,11 @@ namespace BeeView {
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->m_width, height);
 
 		// start at: -xfov/2, +yfov/2
-		float hAngle = -camera->m_xFov / 2;
-		float vAngle = camera->m_yFov / 2;
+		float vAngle = camera->m_yFov / 2.0f;
 
 		for (int y = 0; y < height; y++)
 		{
-			float hAngle = -camera->m_xFov / 2 + 180;
+			float hAngle = -camera->m_xFov / 2.0f + 180.0f;
 
 			for (int x = 0; x < camera->m_width; x++)
 			{
@@ -114,8 +113,8 @@ namespace BeeView {
 		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
 
 
-		float p_x = (2 * (x + 0.5) / (float)camera->getWidth() - 1) * camera->getImageAspectRatio() * camera->getScale();
-		float p_y = (1 - 2 * (y + 0.5) / (float)camera->getHeight()) * camera->getScale();
+		float p_x = static_cast<float>((2.0f * (x + 0.5f) / camera->getWidth() - 1.0f) * camera->getImageAspectRatio() * camera->getScale());
+		float p_y = static_cast<float>((1.0f - 2.0f * (y + 0.5f) / camera->getHeight()) * camera->getScale());
 
 		//float p_x = (2 * (x + 0.5) / (float)camera.m_width - 1) * scale;
 		//float p_y = (1 - 2 * (y + 0.5) / (float)camera.m_height) * scale * 1 / imageAspectRatio;
@@ -371,7 +370,7 @@ namespace BeeView {
 		}
 
 		// draw cross at eye center
-		drawCross(img, floor(center(0)), floor(center(1)));
+		drawCross(img, static_cast<int>(floor(center(0))), static_cast<int>(floor(center(1))));
 
 		return;
 	}
@@ -455,10 +454,10 @@ namespace BeeView {
 		rtcIntersect(m_scene->m_rtcscene, ray);
 		/* shade pixels */
 
-		// no Objects hit -> Backgroundcolor
+		// no Objects hit -> -1
 		if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
 			return -1;
-		if (ray.tfar == std::numeric_limits<float>::infinity())
+		if (std::isinf(ray.tfar))
 			return -1;
 		if (ray.tfar < 0)
 			return -1;

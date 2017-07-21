@@ -81,10 +81,10 @@ namespace BeeView
 		std::sort(m_ommatidia.begin(), m_ommatidia.end());
 
 		// remove duplicates
-		int size_before = m_ommatidia.size();
+		size_t size_before = m_ommatidia.size();
 		m_ommatidia.erase(std::unique(m_ommatidia.begin(), m_ommatidia.end()), m_ommatidia.end());
-		int size_after = m_ommatidia.size();
-		int nr_duplicates = size_before - size_after;
+		size_t size_after = m_ommatidia.size();
+		size_t nr_duplicates = size_before - size_after;
 
 		if(verbose_lvl > 2)
 			std::cout << std::endl << "Removed " << nr_duplicates << " duplicates form Ommatidial array." << std::endl;

@@ -6,7 +6,7 @@ This File contains small general purpose functions and classes.
 */
 
 #ifndef M_PI
-#define M_PI 3.1415926535897932384626433832795
+#define M_PI 3.1415926535f
 #endif
 
 namespace BeeView
@@ -16,7 +16,7 @@ namespace BeeView
 
 	template<typename T> __forceinline T clamp(const T& x, const T& lower = T(0), const T& upper = T(1)) { return std::max(std::min(x, upper), lower); }
 	
-	inline float deg2rad(const float &deg)	{ return deg * M_PI / 180.0f; }
+	inline float deg2rad(const float &deg)	{ return deg * (float)M_PI / 180.0f; }
 
 	inline bool validate(Vec3f vec)
 	{
@@ -105,7 +105,7 @@ namespace BeeView
 
 	inline Vec3f sphericalToCartesian(const float &theta, const float &phi)
 	{
-		float theta2 = (M_PI / 2) - theta;
+		float theta2 = (M_PI / 2.0f) - theta;
 		return Vec3f(cos(phi) * sin(theta2), sin(phi) * sin(theta2), cos(theta2));
 	}
 
@@ -136,7 +136,7 @@ namespace BeeView
 	/* return [-1..1] */
 	inline float randfu()
 	{
-		return (float)xorshf96() / ((~0UL >> 1)*1.0) - 1.0;
+		return (float)xorshf96() / ((~0UL >> 1)*1.0f) - 1.0f;
 	}
 
 	/* scatter plot to txt for displaying it externaly (e.g. with R). x and y must be same size */
