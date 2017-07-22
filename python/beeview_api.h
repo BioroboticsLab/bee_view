@@ -31,8 +31,8 @@ namespace BeeView
 		float fov;
 		float aspectRatio;
 		float scale;
-		float pinholeWidth;
-		float pinholeHeight;
+		int pinholeWidth;
+		int pinholeHeight;
 
 	};
 
@@ -41,7 +41,6 @@ namespace BeeView
 
 	private:
 
-		Renderer m_renderer;
 		std::shared_ptr<BeeEyeCamera> m_beeEyeCamera;
 		std::shared_ptr<PinholeCamera> m_pinholeCamera;
 		std::shared_ptr<PanoramicCamera> m_panoramicCamera;
@@ -54,6 +53,8 @@ namespace BeeView
 		std::string m_ommatidiaFile; 
 
 	public:
+		Renderer m_renderer;
+
 		
 		/* Sets up the scene and renderer. If leftHanded = true: flips the z coordinate and the texture coordinates. 
 		   verbose controls the verbose lvl: if 0 no output, if 1 basic output, if 2 stat output, if > 2 debug output. */

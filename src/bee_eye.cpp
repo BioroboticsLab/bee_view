@@ -24,6 +24,24 @@ namespace BeeView
 		return Vec3f(sin(azimuth2) * sin(elevation2), cos(elevation2), cos(azimuth2) * sin(elevation2)).normalized();
 	}
 
+	Vec3f Ommatidium::getDirVector(float offset_a, float offset_e) const
+	{
+		// make elvation in range 0 - 180
+		float elevation2 = 90 - m_elevation + offset_e;
+
+		// make azimuth in range 0 - 360
+		float azimuth2 = m_azimuth;
+
+		if (azimuth2 < 0)
+			azimuth2 = 360 + azimuth2;
+
+		azimuth2 += offset_a;
+		azimuth2 = deg2rad(azimuth2);
+		elevation2 = deg2rad(elevation2);
+
+		return Vec3f(sin(azimuth2) * sin(elevation2), cos(elevation2), cos(azimuth2) * sin(elevation2)).normalized();
+	}
+
 	void BeeEye::loadFromCSV(std::string fileName)
 	{
 		if (verbose_lvl > 0)

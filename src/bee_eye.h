@@ -34,6 +34,9 @@ namespace BeeView
 		/* return the Vec3f direction vector, calculated from elevation and azimuth */
 		Vec3f getDirVector() const;
 
+		/* add offset to elevation and azimuth and return cartesian. */
+		Vec3f getDirVector(float offset_a, float offset_e) const;
+
 		/*
 		caution: doesn't sort as one might expect: negative values are sorted descendingly, positive values ascendingly!
 		*/

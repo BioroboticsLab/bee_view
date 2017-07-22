@@ -539,5 +539,42 @@ namespace BeeView {
 			return;
 		}
 
+		void testGimbalLock()
+		{
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
+
+			
+
+			beeView.setCameraPosition(0, 0, 0);
+			float h = beeView.getDistance(0, 0, 0, 0, -1, 0);
+			beeView.setCameraPosition(0.0f, (0.0f - h) + 15.0f, 0.0f); // 15m above ground
+
+			beeView.setCameraDirVector(0.1f, 0.0f, 0.0f);
+
+
+			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>();
+			beeView.m_renderer.setCamera(camera);
+
+			camera->setDir(Vec3f(1, 0, 1));
+			camera->m_xFov = 200;
+			std::unique_ptr<Image> img = beeView.m_renderer.renderToImage();
+			img->saveToPPM("test_gimbal_1.ppm");
+
+			camera->setDir(Vec3f(0, 0, 1));
+			img = beeView.m_renderer.renderToImage();
+			img->saveToPPM("test_gimbal_2.ppm");
+
+
+			camera->setDir(Vec3f(0, 0, -1));
+			img = beeView.m_renderer.renderToImage();
+			img->saveToPPM("test_gimbal_3.ppm");
+
+
+			camera->setDir(Vec3f(-1, 0, 0));
+			img = beeView.m_renderer.renderToImage();
+
+			img->saveToPPM("test_gimbal_4.ppm");
+		}
+
 	}
 }

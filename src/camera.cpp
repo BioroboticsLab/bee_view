@@ -58,9 +58,7 @@ namespace BeeView {
 		vec.normalize();
 	}
 
-	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector
-	 * doesnt work on dir-vector of camera, to roll the camera use up-vector of camera instead of dir-vector,
-	 * or use camera.rollRight(). */
+	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector */
 	void Camera::rotateVecZ(Vec3f &vec, float angle)
 	{
 		

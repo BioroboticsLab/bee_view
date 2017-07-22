@@ -67,6 +67,9 @@ namespace BeeView {
 			for (int x = 0; x < camera->m_width; x++)
 			{
 				Vec3f dir = camera->getDir();
+
+				// detect gimbal lock problem
+				// cant rotate VecX if aligned with x (z = 0)
 				camera->rotateVecX(dir, -vAngle);
 				camera->rotateVecY(dir, hAngle);
 
@@ -304,17 +307,19 @@ namespace BeeView {
 
 			std::vector<Color> colorSamples;
 
-			// for all samplepoints: shoot ray, get color
-			for (Vec2f &dev : camera->m_sampler.m_samplePoints)
+			// for all samplepoints: shoot ray, get color.
+			for (Vec2f &angle : camera->m_sampler.m_samplePoints)
 			{
 				// get dir
-				Vec3f sampleDir = dir;
+				//Vec3f sampleDir = dir;
 
 				// rotate dir vector bei x degrees to right
-				m_camera->rotateVecY(sampleDir, dev(0));
+				//m_camera->rotateVecY(sampleDir, angle(0));
 
 				// rotate dir vector bei y degrees up
-				m_camera->rotateVecX(sampleDir, dev(1));
+				//m_camera->rotateVecX(sampleDir, angle(1));
+
+				Vec3f sampleDir = ommatidium.getDirVector(angle(0), angle(1));
 
 				// transform to world coordinates
 				Vec3f rayDir = m_camera->m_viewMatrix.linear() * sampleDir;

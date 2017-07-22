@@ -144,7 +144,12 @@ namespace BeeView {
 		float m_yFov = 90;
 
 		// width in pixels
-		int m_width;
+		int m_width = 1000;
+
+		PanoramicCamera()
+		{
+			m_type = Type::PANORAMIC;
+		}
 
 		PanoramicCamera(int width) : m_width(width) 
 		{

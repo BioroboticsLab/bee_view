@@ -1010,6 +1010,7 @@ static const char __pyx_k_Pinhole[] = "Pinhole";
 static const char __pyx_k_get_mode[] = "get_mode";
 static const char __pyx_k_position[] = "position";
 static const char __pyx_k_property[] = "property";
+static const char __pyx_k_set_mode[] = "set_mode";
 static const char __pyx_k_Panoramic[] = "Panoramic";
 static const char __pyx_k_direction[] = "direction";
 static const char __pyx_k_numSamples[] = "numSamples";
@@ -1068,6 +1069,7 @@ static PyObject *__pyx_n_s_renderMode;
 static PyObject *__pyx_n_s_scale;
 static PyObject *__pyx_n_s_scene_file;
 static PyObject *__pyx_n_s_set_direction;
+static PyObject *__pyx_n_s_set_mode;
 static PyObject *__pyx_n_s_set_position;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_uint8;
@@ -1960,7 +1962,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_16get_mode(struct __pyx_obj_7beevie
  * 	def get_mode(self):
  * 		return self.C_Class.getRenderMode()             # <<<<<<<<<<<<<<
  * 
- * 	mode = property(get_mode)
+ * 	mode = property(get_mode, set_mode)
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->C_Class->getRenderMode()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
@@ -1989,7 +1991,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_16get_mode(struct __pyx_obj_7beevie
 }
 
 /* "beeview.pyx":138
- * 	mode = property(get_mode)
+ * 	mode = property(get_mode, set_mode)
  * 
  * 	def rotate_up(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraUp(degrees)
@@ -2026,7 +2028,7 @@ static PyObject *__pyx_pf_7beeview_8Renderer_18rotate_up(struct __pyx_obj_7beevi
   __pyx_v_self->C_Class->rotateCameraUp(__pyx_t_1);
 
   /* "beeview.pyx":138
- * 	mode = property(get_mode)
+ * 	mode = property(get_mode, set_mode)
  * 
  * 	def rotate_up(self, degrees):             # <<<<<<<<<<<<<<
  * 		self.C_Class.rotateCameraUp(degrees)
@@ -3739,6 +3741,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_scale, __pyx_k_scale, sizeof(__pyx_k_scale), 0, 0, 1, 1},
   {&__pyx_n_s_scene_file, __pyx_k_scene_file, sizeof(__pyx_k_scene_file), 0, 0, 1, 1},
   {&__pyx_n_s_set_direction, __pyx_k_set_direction, sizeof(__pyx_k_set_direction), 0, 0, 1, 1},
+  {&__pyx_n_s_set_mode, __pyx_k_set_mode, sizeof(__pyx_k_set_mode), 0, 0, 1, 1},
   {&__pyx_n_s_set_position, __pyx_k_set_position, sizeof(__pyx_k_set_position), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_uint8, __pyx_k_uint8, sizeof(__pyx_k_uint8), 0, 0, 1, 1},
@@ -4054,22 +4057,27 @@ PyMODINIT_FUNC PyInit_beeview(void)
   /* "beeview.pyx":136
  * 		return self.C_Class.getRenderMode()
  * 
- * 	mode = property(get_mode)             # <<<<<<<<<<<<<<
+ * 	mode = property(get_mode, set_mode)             # <<<<<<<<<<<<<<
  * 
  * 	def rotate_up(self, degrees):
  */
   __pyx_t_3 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_7beeview_Renderer, __pyx_n_s_get_mode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_7beeview_Renderer, __pyx_n_s_set_mode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_1);
   __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_property, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_property, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_7beeview_Renderer->tp_dict, __pyx_n_s_mode, __pyx_t_1) < 0) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_7beeview_Renderer->tp_dict, __pyx_n_s_mode, __pyx_t_3) < 0) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_7beeview_Renderer);
 
   /* "beeview.pyx":1
@@ -4077,10 +4085,10 @@ PyMODINIT_FUNC PyInit_beeview(void)
  * from  beeview_api cimport *
  * 
  */
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_3) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "vector.to_py":67
  * 
