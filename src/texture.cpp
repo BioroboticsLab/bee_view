@@ -48,10 +48,10 @@ namespace BeeView
 		int y0 = (int)floor(v * (float)(m_height));
 
 		// prevent overflow
-		x0 = clamp(x0, 0, m_width);
-		y0 = clamp(y0, 0, m_height);
-		int x1 = clamp(x0 + 1, 0, m_width);
-		int y1 = clamp(y0 + 1, 0, m_height);
+		x0 = clamp(x0, 0, m_width - 1);
+		y0 = clamp(y0, 0, m_height - 1);
+		int x1 = clamp(x0 + 1, 0, m_width - 1);
+		int y1 = clamp(y0 + 1, 0, m_height - 1);
 
 		// get 2x2 nearest pixels around u,v
 		Color c00 = m_data[y0*m_width + x0];

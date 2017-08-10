@@ -19,10 +19,10 @@ namespace BeeView
 		Texture();
 		Texture(std::string filename);
 
-		// get color at point u,v (nearest neighbour)
+		// get color at point u,v (bilinear interpolation)
 		Color getTexel(float u, float v);
 
-		/* load image into img */
+		/* load image from file */
 		void loadImage(std::string fileName);
 
 	};

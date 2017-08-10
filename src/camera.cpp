@@ -58,7 +58,9 @@ namespace BeeView {
 		vec.normalize();
 	}
 
-	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector */
+	/* transform input vector by rotating arround z-axis of camera (foward axis), normalizes vector
+	Warning, kann cause gimbal lock if input vector aligned with Z.
+	*/
 	void Camera::rotateVecZ(Vec3f &vec, float angle)
 	{
 		

@@ -141,7 +141,7 @@ namespace BeeView {
 	{
 	public:
 		float m_xFov = 360;
-		float m_yFov = 90;
+		float m_yFov = 180;
 
 		// width in pixels
 		int m_width = 1000;

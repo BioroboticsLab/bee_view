@@ -11,9 +11,10 @@
 //#define ELEVATION_AZIMUTH_SHADING
 //#define SINGLE_RAY_TEXTURE_SHADING
 //#define RANDOM_SHADING
+//#define CHECKER_BOARD_SHADING
 //#define MATERIAL_KD_SHADING
 
-//#define DEBUG
+#define DEBUG
 
 namespace BeeView {
 
@@ -173,7 +174,7 @@ namespace BeeView {
 		return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);
 #endif	
 
-		/* texture shading */
+		/* Default: texture shading */
 		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
 		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
 
@@ -193,22 +194,25 @@ namespace BeeView {
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
 	{
-
+		std::cout << "1" << std::endl;
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
 
 		int ommatidiumSize = camera->getOmmatidiumSize();
+		std::cout << "2" << std::endl;
 
 #ifdef DEBUG
 		// benchmark
 		std::ofstream benchmarkLog;
 		benchmarkLog.open("log.txt", std::ios_base::app);
-		benchmarkLog << std::endl << "samples: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", acceptance angle: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << std::endl;
+		std::string cam_mode = (camera->m_sampler.getMode() == Sampler::Mode::DISK) ? ", Disk" : ", Square";
+
+		benchmarkLog << std::endl << "ns: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", aa: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << cam_mode << ", bilinear" << std::endl;
 #endif
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
+		std::cout << "3" << std::endl;
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
 
@@ -216,7 +220,7 @@ namespace BeeView {
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 #ifdef DEBUG
-
+		std::cout << "4" << std::endl;
 		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
 		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
@@ -289,6 +293,22 @@ namespace BeeView {
 			#ifdef RANDOM_SHADING
 
 			color = randomColor(ommatidium.m_x*ommatidium.m_y);
+
+			#endif
+
+			#ifdef CHECKER_BOARD_SHADING
+
+			if (ommatidium.m_x % 2 == 0)
+				color = Color(0.0f, 0.0f, 0.0f);
+			else
+				color = Color(1.0f, 1.0f, 1.0f);
+
+			// invert every second row
+			if (ommatidium.m_y % 2 == 1)
+				if(color.m_r > 0)
+					color = Color(0.0f, 0.0f, 0.0f);
+				else
+					color = Color(1.0f, 1.0f, 1.0f);
 
 			#endif
 

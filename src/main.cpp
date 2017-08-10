@@ -15,7 +15,11 @@ int main()
 	//BeeView::Test::testCameraNoScene();
 	//
 	//BeeView::Test::testApi();
-	BeeView::Test::testGimbalLock();
+
+	//BeeView::Test::test_sampler2();
+	//BeeView::Test::testCameraNoScene();
+	BeeView::Test::testBeeEyeCam();
+	//BeeView::Test::testGimbalLock();
 	std::cout << "Finished.";
 
 	int x;

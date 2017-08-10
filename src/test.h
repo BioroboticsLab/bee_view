@@ -38,7 +38,7 @@ namespace BeeView {
 		{
 			// load the ommatidial array from csv file
 			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
-			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
+			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia_linear2.csv";
 
 			beeEye->loadFromCSV(csvfile);
 			
@@ -49,7 +49,8 @@ namespace BeeView {
 
 			// render the image
 			std::unique_ptr<Image> img = renderer.renderToImage();
-			img->saveToPPM("test_ommatidia_shift.ppm");
+			//img->saveToPPM("test_ommatidia_distribution.ppm");
+			img->saveToPPM("test_checker_board.ppm");
 		}
 
 		// test the pinhole camera and the coordinates (move camera around)
@@ -177,7 +178,9 @@ namespace BeeView {
 		void testBeeEyeCam()
 		{
 			// load the scene from .obj file
-			std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
+			//std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
+			std::string file = "D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj";
+
 			std::shared_ptr<Scene> scene = loadOBJ(file);
 
 			// load the ommatidial array from csv file
@@ -187,28 +190,33 @@ namespace BeeView {
 
 			// setup the camera
 			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
-
-			camera->m_sampler.setAcceptanceAngle(0);
-			camera->m_sampler.setSqrtNumSamplePoints(1);
-		
 			camera->setPosition(Vec3f(0, -70, 0));
-
 			Vec3f dir = Vec3f(0, 0, 1).normalized();
 			camera->setDir(dir);
 
+			std::unique_ptr<Image> img = std::make_unique<Image>(); // or null_ptr?
+
+			// first 1 panoramic image 
+			/*
+			std::shared_ptr<PanoramicCamera> pano_camera = std::make_shared<PanoramicCamera>();
+			pano_camera->setPosition(Vec3f(0, -70, 0));
+			pano_camera->setDir(dir);
+
+			Renderer renderer = Renderer(scene, pano_camera);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_panoramic.ppm");
+
+			renderer.setCamera(camera);
+			*/
+
 			Renderer renderer = Renderer(scene, camera);
-
-			// render the image
-			//std::unique_ptr<Image> img = renderer.renderToImage();
-			//img->saveToPPM("test_beeEye_square_single_ray.ppm");
-
 #if 1
 			camera->m_sampler.setAcceptanceAngle(2.6f);
 			camera->m_sampler.setMode(Sampler::Mode::DISK);
 
 			// render the image
 			camera->m_sampler.setSqrtNumSamplePoints(7);
-			std::unique_ptr<Image> img = renderer.renderToImage();
+			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_s7_a26.ppm");
 
 			// render the image
@@ -231,6 +239,25 @@ namespace BeeView {
 			camera->m_sampler.setAcceptanceAngle(1.3f);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_s11_a13.ppm");
+
+
+			camera->m_sampler.setAcceptanceAngle(2.6f);
+			camera->m_sampler.setMode(Sampler::Mode::SQUARE);
+
+			// render the image
+			camera->m_sampler.setSqrtNumSamplePoints(7);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_square_s7_a26.ppm");
+
+			// render the image
+			camera->m_sampler.setSqrtNumSamplePoints(11);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_square_s11_a26.ppm");
+
+			// render the image
+			camera->m_sampler.setSqrtNumSamplePoints(21);
+			img = renderer.renderToImage();
+			img->saveToPPM("test_beeEye_square_s21_a26.ppm");
 #endif
 			// cleanup embree
 			scene->cleanupEmbree();

@@ -1,0 +1,4 @@
+<map id="BeeView::BeeEyeCamera" name="BeeView::BeeEyeCamera">
+<area shape="rect" id="node2" href="$class_bee_view_1_1_camera.html" title="{BeeView::Camera\n|+ m_type\l+ m_viewMatrix\l|+ Camera()\l+ setPosition()\l+ getPosition()\l+ moveAndSetDirection()\l+ lookAt()\l+ setDir()\l+ getDir()\l+ rotateUp()\l+ rotateDown()\l+ rotateRight()\land 7 more...\l}" alt="" coords="5,35,172,273"/>
+<area shape="rect" id="node3" href="$class_bee_view_1_1_sampler.html" title="{BeeView::Sampler\n|+ m_samplePoints\l+ m_weights\l|+ Sampler()\l+ Sampler()\l+ Sampler()\l+ gaussPDF()\l+ sampleDisk()\l+ concentricDiskSamples()\l+ squareSamples()\l+ computeWeightVector()\l+ setMode()\l+ getMode()\l+ setAcceptanceAngle()\l+ getAcceptanceAngle()\l+ setSqrtNumSamplePoints()\l+ getNumSamplePoints()\l+ getTotalSamplePoints()\l}" alt="" coords="197,5,389,303"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="BeeView::Camera" name="BeeView::Camera">
+<area shape="rect" id="node2" href="$class_bee_view_1_1_bee_eye_camera.html" title="{BeeView::BeeEyeCamera\n|+ m_leftEye\l+ m_rightEye\l+ m_sampler\l|+ BeeEyeCamera()\l+ getImageHeight()\l+ getImageWidth()\l+ setOmmatidiumSize()\l+ getOmmatidiumSize()\l}" alt="" coords="5,314,177,479"/>
+<area shape="rect" id="node3" href="$class_bee_view_1_1_panoramic_camera.html" title="{BeeView::PanoramicCamera\n|+ m_xFov\l+ m_yFov\l+ m_width\l|+ PanoramicCamera()\l+ PanoramicCamera()\l+ PanoramicCamera()\l+ PanoramicCamera()\l+ getHeight()\l}" alt="" coords="201,314,389,479"/>
+<area shape="rect" id="node4" href="$class_bee_view_1_1_pinhole_camera.html" title="{BeeView::PinholeCamera\n||+ PinholeCamera()\l+ PinholeCamera()\l+ getWidth()\l+ setWidth()\l+ getHeight()\l+ setHeight()\l+ getFOV()\l+ setFOV()\l+ getScale()\l+ getImageAspectRatio()\l}" alt="" coords="413,292,583,501"/>
+</map>

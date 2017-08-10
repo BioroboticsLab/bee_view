@@ -1,0 +1,3 @@
+<map id="BeeView::PanoramicCamera" name="BeeView::PanoramicCamera">
+<area shape="rect" id="node2" href="$class_bee_view_1_1_camera.html" title="{BeeView::Camera\n|+ m_type\l+ m_viewMatrix\l|+ Camera()\l+ setPosition()\l+ getPosition()\l+ moveAndSetDirection()\l+ lookAt()\l+ setDir()\l+ getDir()\l+ rotateUp()\l+ rotateDown()\l+ rotateRight()\land 7 more...\l}" alt="" coords="16,5,183,244"/>
+</map>

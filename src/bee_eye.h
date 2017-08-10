@@ -4,7 +4,9 @@
 
 namespace BeeView
 {
-
+	/**
+	* Used to indicate left or right directions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+	*/
 	enum class	Side
 	{
 		LEFT,

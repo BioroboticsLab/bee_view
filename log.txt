@@ -170,3 +170,45 @@ samples: 132, acceptance angle: 2.600000
 samples: 132, acceptance angle: 2.600000
 Time difference (microseconds) = 1293990
 Time difference (ms) = 1293
+
+ns: 56, aa: 2.600000, Disk, bilinear
+
+ns: 56, aa: 2.600000, Disk, bilinear
+
+ns: 56, aa: 2.600000, Disk, bilinear
+
+ns: 56, aa: 2.600000, Disk, bilinear
+
+ns: 56, aa: 2.600000, Disk, bilinear
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 905027
+Time difference (ms) = 905
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2062892
+Time difference (ms) = 2062
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6692658
+Time difference (ms) = 6692
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2170528
+Time difference (ms) = 2170
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2232202
+Time difference (ms) = 2232
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 1160545
+Time difference (ms) = 1160
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2135956
+Time difference (ms) = 2135
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 6938205
+Time difference (ms) = 6938

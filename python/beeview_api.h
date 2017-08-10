@@ -6,7 +6,7 @@
 
 namespace BeeView
 {
-	// auto converted to python dict, -> python naming conventions
+
 	struct RenderSettings
 	{
 		int renderMode; // 0 BEEEYE, 1 PANORAMIC, 2 PINHOLE

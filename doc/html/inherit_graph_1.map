@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_bee_view_1_1_camera.html" title="BeeView::Camera" alt="" coords="5,56,132,83"/>
+<area shape="rect" id="node2" href="$class_bee_view_1_1_bee_eye_camera.html" title="BeeView::BeeEyeCamera" alt="" coords="188,5,360,32"/>
+<area shape="rect" id="node3" href="$class_bee_view_1_1_panoramic_camera.html" title="BeeView::PanoramicCamera" alt="" coords="180,56,368,83"/>
+<area shape="rect" id="node4" href="$class_bee_view_1_1_pinhole_camera.html" title="BeeView::PinholeCamera" alt="" coords="189,107,359,133"/>
+</map>
