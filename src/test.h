@@ -4,7 +4,7 @@
 #include "renderer.h"
 #include "obj_loader.h"
 #include "sampler.h"
-#include "../python/beeview_api.h"
+#include "../api/beeview_api.h"
 
 namespace BeeView {
 	namespace Test {
@@ -586,23 +586,24 @@ namespace BeeView {
 					Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
 					c_img.set(x, y, color);
 				}
+
 			return c_img;
 		}
 
 		void testApi()
 		{
-			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia_linear.csv", true);
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
 #if 0		
-			beeView.setRenderMode(2);
+			beeView.setMode(2);
 			//beeView.setRenderModePanoramic();
 
-			beeView.setCameraPosition(0,0,0);
+			beeView.setPosition(0,0,0);
 			float h = beeView.getDistance(0,0,0,0,-1,0);
-			beeView.setCameraPosition(0.0f, (0.0f-h)+10.0f, 0.0f); // 10m above ground
+			beeView.setPosition(0.0f, (0.0f-h)+10.0f, 0.0f); // 10m above ground
 
-			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
+			beeView.setDirection(0.0f, 0.0f, -1.0f);
 
-			beeView.setPinholeCameraFov(15);
+			beeView.setPinholeFov(15);
 			// convert python image to my image format
 			PyImage img = beeView.render();
 			Image c_img = pyToImage(img);
@@ -610,7 +611,7 @@ namespace BeeView {
 
 			for (int i = 20; i <= 180; i += 5)
 			{
-				beeView.setPinholeCameraFov(i);
+				beeView.setPinholeFov(i);
 				// convert python image to my image format
 				img = beeView.render();
 				c_img = pyToImage(img);
@@ -619,34 +620,34 @@ namespace BeeView {
 
 #endif
 
-			beeView.setRenderMode(1);
+			beeView.setMode(1);
 			//beeView.setRenderModePanoramic();
 
-			beeView.setCameraPosition(0, 0, 0);
+			beeView.setPosition(0, 0, 0);
 			float h = beeView.getDistance(0, 0, 0, 0, -1, 0);
-			beeView.setCameraPosition(0.0f, (0.0f - h) + 10.0f, 0.0f); // 10m above ground
-			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
+			beeView.setPosition(0.0f, (0.0f - h) + 10.0f, 0.0f); // 10m above ground
+			beeView.setDirection(0.0f, 0.0f, -1.0f);
 
-			beeView.setPanoramicCameraWidth(500);
-			beeView.setPanoramicCameraXfov(60);
-			beeView.setPanoramicCameraYfov(40);
+			beeView.setPanoramicWidth(500);
+			beeView.setPanoramicHfov(60);
+			beeView.setPanoramicVfov(40);
 			// convert python image to my image format
 			PyImage img = beeView.render();
 			Image c_img = pyToImage(img);
 			c_img.saveToPPM("panoramic_test_fov60_2.ppm");
 
 
-			beeView.setPanoramicCameraXfov(140);
-			beeView.setPanoramicCameraYfov(93);
+			beeView.setPanoramicHfov(140);
+			beeView.setPanoramicVfov(93);
 
 			// convert python image to my image format
 			img = beeView.render();
 			c_img = pyToImage(img);
 			c_img.saveToPPM("panoramic_test_fov140_2.ppm");
 
-			beeView.setPanoramicCameraWidth(1000);
-			beeView.setPanoramicCameraXfov(360);
-			beeView.setPanoramicCameraYfov(180);
+			beeView.setPanoramicWidth(1000);
+			beeView.setPanoramicHfov(360);
+			beeView.setPanoramicVfov(180);
 			// convert python image to my image format
 			img = beeView.render();
 			c_img = pyToImage(img);
@@ -660,35 +661,34 @@ namespace BeeView {
 
 			
 
-			beeView.setCameraPosition(0, 0, 0);
+			beeView.setPosition(0, 0, 0);
 			float h = beeView.getDistance(0, 0, 0, 0, -1, 0);
-			beeView.setCameraPosition(0.0f, (0.0f - h) + 15.0f, 0.0f); // 15m above ground
+			beeView.setPosition(0.0f, (0.0f - h) + 15.0f, 0.0f); // 15m above ground
 
-			beeView.setCameraDirVector(0.1f, 0.0f, 0.0f);
+			beeView.setDirection(0.1f, 0.0f, 0.0f);
 
+			beeView.setMode(1);
 
-			std::shared_ptr<PanoramicCamera> camera = std::make_shared<PanoramicCamera>();
-			beeView.m_renderer.setCamera(camera);
+			beeView.setDirection(1, 0, 1);
+			beeView.setPanoramicHfov(200);
 
-			camera->setDir(Vec3f(1, 0, 1));
-			camera->m_xFov = 200;
-			std::unique_ptr<Image> img = beeView.m_renderer.renderToImage();
-			img->saveToPPM("test_gimbal_1.ppm");
+			Image img = beeView.render();
+			img.saveToPPM("test_gimbal_1.ppm");
 
-			camera->setDir(Vec3f(0, 0, 1));
-			img = beeView.m_renderer.renderToImage();
-			img->saveToPPM("test_gimbal_2.ppm");
-
-
-			camera->setDir(Vec3f(0, 0, -1));
-			img = beeView.m_renderer.renderToImage();
-			img->saveToPPM("test_gimbal_3.ppm");
+			beeView.setDirection(0, 0, 1);
+			img = beeView.render();
+			img.saveToPPM("test_gimbal_2.ppm");
 
 
-			camera->setDir(Vec3f(-1, 0, 0));
-			img = beeView.m_renderer.renderToImage();
+			beeView.setDirection(0, 0, -1);
+			img = beeView.render();
+			img.saveToPPM("test_gimbal_3.ppm");
 
-			img->saveToPPM("test_gimbal_4.ppm");
+
+			beeView.setDirection(-1, 0, 0);
+			img = beeView.render();
+
+			img.saveToPPM("test_gimbal_4.ppm");
 		}
 
 	}

@@ -34,5 +34,4 @@
 #include <embree2/rtcore.h>
 #include <embree2/rtcore_ray.h>
 
-
 // TODO: reference additional headers your program requires here

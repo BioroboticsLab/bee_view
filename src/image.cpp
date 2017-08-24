@@ -63,6 +63,18 @@ namespace BeeView {
 		for (int i = 0; i < height*width; i++) m_data[i] = color;
 	}
 
+	Image::Image(std::vector<std::vector<std::vector<float>>> data)
+	{
+		m_width = static_cast<int>(data[0].size());
+		m_height = static_cast<int>(data.size());
+		for (int y = 0; y < m_height; y++)
+			for (int x = 0; x < m_width; x++)
+			{
+				Color color = Color(data[y][x][0], data[y][x][1], data[y][x][2]);
+				m_data[y*m_width + x] = color;
+			}
+	}
+
 	const Color &Image::getPixel(int x, int y)
 	{
 		return m_data[m_width * y + x];

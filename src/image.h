@@ -44,6 +44,8 @@ namespace BeeView {
 		
 		/* image of uniform color */
 		Image(int width, int height, Color color);
+
+		Image(std::vector<std::vector<std::vector<float>>> data);
 		
 		/* get color at positon x,y */
 		const Color &getPixel(int x, int y);

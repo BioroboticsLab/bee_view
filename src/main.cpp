@@ -14,12 +14,12 @@ int main()
 	//BeeView::Test::testPanoramicCamera();
 	//BeeView::Test::testCameraNoScene();
 	//
-	//BeeView::Test::testApi();
+	BeeView::Test::testApi();
 
 	//BeeView::Test::test_sampler2();
 	//BeeView::Test::testCameraNoScene();
 	//BeeView::Test::test_sampler2();
-	BeeView::Test::testBeeEyeCam();
+	//BeeView::Test::testBeeEyeCam();
 
 	//BeeView::Test::testGimbalLock();
 	std::cout << "Finished.";
