@@ -18,7 +18,9 @@ int main()
 
 	//BeeView::Test::test_sampler2();
 	//BeeView::Test::testCameraNoScene();
+	//BeeView::Test::test_sampler2();
 	BeeView::Test::testBeeEyeCam();
+
 	//BeeView::Test::testGimbalLock();
 	std::cout << "Finished.";
 

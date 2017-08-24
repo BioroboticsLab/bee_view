@@ -69,8 +69,6 @@ namespace BeeView {
 			{
 				Vec3f dir = camera->getDir();
 
-				// detect gimbal lock problem
-				// cant rotate VecX if aligned with x (z = 0)
 				camera->rotateVecX(dir, -vAngle);
 				camera->rotateVecY(dir, hAngle);
 
@@ -112,6 +110,7 @@ namespace BeeView {
 		return img;
 	}
 
+	// only used by pinhole camera
 	Color Renderer::renderPixel(float x, float y)
 	{
 		std::shared_ptr<PinholeCamera> camera = std::static_pointer_cast<PinholeCamera>(m_camera);
@@ -194,35 +193,35 @@ namespace BeeView {
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
 	{
-		std::cout << "1" << std::endl;
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
 
 		int ommatidiumSize = camera->getOmmatidiumSize();
-		std::cout << "2" << std::endl;
 
 #ifdef DEBUG
-		// benchmark
+		// write to log
 		std::ofstream benchmarkLog;
-		benchmarkLog.open("log.txt", std::ios_base::app);
-		std::string cam_mode = (camera->m_sampler.getMode() == Sampler::Mode::DISK) ? ", Disk" : ", Square";
+		benchmarkLog.open("log_table.txt", std::ios_base::app);
+		//std::string cam_mode = (camera->m_sampler.getMode() == Sampler::Mode::DISK) ? ", Disk" : ", Square";
 
-		benchmarkLog << std::endl << "ns: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", aa: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << cam_mode << ", bilinear" << std::endl;
+		//benchmarkLog << std::endl << "ns: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", aa: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << cam_mode << ", bilinear" << std::endl;
+		benchmarkLog << std::to_string((camera->m_sampler.getTotalSamplePoints())) << ",";
 #endif
+
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-		std::cout << "3" << std::endl;
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
 
 		renderBeeEye(img, Side::RIGHT);
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
 #ifdef DEBUG
-		std::cout << "4" << std::endl;
-		benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
-		benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
+		benchmarkLog << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
+		//benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
+		//benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
 
 		if(verbose_lvl > 0)
@@ -234,7 +233,13 @@ namespace BeeView {
 		return img;
 	}
 
-	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side)
+	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> out_rightColor)
+	{
+		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::LEFT,true,out_leftElevation,out_leftAzimuth,out_leftColor);
+		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::RIGHT,true,out_rightElevation,out_rightAzimuth,out_rightColor);
+	}
+
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> out_color)
 	{
 		int x;
 		int y;
@@ -255,7 +260,8 @@ namespace BeeView {
 		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
 		{
-			// fix for "nice" display at elevation = 0 (model returns to many ommatidia for e=0), delete last ommatidium at e=0
+			
+			// fix for "nice" display at elevation = 0 (model returns too many ommatidia for e=0), delete last ommatidium at e=0
 			if (ommatidium.m_y == 0)
 			{
 				if (beeEye->m_side == Side::RIGHT && (ommatidium.m_x == -5 || ommatidium.m_x == -4))
@@ -263,7 +269,7 @@ namespace BeeView {
 				if (beeEye->m_side == Side::LEFT && (ommatidium.m_x == 5 || ommatidium.m_x == 4))
 					continue;
 			}
-
+			
 			// get main dir
 			Vec3f dir = ommatidium.getDirVector();
 
@@ -361,6 +367,14 @@ namespace BeeView {
 			}
 			#endif
 
+			if (agent)
+			{
+				out_color.push_back(color);
+				out_azimuth.push_back(ommatidium.m_azimuth);
+				out_elevation.push_back(ommatidium.m_elevation);
+				continue;
+			}
+
 			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
 			convert2ImageCoords(ommatidium, beeEye, x, y);
 
@@ -404,11 +418,11 @@ namespace BeeView {
 	Convert beeeye coordinate to image coordinates
 
 	Bee eye:
-	(+y)
-	|
-	(-x)----+-----(+x)
-	|
-	(-y)
+           (+y)
+	        |
+    (-x)----+-----(+x)
+	        |
+          (-y)
 
 	Image:
 	+----------(+x)

@@ -181,25 +181,26 @@ namespace BeeView {
 			//std::string file = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\models\\hessen\\skydome_minus_z_forward.obj"; //\\cornell\\cornell_box.obj";// 
 			std::string file = "D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj";
 
-			std::shared_ptr<Scene> scene = loadOBJ(file);
+			std::shared_ptr<Scene> scene = loadOBJ(file, true);
 
 			// load the ommatidial array from csv file
 			BeeEye::Ptr beeEye = std::make_shared<BeeEye>();
-			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia.csv";
+			std::string csvfile = "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia_linear2.csv";
 			beeEye->loadFromCSV(csvfile);
 
 			// setup the camera
 			std::shared_ptr<BeeEyeCamera> camera = std::make_shared<BeeEyeCamera>(beeEye);
-			camera->setPosition(Vec3f(0, -70, 0));
-			Vec3f dir = Vec3f(0, 0, 1).normalized();
+			Vec3f pos = Vec3f(0, -85, 0);
+			camera->setPosition(pos);
+			Vec3f dir = Vec3f(0, 0, -1).normalized();
 			camera->setDir(dir);
 
 			std::unique_ptr<Image> img = std::make_unique<Image>(); // or null_ptr?
 
 			// first 1 panoramic image 
-			/*
+			
 			std::shared_ptr<PanoramicCamera> pano_camera = std::make_shared<PanoramicCamera>();
-			pano_camera->setPosition(Vec3f(0, -70, 0));
+			pano_camera->setPosition(pos);
 			pano_camera->setDir(dir);
 
 			Renderer renderer = Renderer(scene, pano_camera);
@@ -207,40 +208,33 @@ namespace BeeView {
 			img->saveToPPM("test_panoramic.ppm");
 
 			renderer.setCamera(camera);
-			*/
+			
 
-			Renderer renderer = Renderer(scene, camera);
+			//Renderer renderer = Renderer(scene, camera);
 #if 1
+
+			// test acceptance angles
 			camera->m_sampler.setAcceptanceAngle(2.6f);
+			camera->m_sampler.setSqrtNumSamplePoints(21);
 			camera->m_sampler.setMode(Sampler::Mode::DISK);
 
 			// render the image
-			camera->m_sampler.setSqrtNumSamplePoints(7);
-			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s7_a26.ppm");
-
-			// render the image
-			camera->m_sampler.setSqrtNumSamplePoints(11);
-			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a26.ppm");
-
-			// render the image
-			camera->m_sampler.setSqrtNumSamplePoints(21);
 			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_s21_a26.ppm");
-
+			
 			// render the image
-			camera->m_sampler.setSqrtNumSamplePoints(11);
 			camera->m_sampler.setAcceptanceAngle(5.2f);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a52.ppm");
+			img->saveToPPM("test_beeEye_s21_a52.ppm");
 
 			// render the image
 			camera->m_sampler.setAcceptanceAngle(1.3f);
 			img = renderer.renderToImage();
-			img->saveToPPM("test_beeEye_s11_a13.ppm");
+			img->saveToPPM("test_beeEye_s21_a13.ppm");
 
 
+
+			// test square samples
 			camera->m_sampler.setAcceptanceAngle(2.6f);
 			camera->m_sampler.setMode(Sampler::Mode::SQUARE);
 
@@ -259,6 +253,21 @@ namespace BeeView {
 			img = renderer.renderToImage();
 			img->saveToPPM("test_beeEye_square_s21_a26.ppm");
 #endif
+
+			// test round sampling with aa 2.6, different sample sizes
+			camera->m_sampler.setAcceptanceAngle(2.6f);
+			camera->m_sampler.setMode(Sampler::Mode::DISK);
+			for (int i = 3; i < 100; i++)
+			{
+				if (i % 2 == 1)
+				{
+					// render the image
+					camera->m_sampler.setSqrtNumSamplePoints(i);
+					img = renderer.renderToImage();
+					img->saveToPPM("test_beeEye_s" + std::to_string(i) + "_a26.ppm");
+				}
+			}
+
 			// cleanup embree
 			scene->cleanupEmbree();
 
@@ -472,6 +481,36 @@ namespace BeeView {
 			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
 			plot2txt(points, weights, fileName);
 
+			// 930 samples for disk
+			sqrtSamples = 30;
+			points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+			sqrtSamples = 40;
+			points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
+
+
+
+			for (int i = 3; i <= 85; i++)
+			{
+				sqrtSamples = i;
+				points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+				weights = sampler.computeWeightVector(points, acceptanceAngle);
+				fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_"+ std::to_string(i) + ".txt";
+				plot2txt(points, weights, fileName);
+			}
+
+			acceptanceAngle = 5.1f;
+			sqrtSamples = 21;
+			points = sampler.concentricDiskSamples(sqrtSamples, acceptanceAngle);
+			weights = sampler.computeWeightVector(points, acceptanceAngle);
+			fileName = "D:\\Documents\\bachelorarbeit\\raytracing\\beeView\\R\\sample_aa51_" + std::to_string(points.size()) + "_weights.txt";
+			plot2txt(points, weights, fileName);
 			return;
 		}
 
@@ -536,33 +575,82 @@ namespace BeeView {
 
 		typedef std::vector<std::vector<std::vector<float>>> PyImage;
 
-		void testApi()
+		Image pyToImage(PyImage img)
 		{
-			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
-			
-			//beeView.setRenderModePinhole();
-			//beeView.setRenderModePanoramic();
-
-			beeView.setCameraPosition(0,0,0);
-			float h = beeView.getDistance(0,0,0,0,-1,0);
-			beeView.setCameraPosition(0.0f, (0.0f-h)+15.0f, 0.0f); // 5m above ground
-
-			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
-
-			beeView.setBeeEyeCameraNumSamplePoints(132);
-
-			// convert python image to my image format
-			PyImage img = beeView.render();
 			int width = static_cast<int>(img[0].size());
 			int height = static_cast<int>(img.size());
 			Image c_img = Image(width, height);
 			for (int y = 0; y < height; y++)
-			for (int x = 0; x < width; x++)
+				for (int x = 0; x < width; x++)
+				{
+					Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
+					c_img.set(x, y, color);
+				}
+			return c_img;
+		}
+
+		void testApi()
+		{
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_eye_model\\ommatidia_linear.csv", true);
+#if 0		
+			beeView.setRenderMode(2);
+			//beeView.setRenderModePanoramic();
+
+			beeView.setCameraPosition(0,0,0);
+			float h = beeView.getDistance(0,0,0,0,-1,0);
+			beeView.setCameraPosition(0.0f, (0.0f-h)+10.0f, 0.0f); // 10m above ground
+
+			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
+
+			beeView.setPinholeCameraFov(15);
+			// convert python image to my image format
+			PyImage img = beeView.render();
+			Image c_img = pyToImage(img);
+			c_img.saveToPPM("pinhole_test_fov15.ppm");
+
+			for (int i = 20; i <= 180; i += 5)
 			{
-				Color color = Color(img[y][x][0], img[y][x][1], img[y][x][2]);
-				c_img.set(x, y, color);
+				beeView.setPinholeCameraFov(i);
+				// convert python image to my image format
+				img = beeView.render();
+				c_img = pyToImage(img);
+				c_img.saveToPPM("pinhole_test_fov"+std::to_string(i)+".ppm");
 			}
-			c_img.saveToPPM("bee_eye_nn.ppm");
+
+#endif
+
+			beeView.setRenderMode(1);
+			//beeView.setRenderModePanoramic();
+
+			beeView.setCameraPosition(0, 0, 0);
+			float h = beeView.getDistance(0, 0, 0, 0, -1, 0);
+			beeView.setCameraPosition(0.0f, (0.0f - h) + 10.0f, 0.0f); // 10m above ground
+			beeView.setCameraDirVector(0.0f, 0.0f, -1.0f);
+
+			beeView.setPanoramicCameraWidth(500);
+			beeView.setPanoramicCameraXfov(60);
+			beeView.setPanoramicCameraYfov(40);
+			// convert python image to my image format
+			PyImage img = beeView.render();
+			Image c_img = pyToImage(img);
+			c_img.saveToPPM("panoramic_test_fov60_2.ppm");
+
+
+			beeView.setPanoramicCameraXfov(140);
+			beeView.setPanoramicCameraYfov(93);
+
+			// convert python image to my image format
+			img = beeView.render();
+			c_img = pyToImage(img);
+			c_img.saveToPPM("panoramic_test_fov140_2.ppm");
+
+			beeView.setPanoramicCameraWidth(1000);
+			beeView.setPanoramicCameraXfov(360);
+			beeView.setPanoramicCameraYfov(180);
+			// convert python image to my image format
+			img = beeView.render();
+			c_img = pyToImage(img);
+			c_img.saveToPPM("panoramic_test_fov360_2.ppm");
 			return;
 		}
 

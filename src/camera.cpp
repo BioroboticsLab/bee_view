@@ -162,7 +162,7 @@ namespace BeeView {
 		if (m_leftEye->m_side == Side::RIGHT)
 			m_leftEye.swap(m_rightEye);
 
-		m_sampler = Sampler(11, 2.6f);
+		m_sampler = Sampler(15, 2.6f);
 
 		calculateImageDimensions();
 	}

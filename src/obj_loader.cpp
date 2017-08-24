@@ -383,10 +383,8 @@ namespace BeeView
 
 			/* there may be vertices without texture coordinates, thus we have to make this array the same size here */
 			if (mesh->texcoords.size()) while (mesh->texcoords.size() < mesh->numVertices()) mesh->texcoords.push_back(Vec2f::Zero()); // TODO: optimize: Zero doesnt need to be created can be referenz to const global zero object?
-			/* same for normals*/
-			//if (mesh.normals.size()) while (mesh.normals.size() < mesh.numVertices()) mesh.normals.push_back(Vec3f::Zero()); // XXXNORMALS
-
-			//if (mesh.texcoords.size()) while (mesh.texcoords.size() < mesh.numVertices()) mesh.texcoords.push_back(0);
+			/* same for normals, deactiviated to speed up loading, normal shading not implemented */
+			//if (mesh->normals.size()) while (mesh->normals.size() < mesh->numVertices()) mesh->normals.push_back(Vec3f::Zero()); // XXXNORMALS
 
 		}
 

@@ -212,3 +212,317 @@ Time difference (ms) = 2135
 ns: 462, aa: 2.600000, Square, bilinear
 Time difference (microseconds) = 6938205
 Time difference (ms) = 6938
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 900615
+Time difference (ms) = 900
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2085583
+Time difference (ms) = 2085
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6716180
+Time difference (ms) = 6716
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2299529
+Time difference (ms) = 2299
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2358041
+Time difference (ms) = 2358
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 906972
+Time difference (ms) = 906
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2112948
+Time difference (ms) = 2112
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 6788750
+Time difference (ms) = 6788
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 976931
+Time difference (ms) = 976
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2196608
+Time difference (ms) = 2196
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 7080976
+Time difference (ms) = 7080
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6970081
+Time difference (ms) = 6970
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2155018
+Time difference (ms) = 2155
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2106924
+Time difference (ms) = 2106
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 993072
+Time difference (ms) = 993
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2123494
+Time difference (ms) = 2123
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 7019964
+Time difference (ms) = 7019
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 921689
+Time difference (ms) = 921
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2074761
+Time difference (ms) = 2074
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6821457
+Time difference (ms) = 6821
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6992471
+Time difference (ms) = 6992
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2228485
+Time difference (ms) = 2228
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2067035
+Time difference (ms) = 2067
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 917201
+Time difference (ms) = 917
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2161730
+Time difference (ms) = 2161
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 7436405
+Time difference (ms) = 7436
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 1033112
+Time difference (ms) = 1033
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2376035
+Time difference (ms) = 2376
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 7278777
+Time difference (ms) = 7278
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 7093635
+Time difference (ms) = 7093
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2096418
+Time difference (ms) = 2096
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2030478
+Time difference (ms) = 2030
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 902456
+Time difference (ms) = 902
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2082322
+Time difference (ms) = 2082
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 6925268
+Time difference (ms) = 6925
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 900901
+Time difference (ms) = 900
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2064369
+Time difference (ms) = 2064
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 7296292
+Time difference (ms) = 7296
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6913612
+Time difference (ms) = 6913
+
+ns: 132, aa: 5.200000, Disk, bilinear
+Time difference (microseconds) = 2209301
+Time difference (ms) = 2209
+
+ns: 132, aa: 1.300000, Disk, bilinear
+Time difference (microseconds) = 2038754
+Time difference (ms) = 2038
+
+ns: 56, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 936623
+Time difference (ms) = 936
+
+ns: 132, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 2061674
+Time difference (ms) = 2061
+
+ns: 462, aa: 2.600000, Square, bilinear
+Time difference (microseconds) = 6712933
+Time difference (ms) = 6712
+
+ns: 12, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 221865
+Time difference (ms) = 221
+
+ns: 20, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 410067
+Time difference (ms) = 410
+
+ns: 30, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 606642
+Time difference (ms) = 606
+
+ns: 42, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 892064
+Time difference (ms) = 892
+
+ns: 56, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 935986
+Time difference (ms) = 935
+
+ns: 72, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 1293709
+Time difference (ms) = 1293
+
+ns: 90, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 1472301
+Time difference (ms) = 1472
+
+ns: 110, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 1911945
+Time difference (ms) = 1911
+
+ns: 132, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2095938
+Time difference (ms) = 2095
+
+ns: 156, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2581831
+Time difference (ms) = 2581
+
+ns: 182, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 2866676
+Time difference (ms) = 2866
+
+ns: 210, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 3834191
+Time difference (ms) = 3834
+
+ns: 240, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 3906095
+Time difference (ms) = 3906
+
+ns: 272, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 4490152
+Time difference (ms) = 4490
+
+ns: 306, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 4786579
+Time difference (ms) = 4786
+
+ns: 342, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 5900490
+Time difference (ms) = 5900
+
+ns: 380, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 5842240
+Time difference (ms) = 5842
+
+ns: 420, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6567007
+Time difference (ms) = 6567
+
+ns: 462, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 6849385
+Time difference (ms) = 6849
+
+ns: 506, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 7731607
+Time difference (ms) = 7731
+
+ns: 552, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 8109989
+Time difference (ms) = 8109
+
+ns: 600, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 9112058
+Time difference (ms) = 9112
+
+ns: 650, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 9465520
+Time difference (ms) = 9465
+
+ns: 702, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 11343565
+Time difference (ms) = 11343
+
+ns: 756, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 11038817
+Time difference (ms) = 11038
+
+ns: 812, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 12778773
+Time difference (ms) = 12778
+
+ns: 870, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 12687548
+Time difference (ms) = 12687
+
+ns: 930, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 13953780
+Time difference (ms) = 13953
+
+ns: 992, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 14874962
+Time difference (ms) = 14874
+
+ns: 1056, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 15686374
+Time difference (ms) = 15686
+
+ns: 1122, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 16143313
+Time difference (ms) = 16143
+
+ns: 1190, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 18101603
+Time difference (ms) = 18101
+
+ns: 1260, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 18162069
+Time difference (ms) = 18162
+
+ns: 1332, aa: 2.600000, Disk, bilinear
+Time difference (microseconds) = 19591781
+Time difference (ms) = 19591
+
+ns: 1406, aa: 2.600000, Disk, bilinear

@@ -64,6 +64,7 @@ namespace BeeView {
 		void rollRight(float angle);
 		void rollLeft(float angle);
 
+		// Not gimbal lock safe!
 		/* transform input vector by rotating arround x-axis of camera (right axis) */
 		void rotateVecX(Vec3f &vec, float angle);
 		/* transform input vector by rotating arround y-axis of camera (up axis) */

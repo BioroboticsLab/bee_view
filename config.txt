@@ -1,8 +1,0 @@
-# the absolute path to the .obj file for the scene (located in the data folder of bee_view).
-model = ""
-
-# the .csv file for the elevation and azimuth angles of the bee eye (located in the data folder of bee_view).
-ommatidia = ""
-
-# the level of print output: 0 = no output, 1 = only bare minimum is printed, 2 = standard, 3 = everything is printed (for debugging, effects performance)
-verbose = 2

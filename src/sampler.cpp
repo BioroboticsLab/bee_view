@@ -99,9 +99,10 @@ namespace BeeView
 	float Sampler::gaussPDF(float x, float y, float hw)
 	{
 		float dist = sqrt(x*x + y*y);
-		// have to change to 3.333, so that FWHM ist correct
 		float var = hw / 3.333f;
 		return std::exp(-pow(0.5f * dist / var, 2));	
+
+
 	}
 
 	std::vector<float> Sampler::computeWeightVector(std::vector<Vec2f> &samples, float acceptanceAngle)
