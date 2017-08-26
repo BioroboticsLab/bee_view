@@ -89,6 +89,54 @@ namespace BeeView
 		return returnImage;
 	}
 
+	std::vector<std::vector<float>> BeeViewApplication::renderAgent()
+	{
+		std::vector<Color> out_leftColor = std::vector<Color>();
+		std::vector<Color> out_rightColor = std::vector<Color>();
+		std::vector<float> out_leftElevation = std::vector<float>();
+		std::vector<float> out_rightElevation = std::vector<float>();
+		std::vector<float> out_leftAzimuth = std::vector<float>();
+		std::vector<float> out_rightAzimuth = std::vector<float>();
+
+		impl_->m_renderer.renderAgent(out_leftElevation, out_leftAzimuth, out_leftColor, out_rightElevation, out_rightAzimuth, out_rightColor);
+	
+		std::vector<float> out_leftR = std::vector<float>();
+		std::vector<float> out_leftG = std::vector<float>();
+		std::vector<float> out_leftB = std::vector<float>();
+		std::vector<float> out_rightR = std::vector<float>();
+		std::vector<float> out_rightG = std::vector<float>();
+		std::vector<float> out_rightB = std::vector<float>();
+
+		// convert the color arrays to float arrays
+		for (int i = 0; i < out_leftColor.size(); i++)
+		{
+			Color left_color = out_leftColor[i];
+			Color right_color = out_rightColor[i];
+
+			out_leftR.push_back(left_color.m_r);
+			out_leftG.push_back(left_color.m_g);
+			out_leftB.push_back(left_color.m_b);
+			out_rightR.push_back(right_color.m_r);
+			out_rightG.push_back(right_color.m_g);
+			out_rightB.push_back(right_color.m_b);
+		}
+		
+		std::vector<std::vector<float>> returnVector = std::vector<std::vector<float>>();
+
+		returnVector.push_back(out_leftAzimuth);
+		returnVector.push_back(out_leftElevation);
+		returnVector.push_back(out_leftR);
+		returnVector.push_back(out_leftG);
+		returnVector.push_back(out_leftB);
+		returnVector.push_back(out_rightAzimuth);
+		returnVector.push_back(out_rightElevation);
+		returnVector.push_back(out_rightR);
+		returnVector.push_back(out_rightG);
+		returnVector.push_back(out_rightB);
+
+		return returnVector;
+	}
+
 	void BeeViewApplication::setPosition(float x, float y, float z)
 	{
 

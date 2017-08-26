@@ -25,6 +25,12 @@ namespace BeeView {
 		/* renders the image of scene according to set camera */
 		std::unique_ptr<Image> renderToImage();
 
+		/* renders the image according to parameters in beeEyeCamera, returns
+		3 arrays for each eye: elevation angles, azimuth angles, and color values with length of n ommatidia
+		*/
+		void renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor);
+
+
 		/* switch camera */
 		void setCamera(std::shared_ptr<Camera> camera)
 		{
@@ -42,11 +48,6 @@ namespace BeeView {
 		/* renders the bee eyes according to parameters in beeEyeCamera, returns bee view */
 		std::unique_ptr<Image> renderToImageBeeEye();
 
-		/* renders the image according to parameters in beeEyeCamera, returns 
-		3 arrays for each eye: elevation angles, azimuth angles, and color values with length of n ommatidia
-		*/
-		void renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> out_rightColor);
-
 		std::unique_ptr<Image> Renderer::renderToImagePanoramic();
 	
 		/* PINHOLE: renders single pixel */
@@ -62,7 +63,7 @@ namespace BeeView {
 		Color azimuthElevationColor(const int a, const int e);
 
 		/* renders the given beeeye onto the given image */
-		void renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent = false, std::vector<float> &out_elevation = std::vector<float>(), std::vector<float> &out_azimuth = std::vector<float>(), std::vector<Color> out_color = std::vector<Color>());
+		void renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent = false, std::vector<float> &out_elevation = std::vector<float>(), std::vector<float> &out_azimuth = std::vector<float>(), std::vector<Color> &out_color = std::vector<Color>());
 
 		struct ConvertCoordsParams
 		{

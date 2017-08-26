@@ -593,6 +593,11 @@ namespace BeeView {
 		void testApi()
 		{
 			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\sky_white\\skydome_white.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
+
+			std::vector<std::vector<float>> test = beeView.renderAgent();
+
+			std::vector<float> color_r_left = test[2];
+
 #if 0		
 			beeView.setMode(2);
 			//beeView.setRenderModePanoramic();
@@ -617,8 +622,6 @@ namespace BeeView {
 				c_img = pyToImage(img);
 				c_img.saveToPPM("pinhole_test_fov"+std::to_string(i)+".ppm");
 			}
-
-#endif
 
 			beeView.setMode(1);
 			//beeView.setRenderModePanoramic();
@@ -652,6 +655,8 @@ namespace BeeView {
 			img = beeView.render();
 			c_img = pyToImage(img);
 			c_img.saveToPPM("panoramic_test_fov360_2.ppm");
+#endif
+
 			return;
 		}
 

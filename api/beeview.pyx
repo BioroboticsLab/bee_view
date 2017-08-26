@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from  beeview_api cimport *
 
 cdef class Renderer:
@@ -38,6 +39,9 @@ cdef class Renderer:
 
 		"""
 
+		scene_file = os.path.abspath(scene_file)
+		ommatidia_file = os.path.abspath(ommatidia_file)
+
 		cdef string c_scene_file = scene_file.encode('UTF-8')
 		cdef string c_ommatidia_file = ommatidia_file.encode('UTF-8')
 
@@ -52,11 +56,10 @@ cdef class Renderer:
 	def render(self):
 		"""Renders an image with the current camera.
 
+
 		Returns
 		-------
-		array_like
-			Array of height x width x 3. Color data is uint8 with range 0-255.
-			
+		Array of shape: [height, width, 3]. Color data is uint8 with range 0-255.	
 
 		"""
 
@@ -64,6 +67,34 @@ cdef class Renderer:
 		img = (np.array(img) * 255).astype(np.uint8)
 		return img
 		#return Image.fromarray(img)
+	
+	def render_agent(self):
+		"""Renders a flat array of image data.
+
+		Returns
+		-------
+		If BeeEye mode: 
+			Tuple of 2 dictionaries (one for left eye, one for right eye) with keys: “azimuth”, “elevation” and “color”.
+			Azimuth contains a list of 	azimuth angles, Elevation contains list of elevation angles 
+			and color a list of lists containing the color values for each ommatidium.
+		If Panoramic or Pinhole mode: 
+			Array of shape [width*height,3] containing the color data
+		"""
+
+		# if beeeye mode
+		if self.mode == 0:
+			
+			r = self.C_Class.renderAgent()
+			left_color = np.transpose(np.array([r[2],r[3],r[4]]))
+			right_color = np.transpose(np.array([r[7],r[8],r[9]]))
+			left = {"azimuth":r[0],"elevation":r[1],"color":left_color}
+			right = {"azimuth":r[5],"elevation":r[6],"color":right_color}
+			return (left,right)
+		else:
+			img = self.C_Class.render();
+
+			# make img flat
+			return np.array([color for row in img for color in row])
 
 	def set_position(self,pos):
 		"""	
@@ -72,7 +103,7 @@ cdef class Renderer:
 		pos : sequence of float
 			The x, y, z coordinates
 		"""
-		self.C_Class.setCameraPosition(pos[0],pos[1],pos[2]);
+		self.C_Class.setPosition(pos[0],pos[1],pos[2]);
 
 	def get_position(self):
 		"""
@@ -84,7 +115,7 @@ cdef class Renderer:
 		"""
 
 		cdef float x = 0.0, y = 0.0, z = 0.0
-		self.C_Class.getCameraPosition(x,y,z);
+		self.C_Class.getPosition(x,y,z);
 		return [x,y,z]
 
 	position = property(get_position, set_position)
@@ -98,7 +129,7 @@ cdef class Renderer:
 
 		"""
 
-		self.C_Class.setCameraDirVector(dir[0],dir[1],dir[2]);
+		self.C_Class.setDirection(dir[0],dir[1],dir[2]);
 
 	def get_direction(self):
 		"""
@@ -110,7 +141,7 @@ cdef class Renderer:
 		"""
 
 		cdef float x = 0.0, y = 0.0, z = 0.0
-		self.C_Class.getCameraDirVector(x,y,z)
+		self.C_Class.getDirection(x,y,z)
 		return [x,y,z]
 
 	direction = property(get_direction, set_direction)
@@ -128,30 +159,30 @@ cdef class Renderer:
 
 		"""
 
-		self.C_Class.setRenderMode(mode)
+		self.C_Class.setMode(mode)
 
 	def get_mode(self):
-		return self.C_Class.getRenderMode()
+		return self.C_Class.getMode()
 
 	mode = property(get_mode, set_mode)
 
 	def rotate_up(self, degrees):
-		self.C_Class.rotateCameraUp(degrees)
+		self.C_Class.rotateUp(degrees)
 
 	def rotate_down(self, degrees):
-		self.C_Class.rotateCameraDown(degrees)
+		self.C_Class.rotateDown(degrees)
 
 	def rotate_left(self, degrees):
-		self.C_Class.rotateCameraLeft(degrees)
+		self.C_Class.rotateLeft(degrees)
 
 	def rotate_right(self, degrees):
-		self.C_Class.rotateCameraRight(degrees)
+		self.C_Class.rotateRight(degrees)
 
 	def roll_left(self, degrees):
-		self.C_Class.rollCameraLeft(degrees)
+		self.C_Class.rollLeft(degrees)
 
 	def roll_right(self, degrees):
-		self.C_Class.rollCameraRight(degrees)
+		self.C_Class.rollRight(degrees)
 
 	def measure_distance(self, pos, dir):
 		"""Measures distance to next object in direction of dir.
@@ -173,31 +204,31 @@ cdef class Renderer:
 		return self.C_Class.getDistance(pos[0],pos[1],pos[2],dir[0],dir[1],dir[2])
 
 	def set_panoramic_hfov(self, hfov):
-		self.C_Class.setPanoramicCameraXfov(hfov)
+		self.C_Class.setPanoramicHfov(hfov)
 
 	def set_panoramic_vfov(self, vfov):
-		self.C_Class.setPanoramicCameraYfov(vfov)
+		self.C_Class.setPanoramicVfov(vfov)
 
 	def set_panoramic_width(self, width):
-		self.C_Class.setPanoramicCameraWidth(width)
+		self.C_Class.setPanoramicWidth(width)
 
 	def set_pinhole_fov(self, fov):
-		self.C_Class.setPinholeCameraFov(fov)
+		self.C_Class.setPinholeFov(fov)
 
 	def set_pinhole_width(self, width):
-		self.C_Class.setPinholeCameraWidth(width)
+		self.C_Class.setPinholeWidth(width)
 
 	def set_pinhole_height(self, height):
-		self.C_Class.setPinholeCameraHeight(height)
+		self.C_Class.setPinholeHeight(height)
 
 	def set_acceptance_angle(self, acceptance_angle):
-		self.C_Class.setPinholeCameraHeight(acceptance_angle)
+		self.C_Class.setAcceptanceAngle(acceptance_angle)
 
 	def set_num_samples(self, num_samples):
-		self.C_Class.setBeeEyeCameraNumSamplePoints(num_samples)
+		self.C_Class.setNumSamples(num_samples)
 
 	def set_ommatidium_size(self, ommatidium_size):
-		self.C_Class.setBeeEyeCameraOmmatidiumSize(ommatidium_size)
+		self.C_Class.setOmmatidiumSize(ommatidium_size)
 
 	def get_image_size(self):
 		"""Get the rendered Image Dimensions (width, height)

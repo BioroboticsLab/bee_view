@@ -233,13 +233,14 @@ namespace BeeView {
 		return img;
 	}
 
-	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> out_rightColor)
+	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor)
 	{
 		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::LEFT,true,out_leftElevation,out_leftAzimuth,out_leftColor);
 		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::RIGHT,true,out_rightElevation,out_rightAzimuth,out_rightColor);
+		return;
 	}
 
-	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> out_color)
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color)
 	{
 		int x;
 		int y;
@@ -409,7 +410,8 @@ namespace BeeView {
 		}
 
 		// draw cross at eye center
-		drawCross(img, static_cast<int>(floor(center(0))), static_cast<int>(floor(center(1))));
+		if(!agent)
+			drawCross(img, static_cast<int>(floor(center(0))), static_cast<int>(floor(center(1))));
 
 		return;
 	}

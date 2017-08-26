@@ -33,36 +33,37 @@ cdef extern from "beeview_api.h" namespace "BeeView":
 
 		#Methods
 		vector[vector[vector[float]]] render()
+		vector[vector[float]] renderAgent()
 
-		void setCameraPosition(float, float, float)
-		void getCameraPosition(float &, float &, float &)
+		void setPosition(float, float, float)
+		void getPosition(float &, float &, float &)
 
-		void setCameraDirVector(float, float, float)
-		void getCameraDirVector(float &, float &, float &)
+		void setDirection(float, float, float)
+		void getDirection(float &, float &, float &)
 
-		void setRenderMode(int)
-		int getRenderMode()
+		void setMode(int)
+		int getMode()
 
 		float getDistance(float, float, float, float, float, float);
 
-		void rotateCameraUp(float)
-		void rotateCameraDown(float)
-		void rotateCameraRight(float)
-		void rotateCameraLeft(float)
-		void rollCameraRight(float)
-		void rollCameraLeft(float)
+		void rotateUp(float)
+		void rotateDown(float)
+		void rotateRight(float)
+		void rotateLeft(float)
+		void rollRight(float)
+		void rollLeft(float)
 
-		void setPinholeCameraFov(float)
-		void setPinholeCameraWidth(int)
-		void setPinholeCameraHeight(int)
+		void setPinholeFov(float)
+		void setPinholeWidth(int)
+		void setPinholeHeight(int)
 
-		void setBeeEyeCameraAcceptanceAngle(float)
-		void setBeeEyeCameraNumSamplePoints(int)
-		void setBeeEyeCameraOmmatidiumSize(int)
+		void setAcceptanceAngle(float)
+		void setNumSamples(int)
+		void setOmmatidiumSize(int)
 
-		void setPanoramicCameraXfov(float)
-		void setPanoramicCameraYfov(float)
-		void setPanoramicCameraWidth(int)
+		void setPanoramicHfov(float)
+		void setPanoramicVfov(float)
+		void setPanoramicWidth(int)
 
 		int getImageWidth()
 		int getImageHeight()

@@ -57,6 +57,13 @@ namespace BeeView
 		/* renders an image with the current active camera and the settings specified be the camera */
 		std::vector<std::vector<std::vector<float>>> render();
 
+		/* renders the image according to parameters in beeEyeCamera, returns
+		12 arrays: the first 6 for the left eye.
+		azimuth angles, elevation angles, r ,g , b with length of n ommatidia
+		*/
+		std::vector<std::vector<float>> renderAgent();
+
+
 		// camera setters and getter: position, rotation, cameratype
 		void setPosition(float x, float y, float z);
 		void getPosition(float &out_x, float &out_y, float &out_z);
