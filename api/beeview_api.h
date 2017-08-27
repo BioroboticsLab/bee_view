@@ -107,6 +107,7 @@ namespace BeeView
 		int getImageWidth();
 		int getImageHeight();
 
+		/* get aabb of scene */
 		void getSceneBounds(float &out_lower_x, float &out_lower_y, float &out_lower_z, float &out_upper_x, float &out_upper_y, float &out_upper_z);
 
 		/* overwrites yFov, not implemented */
