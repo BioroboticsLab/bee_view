@@ -16,13 +16,11 @@ The Model is based on the paper:
 >W. Stürzl, N. Boeddeker, L. Dittmar, and M. Egelhaaf, ‘Mimicking honeybee eyes with a 280 degrees field of view catadioptric imaging system’, Bioinspir. Biomim., vol. 5, no. 3, p. 036002, Sep. 2010.
 
 The script for rendering the interommatidial angles can be found [here](data/calc_ommatidial_array.R).
-The renderer was built as part of a bachelor's thesis. Implementation details and other information can be found in the [thesis]data/bachelorarbeit_polster_final_corrected_web.pdf).
+The renderer was built as part of a bachelor's thesis. Implementation details and other information can be found in the [thesis](data/bachelorarbeit_polster_final_corrected_web.pdf).
 
-![example rendered bee view](data/test_beeEye_s21_a26.png)
+![example rendered bee view](data/test_beeEye_s21_a26.png| width=250)
 
 An example video that was rendered with the engine can be found [here](https://www.youtube.com/watch?v=xc-4FWyoQM4).
-
-TODO: link to doc: Make doc compatible with doxygen, host the doc
 
 # beeview Python package
 
