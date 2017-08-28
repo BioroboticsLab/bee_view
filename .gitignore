@@ -1,14 +1,5 @@
-models/
-build/
 .vs/
-*.jpg
-*.JPG
-*.jpeg
-*.JPEG
 *.ppm
-*.PPM
-*.png
-*.PNG
 
 # Compiled source #
 ###################

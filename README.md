@@ -15,10 +15,13 @@ The bee's eye model implemented is a model of the spatial resolution and field o
 The Model is based on the paper: 
 >W. Stürzl, N. Boeddeker, L. Dittmar, and M. Egelhaaf, ‘Mimicking honeybee eyes with a 280 degrees field of view catadioptric imaging system’, Bioinspir. Biomim., vol. 5, no. 3, p. 036002, Sep. 2010.
 
-The script for rendering the interommatidial angles can be found [here](data/calc_ommatidial_array.R)
-The renderer was built as part of a bachelor's thesis. Implementation details and other information can be found [here](data/bachelorarbeit_polster_final_corrected_web.pdf).
+The script for rendering the interommatidial angles can be found [here](data/calc_ommatidial_array.R).
+The renderer was built as part of a bachelor's thesis. Implementation details and other information can be found in the [thesis]data/bachelorarbeit_polster_final_corrected_web.pdf).
 
-TODO: Example output as image, Example video
+![example rendered bee view](data/example_beeview_s21_a26.png)
+
+An example video that was rendered with the engine can be found [here](https://www.youtube.com/watch?v=xc-4FWyoQM4).
+
 TODO: link to doc: Make doc compatible with doxygen, host the doc
 
 # beeview Python package
@@ -32,7 +35,7 @@ Dependencies:
 * Cython (only needed if building from source)
 
 ### Windows
-A precompiled .pyd file for Windows 10 64 bit can be found TODO [here](in the folder api\build). Either place the .pyd file and the .dlls in the same folder as your python script or add them to your PATH variable. Then simply use `import beeview` to use the package.
+A precompiled .pyd file for Windows 10 64 bit can be found [here](api/build/lib.win-amd64-3.6/beeview.cp36-win_amd64.pyd). Either place the .pyd file and the .dlls in the same folder as your python script or add them to your PATH variable. Then simply use `import beeview` to use the package.
 
 ### Linux
 TODO
@@ -46,7 +49,7 @@ in the api folder of bee_view.
 
 
 ## Usage
-Example Python scripts and Notebooks can be found TODO here: api\examples
+Example Python scripts and Notebooks can be found [here](api\examples).
 
 # C++ Library
 
@@ -59,31 +62,29 @@ Building with Visual Studio on Windows:
 * add the "lib" folder to Project Settings -> VC++ Directories -> Library Directories
 * add "embree.lib" to Project Settings -> Linker -> Input -> Additional Dependencies
 * add embree.dll, tbb.dll and tbbmalloc.dll (they can be found in the "lib" folder) to your PATH variable, or put them in the same folder as your application.
-* Include the beeview_api.h file (located in the api folder)
 
-Then build for x64. 
+Then build for x64.
+
+To include bee_view with your project, you can build it as shared library and use include the [beeview_api.h](api/beeview_api.h) file.
+
 
 # Credits
 The renderer uses the following libraries:
-* Embree library embree.github.io
-* Eigen library: eigen.tuxfamily.org
+* [Embree library](embree.github.io)
+* [Eigen library](eigen.tuxfamily.org)
 
 The bee eye model is based on:
-* W. Stürzl, N. Boeddeker, L. Dittmar, and M. Egelhaaf, ‘Mimicking honeybee eyes with a 280 degrees field of view catadioptric imaging system’, Bioinspir. Biomim., vol. 5, no. 3, p. 036002, Sep. 2010.
-  https://pub.uni-bielefeld.de/download/1930189/2516828
+* [W. Stürzl, N. Boeddeker, L. Dittmar, and M. Egelhaaf, ‘Mimicking honeybee eyes with a 280 degrees field of view catadioptric imaging system’, Bioinspir. Biomim., vol. 5, no. 3, p. 036002, Sep. 2010.](https://pub.uni-bielefeld.de/download/1930189/2516828)
 
 The 3D model was recorded from the [FU Biorotobotics lab](http://berlinbiorobotics.blog/).
-The location of the model on Google maps: [link]( https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.815272,8.8760423,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
-
-# License
-TODO: change license to mpl
-
+The location of the model on Google maps: [link](https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.815272,8.8760423,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
 
 ##############
 
-TODO: 
-setup.py detect os, change linker objects depending on os
-make a make file that can do: make python, or make install for c++
-cleanup python doc mess
-make new docs for c++ and python
-examples for c++
+# TODO: 
+- setup.py detect os, change linker objects depending on os
+- make a make file that can do: make python, or make install for c++
+- bluild for linux
+- generate doc with pyrex
+- make c++ doc compatible with doxygen
+- examples for c++
