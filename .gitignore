@@ -8,7 +8,9 @@
 *.com
 *.class
 *.exe
-!scene_no_normals.obj
+.ipynb_checkpoints
+*.ipynb_checkpoints
+!data/scene_no_normals.obj
 
 # Packages #
 ############
