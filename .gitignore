@@ -8,6 +8,7 @@
 *.com
 *.class
 *.exe
+!scene_no_normals.obj
 
 # Packages #
 ############
