@@ -19,6 +19,8 @@ The script for rendering the interommatidial angles can be found [here](data/cal
 The renderer was built as part of a bachelor's thesis. Implementation details and other information can be found in the [thesis](data/bachelorarbeit_polster_final_corrected_web.pdf).
 
 ![An example rendering](data/test_beeEye_s21_a26.png?raw=true "Example rendering")
+
+
 An example video that was rendered with the engine can be found [here](https://www.youtube.com/watch?v=xc-4FWyoQM4).
 
 # beeview Python package
