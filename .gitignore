@@ -10,7 +10,6 @@
 *.exe
 .ipynb_checkpoints
 *.ipynb_checkpoints
-!data/scene_no_normals.obj
 
 # Packages #
 ############

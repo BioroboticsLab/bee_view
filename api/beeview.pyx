@@ -31,9 +31,9 @@ cdef class Renderer:
 		Parameters
 		----------
 		scene_file : str
-			The absolute File Path to the .obj file. 
+			The File Path to the .obj file. 
 		ommatidia_file : str
-			The absolute filepath to the .csv file containing the elevation and azimuth angles of the ommatidia.
+			The filepath to the .csv file containing the elevation and azimuth angles of the ommatidia.
 		left_handed : bool
 			Wether to load the scene as right handed or left handed coordinatesystem.
 
