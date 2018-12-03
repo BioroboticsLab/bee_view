@@ -267,7 +267,9 @@ cdef class Renderer:
 	def get_settings(self):
 		"""Get all render settings as Dictionary.
 
-		Returns : dict
+		Returns
+		-------
+		dict
 			Dictionary of render settings.
 
 		"""

@@ -32,8 +32,8 @@ renderer.mode = renderer.BeeEye
 # bee_eye_data is a tuple with data for left and right eye 
 bee_eye_data = renderer.render_agent()
 
-left_eye = bee_eye_data[0]
-right_eye = bee_eye_data[1]
+left_eye = bee_eye_data["left"]
+right_eye = bee_eye_data["right"]
 
 # print data for first 20 ommatidia of left eye
 row_format ="{:>20}{:>20}{:>50}"
