@@ -28,7 +28,7 @@ namespace BeeView {
 		/* renders the image according to parameters in beeEyeCamera, returns
 		3 arrays for each eye: elevation angles, azimuth angles, and color values with length of n ommatidia
 		*/
-		void renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor);
+		void renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor,  std::vector<int> &out_x = std::vector<int>(), std::vector<int> &out_y = std::vector<int>());
 
 
 		/* switch camera */
@@ -63,7 +63,7 @@ namespace BeeView {
 		Color azimuthElevationColor(const int a, const int e);
 
 		/* renders the given beeeye onto the given image */
-		void renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent = false, std::vector<float> &out_elevation = std::vector<float>(), std::vector<float> &out_azimuth = std::vector<float>(), std::vector<Color> &out_color = std::vector<Color>());
+		void renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent = false, std::vector<float> &out_elevation = std::vector<float>(), std::vector<float> &out_azimuth = std::vector<float>(), std::vector<Color> &out_color = std::vector<Color>(), std::vector<int> &out_x = std::vector<int>(), std::vector<int> &out_y = std::vector<int>());
 
 		struct ConvertCoordsParams
 		{

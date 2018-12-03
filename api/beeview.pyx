@@ -87,9 +87,11 @@ cdef class Renderer:
 			r = self.C_Class.renderAgent()
 			left_color = np.transpose(np.array([r[2],r[3],r[4]]))
 			right_color = np.transpose(np.array([r[7],r[8],r[9]]))
-			left = {"azimuth":r[0],"elevation":r[1],"color":left_color}
-			right = {"azimuth":r[5],"elevation":r[6],"color":right_color}
-			return (left,right)
+			x =  np.array(r[10])
+			y = np.array(r[11])
+			left = {"azimuth":np.array(r[0]),"elevation":np.array(r[1]),"color":left_color, "coordinates": np.array([x[:len(x)//2], y[:len(y)//2]]).T}
+			right = {"azimuth":np.array(r[5]),"elevation":np.array(r[6]),"color":right_color, "coordinates": np.array([x[len(x)//2:], y[len(y)//2:]]).T}
+			return {"left":left,"right":right}
 		else:
 			img = self.C_Class.render();
 

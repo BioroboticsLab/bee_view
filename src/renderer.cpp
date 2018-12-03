@@ -27,7 +27,7 @@ namespace BeeView {
 			Vec3f cam_dir = m_camera->getDir();
 			Vec3f cam_pos = m_camera->getPosition();
 			std::cout << std::endl << "Pos" << "(" << cam_pos(0) << "," << cam_pos(1) << "," << cam_pos(2) << "), ";
-			std::cout << "Dir " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) <<")";
+			std::cout << "Dir " << "(" << cam_dir(0) << "," << cam_dir(1) << "," << cam_dir(2) << ")";
 		}
 		if (verbose_lvl > 0)
 			std::cout << std::endl << "Start rendering Image... ";
@@ -188,7 +188,7 @@ namespace BeeView {
 			return mesh->texture->getTexel(st(0), st(1)); // 1.0f - st(1) for lefthanded
 		}
 
-		return Color(0.5f, 0.5f, 0.5f);
+		return Color(0.0f, 0.0f, 0.0f); // if nothing hit: black
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
@@ -198,7 +198,7 @@ namespace BeeView {
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
 
-		int ommatidiumSize = camera->getOmmatidiumSize();
+		//int ommatidiumSize = camera->getOmmatidiumSize();
 
 #ifdef DEBUG
 		// write to log
@@ -224,29 +224,29 @@ namespace BeeView {
 		//benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
 #endif
 
-		if(verbose_lvl > 0)
+		if (verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
 		if (verbose_lvl > 1)
 			std::cout << "Rendering Stats: Time " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << " ms, Number of Rays cast " << camera->m_sampler.getTotalSamplePoints()*camera->m_rightEye->m_ommatidia.size() * 2 << "." << std::endl;
 		if (verbose_lvl > 2)
-			std::cout << "Camera settings: Type BEE_EYE, Acceptance angle " << camera->m_sampler.getAcceptanceAngle() << ", Ommatidium size " << ommatidiumSize << ", Num Samples per Ommatidium " << camera->m_sampler.getTotalSamplePoints() << ", Number of Ommatidia " << camera->m_rightEye->m_ommatidia.size()*2 << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
+			std::cout << "Camera settings: Type BEE_EYE, Acceptance angle " << camera->m_sampler.getAcceptanceAngle() << ", Ommatidium size " << camera->getOmmatidiumSize() << ", Num Samples per Ommatidium " << camera->m_sampler.getTotalSamplePoints() << ", Number of Ommatidia " << camera->m_rightEye->m_ommatidia.size() * 2 << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
 		return img;
 	}
 
-	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor)
+	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor, std::vector<int> &out_x, std::vector<int> &out_y)
 	{
-		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::LEFT,true,out_leftElevation,out_leftAzimuth,out_leftColor);
-		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::RIGHT,true,out_rightElevation,out_rightAzimuth,out_rightColor);
+		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::LEFT, true, out_leftElevation, out_leftAzimuth, out_leftColor, out_x, out_y);
+		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::RIGHT, true, out_rightElevation, out_rightAzimuth, out_rightColor, out_x, out_y);
 		return;
 	}
 
-	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color)
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color, std::vector<int> &out_x, std::vector<int> &out_y)
 	{
 		int x;
 		int y;
 
 		Vec2f center;
-		
+
 		// need beeeyecamera methods
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
@@ -261,7 +261,7 @@ namespace BeeView {
 		// draw the ommatidia
 		for each (const auto &ommatidium in beeEye->m_ommatidia)
 		{
-			
+
 			// fix for "nice" display at elevation = 0 (model returns too many ommatidia for e=0), delete last ommatidium at e=0
 			if (ommatidium.m_y == 0)
 			{
@@ -270,40 +270,40 @@ namespace BeeView {
 				if (beeEye->m_side == Side::LEFT && (ommatidium.m_x == 5 || ommatidium.m_x == 4))
 					continue;
 			}
-			
+
 			// get main dir
 			Vec3f dir = ommatidium.getDirVector();
 
 			Color color = Color(); // 0,0,0
 
-			#ifdef ELEVATION_AZIMUTH_SHADING
+#ifdef ELEVATION_AZIMUTH_SHADING
 
 			color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
 
-			#endif
-		
-			#ifdef XYZ_SHADING
+#endif
+
+#ifdef XYZ_SHADING
 
 			color = Color(dir(0), dir(1), dir(2));
 
-			#endif
+#endif
 
-			#ifdef SOLID_SHADING
+#ifdef SOLID_SHADING
 
 			if (ommatidium.m_x == 0 || ommatidium.m_y == 0)
 				color = Color(0, 1, 0);
 			else
 				color = Color(1, 0, 0);
 
-			#endif
+#endif
 
-			#ifdef RANDOM_SHADING
+#ifdef RANDOM_SHADING
 
 			color = randomColor(ommatidium.m_x*ommatidium.m_y);
 
-			#endif
+#endif
 
-			#ifdef CHECKER_BOARD_SHADING
+#ifdef CHECKER_BOARD_SHADING
 
 			if (ommatidium.m_x % 2 == 0)
 				color = Color(0.0f, 0.0f, 0.0f);
@@ -312,14 +312,14 @@ namespace BeeView {
 
 			// invert every second row
 			if (ommatidium.m_y % 2 == 1)
-				if(color.m_r > 0)
+				if (color.m_r > 0)
 					color = Color(0.0f, 0.0f, 0.0f);
 				else
 					color = Color(1.0f, 1.0f, 1.0f);
 
-			#endif
+#endif
 
-			#if defined(SINGLE_RAY_TEXTURE_SHADING) || defined(MATERIAL_KD_SHADING) || defined(UV_SHADING)
+#if defined(SINGLE_RAY_TEXTURE_SHADING) || defined(MATERIAL_KD_SHADING) || defined(UV_SHADING)
 
 			// transform to world coordinates
 			Vec3f rayDir = m_camera->m_viewMatrix.linear() * dir;
@@ -328,9 +328,9 @@ namespace BeeView {
 			// shoot ray and store color in array
 			color = shootRay(rayDir);
 
-			#endif
+#endif
 
-			#ifdef TEXTURE_SHADING
+#ifdef TEXTURE_SHADING
 
 			std::vector<Color> colorSamples;
 
@@ -366,14 +366,13 @@ namespace BeeView {
 				color.m_g += w * colorSamples[i].m_g;
 				color.m_b += w * colorSamples[i].m_b;
 			}
-			#endif
+#endif
 
 			if (agent)
 			{
 				out_color.push_back(color);
 				out_azimuth.push_back(ommatidium.m_azimuth);
 				out_elevation.push_back(ommatidium.m_elevation);
-				continue;
 			}
 
 			// convert the relative coords of ommatidium to image coords (see convert2ImageCoords for details)
@@ -382,35 +381,48 @@ namespace BeeView {
 			int rel_x = x * ommatidiumSize;
 			int rel_y = y * ommatidiumSize;
 
-			// shift every second row, to simulate hexagonal shape
 			if (beeEye->m_side == Side::RIGHT)
 			{
-				if (y % 2 == 0)
+				// shift every second row, to simulate hexagonal shape
+				if (ommatidiumSize > 1 && y % 2 == 0)
 					rel_x += ommatidiumSize / 2;
 
 				// also add offset to right side
-				rel_x += (img->m_width / 2);
+				rel_x += (camera->getImageWidth() / 2);
 
 				// space between the two eyes
 				rel_x += ommatidiumSize;
+
+				if (ommatidiumSize == 1 && y % 2 == 1)
+					rel_x -= 1;
 			}
 			else // left eye
 			{
-				if (y % 2 == 1)
+				if (ommatidiumSize > 1 && y % 2 == 1)
 					rel_x += ommatidiumSize / 2;
+
+				if (ommatidiumSize == 1 && y % 2 == 1)
+					rel_x += 1;
 			}
 
-			/* draw the ommatidium as square */
-			drawSquare(img, rel_x, rel_y, ommatidiumSize, color);
+			if (agent) {
+				out_x.push_back(rel_x);
+				out_y.push_back(rel_y);
+			}
+			else {
 
-			/* for the crosses at center of eye */
-			if (ommatidium.m_x == 0 && ommatidium.m_y == 0)
-				center = Vec2f(rel_x + ommatidiumSize / 2, rel_y + ommatidiumSize / 2);
+				/* draw the ommatidium as square */
+				drawSquare(img, rel_x, rel_y, ommatidiumSize, color);
+
+				/* for the crosses at center of eye */
+				if (ommatidium.m_x == 0 && ommatidium.m_y == 0 && ommatidiumSize > 1)
+					center = Vec2f(rel_x + ommatidiumSize / 2, rel_y + ommatidiumSize / 2);
+			}
 
 		}
 
 		// draw cross at eye center
-		if(!agent)
+		if (!agent && ommatidiumSize > 1)
 			drawCross(img, static_cast<int>(floor(center(0))), static_cast<int>(floor(center(1))));
 
 		return;
@@ -420,11 +432,11 @@ namespace BeeView {
 	Convert beeeye coordinate to image coordinates
 
 	Bee eye:
-           (+y)
-	        |
-    (-x)----+-----(+x)
-	        |
-          (-y)
+		   (+y)
+			|
+	(-x)----+-----(+x)
+			|
+		  (-y)
 
 	Image:
 	+----------(+x)

@@ -9,8 +9,6 @@ namespace BeeView
 	/* lvl 0: no output, lvl 1: basic output, lvl 2: stat output, lvl 3: Debug output */
 	int verbose_lvl = 2;
 
-
-
 	class BeeViewApplication::Impl 
 	{ 
 	public:
@@ -97,8 +95,10 @@ namespace BeeView
 		std::vector<float> out_rightElevation = std::vector<float>();
 		std::vector<float> out_leftAzimuth = std::vector<float>();
 		std::vector<float> out_rightAzimuth = std::vector<float>();
+		std::vector<int> out_x = std::vector<int>();
+		std::vector<int> out_y = std::vector<int>();
 
-		impl_->m_renderer.renderAgent(out_leftElevation, out_leftAzimuth, out_leftColor, out_rightElevation, out_rightAzimuth, out_rightColor);
+		impl_->m_renderer.renderAgent(out_leftElevation, out_leftAzimuth, out_leftColor, out_rightElevation, out_rightAzimuth, out_rightColor, out_x, out_y);
 	
 		std::vector<float> out_leftR = std::vector<float>();
 		std::vector<float> out_leftG = std::vector<float>();
@@ -120,19 +120,25 @@ namespace BeeView
 			out_rightG.push_back(right_color.m_g);
 			out_rightB.push_back(right_color.m_b);
 		}
+
+		// convert the coordinate vector to float
+		std::vector<float> out_x_float(out_x.begin(), out_x.end());
+		std::vector<float> out_y_float(out_y.begin(), out_y.end());
 		
 		std::vector<std::vector<float>> returnVector = std::vector<std::vector<float>>();
 
-		returnVector.push_back(out_leftAzimuth);
-		returnVector.push_back(out_leftElevation);
-		returnVector.push_back(out_leftR);
-		returnVector.push_back(out_leftG);
-		returnVector.push_back(out_leftB);
-		returnVector.push_back(out_rightAzimuth);
-		returnVector.push_back(out_rightElevation);
-		returnVector.push_back(out_rightR);
-		returnVector.push_back(out_rightG);
-		returnVector.push_back(out_rightB);
+		returnVector.push_back(out_leftAzimuth); // 0
+		returnVector.push_back(out_leftElevation); // 1
+		returnVector.push_back(out_leftR); // 2
+		returnVector.push_back(out_leftG); // 3
+		returnVector.push_back(out_leftB); // 4
+		returnVector.push_back(out_rightAzimuth); // 5
+		returnVector.push_back(out_rightElevation); // 6
+		returnVector.push_back(out_rightR); // 7
+		returnVector.push_back(out_rightG); // 8
+		returnVector.push_back(out_rightB); // 9
+		returnVector.push_back(out_x_float); // 10
+		returnVector.push_back(out_y_float); // 11
 
 		return returnVector;
 	}
@@ -387,10 +393,6 @@ namespace BeeView
 	/* ommatidium size in pixels, should be an even number (if not: incremented to next number) */
 	void BeeViewApplication::setOmmatidiumSize(int size)
 	{
-		if (size < 1)
-			size = 2;
-		if (size % 2 != 0)
-			size++;
 		impl_->m_beeEyeCamera->setOmmatidiumSize(size);
 	}
 

@@ -101,7 +101,8 @@ namespace BeeView
 		void setAcceptanceAngle(float acceptanceAngle);
 		/* set the number of samplepoints taken per ommatidium */
 		void setNumSamples(int numSamples);
-		/* ommatidium size in pixels, must be an even number */
+
+		/* ommatidium size in pixels, must be an even number (but can be 1) */
 		void setOmmatidiumSize(int size);
 
 		int getImageWidth();

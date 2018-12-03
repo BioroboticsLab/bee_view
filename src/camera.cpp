@@ -170,8 +170,8 @@ namespace BeeView {
 	void BeeEyeCamera::setOmmatidiumSize(int size)
 	{
 		if (size < 1)
-			size = 2;
-		if (size % 2 != 0)
+			size = 1;
+		if (size > 1 && size % 2 != 0)
 			size++;
 		m_ommatidium_size = size;
 		calculateImageDimensions();
@@ -191,7 +191,8 @@ namespace BeeView {
 		m_image_height = (m_leftEye->m_y_max + abs(m_leftEye->m_y_min) + 1)*m_ommatidium_size;
 
 		// add to x_dim because of ommatidia shift
-		m_image_width += m_ommatidium_size / 2;
+		if(m_ommatidium_size > 1)
+			m_image_width += m_ommatidium_size / 2;
 
 		// 2 eyes
 		m_image_width *= 2;
