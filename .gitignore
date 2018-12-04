@@ -1,7 +1,7 @@
 .vs/
 *.ppm
-# Debug/
-# x64/
+Debug/
+x64/
 
 # Compiled source #
 ###################
