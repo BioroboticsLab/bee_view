@@ -51,6 +51,9 @@ in the api folder of bee_view. This will generate the python shared library.
 ## Getting started
 Example Python scripts and Notebooks can be found [here](api/examples).
 
+### 3-D World
+A low-res 3-D world of a 2 km^2 area in Hesse, Germany can be downloaded [here](https://osf.io/vqdkz/). The location of the model on Google maps: [link](https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.8152778,8.8432033,8382m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
+
 # C++ Library
 
 ## Installation
@@ -67,7 +70,6 @@ Then build for x64.
 
 To include bee_view with your project, you can build it as shared library and include the [beeview_api.h](api/beeview_api.h) file.
 
-
 # Credits
 The renderer uses the following libraries:
 * [Embree library](http://embree.github.io)
@@ -77,4 +79,3 @@ The bee eye model is based on:
 * [W. Stürzl, N. Boeddeker, L. Dittmar, and M. Egelhaaf, ‘Mimicking honeybee eyes with a 280 degrees field of view catadioptric imaging system’, Bioinspir. Biomim., vol. 5, no. 3, p. 036002, Sep. 2010.](https://pub.uni-bielefeld.de/download/1930189/2516828)
 
 The 3D model was recorded from the [FU Biorotobotics lab](http://berlinbiorobotics.blog/).
-The location of the model on Google maps: [link](https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.8152778,8.8432033,8382m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
