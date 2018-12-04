@@ -1,5 +1,7 @@
 .vs/
 *.ppm
+# Debug/
+# x64/
 
 # Compiled source #
 ###################
@@ -43,5 +45,3 @@ ehthumbs.db
 Thumbs.db
 
 # exceptions
-!data/*.ppm
-!data/*.obj
