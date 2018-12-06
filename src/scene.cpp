@@ -31,7 +31,7 @@ namespace BeeView
 
 		size_t total_verts = 0;
 		size_t total_triangles = 0;
-		for each (const std::shared_ptr<Mesh> &mesh in m_objects)
+		for(const std::shared_ptr<Mesh> &mesh : m_objects)
 		{
 			total_triangles += mesh->triangles.size();
 			total_verts += mesh->numVertices();

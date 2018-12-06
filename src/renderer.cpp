@@ -235,12 +235,26 @@ namespace BeeView {
 
 	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor, std::vector<int> &out_x, std::vector<int> &out_y)
 	{
-		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::LEFT, true, out_leftElevation, out_leftAzimuth, out_leftColor, out_x, out_y);
-		renderBeeEye(std::unique_ptr<Image>(nullptr), Side::RIGHT, true, out_rightElevation, out_rightAzimuth, out_rightColor, out_x, out_y);
+		std::unique_ptr<Image> tmp_image = std::unique_ptr<Image>(nullptr);
+
+		renderBeeEye(tmp_image, Side::LEFT, out_leftElevation, out_leftAzimuth, out_leftColor, out_x, out_y, true);
+		renderBeeEye(tmp_image, Side::RIGHT, out_rightElevation, out_rightAzimuth, out_rightColor, out_x, out_y, true);
 		return;
 	}
 
-	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, bool agent, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color, std::vector<int> &out_x, std::vector<int> &out_y)
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side) {
+
+		std::vector<float> tmp_elevation = std::vector<float>();
+        std::vector<float>tmp_azimuth = std::vector<float>();
+        std::vector<Color>tmp_color = std::vector<Color>();
+        std::vector<int> tmp_x = std::vector<int>();
+        std::vector<int>tmp_y = std::vector<int>();
+
+        renderBeeEye(img, side, tmp_elevation, tmp_azimuth, tmp_color, tmp_x, tmp_y, false);
+	}
+
+
+	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color, std::vector<int> &out_x, std::vector<int> &out_y, bool agent)
 	{
 		int x;
 		int y;
@@ -259,7 +273,7 @@ namespace BeeView {
 			beeEye = camera->m_rightEye;
 
 		// draw the ommatidia
-		for each (const auto &ommatidium in beeEye->m_ommatidia)
+		for(const auto &ommatidium : beeEye->m_ommatidia)
 		{
 
 			// fix for "nice" display at elevation = 0 (model returns too many ommatidia for e=0), delete last ommatidium at e=0

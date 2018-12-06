@@ -199,7 +199,7 @@ namespace BeeView
 	{
 		BeeEye otherEye = BeeEye();
 		otherEye.m_side = Side(!static_cast<int>(m_side)); // flip sides
-		for each (const auto &my_o in m_ommatidia)
+		for(const auto &my_o : m_ommatidia)
 		{
 			Ommatidium other_o = Ommatidium(-my_o.m_azimuth, my_o.m_elevation);
 

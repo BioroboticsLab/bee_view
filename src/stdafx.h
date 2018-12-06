@@ -18,7 +18,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <tchar.h>
+// #include <tchar.h> // problem on linux
 #include <string>
 #include <cstring>
 #include <cstdio>
@@ -30,7 +30,7 @@
 
 #include <cassert>
 
-#include <Eigen\Dense>
+#include <Eigen/Dense>
 #include <embree2/rtcore.h>
 #include <embree2/rtcore_ray.h>
 

@@ -14,7 +14,7 @@ namespace BeeView
 	typedef Eigen::Vector3f Vec3f;
 	typedef Eigen::Vector2f Vec2f;
 
-	template<typename T> __forceinline T clamp(const T& x, const T& lower = T(0), const T& upper = T(1)) { return std::max(std::min(x, upper), lower); }
+	template<typename T> T clamp(const T& x, const T& lower = T(0), const T& upper = T(1)) { return std::max(std::min(x, upper), lower); }
 	
 	inline float deg2rad(const float &deg)	{ return deg * (float)M_PI / 180.0f; }
 

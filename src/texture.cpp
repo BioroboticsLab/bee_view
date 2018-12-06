@@ -65,8 +65,8 @@ namespace BeeView
 		float w10 = (x - (float)x0) * ((float)y1 - y);
 		float w11 = (x - (float)x0) * (y - (float)y0);
 
-		return w00*c00.toVec3f() + w01*c01.toVec3f() + w10*c10.toVec3f() + w11*c11.toVec3f();
-
+		Color result = Color(w00*c00.toVec3f() + w01*c01.toVec3f() + w10*c10.toVec3f() + w11*c11.toVec3f());
+        return result;
 #endif	
 
 

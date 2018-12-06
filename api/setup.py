@@ -22,8 +22,8 @@ sourcefiles  = [
 ext=[Extension('beeview',
             sources = sourcefiles,
             libraries=["embree"],  
-            extra_link_args=["/LIBPATH:"+ os.path.join(project_path,'lib')], # for linux -L
-            extra_compile_args=["-I" + os.path.join(project_path,'external')],
+            extra_link_args=["-L "+ os.path.join(project_path,'lib')], # for linux -L
+            extra_compile_args=["-std=c++1y", "-I" + os.path.join(project_path,'external')],
             language='c++')]
 
 setup(
