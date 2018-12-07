@@ -67,6 +67,7 @@ namespace BeeView {
 	{
 		m_width = static_cast<int>(data[0].size());
 		m_height = static_cast<int>(data.size());
+		m_data.resize(m_width*m_height);
 		for (int y = 0; y < m_height; y++)
 			for (int x = 0; x < m_width; x++)
 			{
