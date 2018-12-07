@@ -24,6 +24,7 @@ ext=[Extension('beeview',
             libraries=["embree"],  
             extra_link_args=["/LIBPATH:"+ os.path.join(project_path,'lib')], # for linux -L
             extra_compile_args=["-I" + os.path.join(project_path,'external')],
+            define_macros=[('_ENABLE_EXTENDED_ALIGNED_STORAGE', null)],
             language='c++')]
 
 setup(
