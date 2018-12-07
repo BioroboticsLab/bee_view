@@ -12,6 +12,8 @@ x64/
 *.exe
 .ipynb_checkpoints
 *.ipynb_checkpoints
+*.o
+api/build/temp.*
 
 # Packages #
 ############

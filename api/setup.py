@@ -22,8 +22,8 @@ sourcefiles  = [
 ext=[Extension('beeview',
             sources = sourcefiles,
             libraries=["embree"],  
-            extra_link_args=["-L "+ os.path.join(project_path,'lib')], # for linux -L
-            extra_compile_args=["-std=c++1y", "-I" + os.path.join(project_path,'external')],
+            extra_link_args=["-L"+ os.path.join(project_path,'lib'),"-Wl,-rpath=/usr/lib/","-l:libtbbmalloc.so.2","-l:libtbb.so.2","-l:libembree.so.2"], # for linux -L
+            extra_compile_args=["-std=c++14", "-I" + os.path.join(project_path,'external'), "-O3"],
             language='c++')]
 
 setup(

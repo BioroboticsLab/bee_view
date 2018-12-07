@@ -235,14 +235,24 @@ namespace BeeView {
 
 	void  Renderer::renderAgent(std::vector<float> &out_leftElevation, std::vector<float> &out_leftAzimuth, std::vector<Color> &out_leftColor, std::vector<float> &out_rightElevation, std::vector<float> &out_rightAzimuth, std::vector<Color> &out_rightColor, std::vector<int> &out_x, std::vector<int> &out_y)
 	{
+
+		#ifdef DEBUG
+			std::cout << "rendering agent..." << std::endl;;
+		#endif
+
 		std::unique_ptr<Image> tmp_image = std::unique_ptr<Image>(nullptr);
 
 		renderBeeEye(tmp_image, Side::LEFT, out_leftElevation, out_leftAzimuth, out_leftColor, out_x, out_y, true);
 		renderBeeEye(tmp_image, Side::RIGHT, out_rightElevation, out_rightAzimuth, out_rightColor, out_x, out_y, true);
+
+		#ifdef DEBUG
+			std::cout << "done rendering agent." << std::endl;;
+		#endif
 		return;
 	}
 
 	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side) {
+
 
 		std::vector<float> tmp_elevation = std::vector<float>();
         std::vector<float>tmp_azimuth = std::vector<float>();
@@ -256,6 +266,9 @@ namespace BeeView {
 
 	void Renderer::renderBeeEye(std::unique_ptr<Image> &img, Side side, std::vector<float> &out_elevation, std::vector<float> &out_azimuth, std::vector<Color> &out_color, std::vector<int> &out_x, std::vector<int> &out_y, bool agent)
 	{
+		#ifdef DEBUG
+			std::cout << "rendering bee eye" << std::endl;;
+		#endif
 		int x;
 		int y;
 
@@ -275,7 +288,6 @@ namespace BeeView {
 		// draw the ommatidia
 		for(const auto &ommatidium : beeEye->m_ommatidia)
 		{
-
 			// fix for "nice" display at elevation = 0 (model returns too many ommatidia for e=0), delete last ommatidium at e=0
 			if (ommatidium.m_y == 0)
 			{
@@ -432,13 +444,15 @@ namespace BeeView {
 				if (ommatidium.m_x == 0 && ommatidium.m_y == 0 && ommatidiumSize > 1)
 					center = Vec2f(rel_x + ommatidiumSize / 2, rel_y + ommatidiumSize / 2);
 			}
-
 		}
 
 		// draw cross at eye center
 		if (!agent && ommatidiumSize > 1)
 			drawCross(img, static_cast<int>(floor(center(0))), static_cast<int>(floor(center(1))));
 
+		#ifdef DEBUG
+			std::cout << "Done rendering bee eye." << std::endl;;
+		#endif
 		return;
 	}
 
