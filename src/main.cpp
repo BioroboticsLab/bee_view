@@ -14,7 +14,8 @@ int main()
 	//BeeView::Test::testPanoramicCamera();
 	//BeeView::Test::testCameraNoScene();
 	//
-	BeeView::Test::testApi();
+	// BeeView::Test::testApi();
+	BeeView::Test::testSimple();
 
 	//BeeView::Test::test_sampler2();
 	//BeeView::Test::testCameraNoScene();

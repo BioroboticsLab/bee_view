@@ -696,5 +696,20 @@ namespace BeeView {
 			img.saveToPPM("test_gimbal_4.ppm");
 		}
 
+		void testSimple()
+		{
+			BeeViewApplication beeView = BeeViewApplication("D:\\Documents\\bachelorarbeit\\bee_view\\data\\hessen_2016\\scene.obj", "D:\\Documents\\bachelorarbeit\\bee_view\\data\\ommatidia.csv", true);
+			beeView.setPosition(0, 0, 0.5);
+			float h = beeView.getDistance(0, 0, 0, 0, -1, 0);
+			beeView.setPosition(0.0f, (0.0f - h) + 7.0f, 0.0f); // 7m above ground
+			beeView.setDirection(0.0f, 0.0f, -1.0f);
+			beeView.setMode(0);
+
+			Image img = beeView.render();
+
+			img.saveToPPM("test_simple.ppm");
+
+		}
+
 	}
 }
