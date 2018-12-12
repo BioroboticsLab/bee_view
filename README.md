@@ -1,4 +1,3 @@
-
 # Bee Vision Simulator
 
 Bee_view is a rendering engine based on raycasting that simulates insect vision.
@@ -32,32 +31,35 @@ Dependencies:
 * numpy
 * Cython (only needed if building from source)
 
-### Windows
-A precompiled .pyd file for Windows 10 64 bit is available [here](api/build/lib.win-amd64-3.6/beeview.cp36-win_amd64.pyd). 
-Add the .pyd file together with the .dlls from the [lib](lib/) folder to your PATH variable.
+### Precompiled Binaries
+* [Windows](api/build/lib.win-amd64-3.6/beeview.cp36-win_amd64.pyd). 
+* [Linux](api/build/lib.linux-x86_64-3.6/beeview.cpython-36m-x86_64-linux-gnu.so)
+
+Add the precompiled file (.pyd for windows, .so for linux) to your PATH variable. 
+
+Add **all** the shared libraries (tbbmalloc, tbb, embree) from the [lib](lib/) folder (.dll for windows, .so for linux) to your system PATH variable.
+
 Then you can use `import beeview` to load the package.
 
-### Linux
-There is no build available for Linux at this moment.
-
-## Building from source
+### Building from source
 For building and installing the python package with Cython from source run:
 ```
 python setup.py install
 ```
-in the api folder of bee_view. This will generate the python shared library.
+in the api folder of bee_view. This will generate the python shared library. 
+For linux: The .so files from the [bee_view/lib](lib/) folder need to be copied to `/usr/lib/`.
 
 
 ## Getting started
 Example Python scripts and Notebooks can be found [here](api/examples).
 
 ### 3-D World
-A low-res 3-D world of a 2 km^2 area in Hesse, Germany can be downloaded [here](https://osf.io/vqdkz/). The location of the model on Google maps: [link](https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.8152778,8.8432033,8382m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
+* A low-res 3-D world of a 2 km^2 area in Hesse, Germany can be downloaded [here](https://osf.io/vqdkz/). The location of the model on Google maps: [link](https://www.google.de/maps/place/50%C2%B048'55.0%22N+8%C2%B052'41.6%22E/@50.8152778,8.8432033,8382m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d50.815272!4d8.878231)
+* Note that only .ppm textures are supported by the loader. 
 
 # C++ Library
 
-## Installation
-### Windows 
+## Building on Windows 
 Building with Visual Studio on Windows:
 
 * clone the repository
