@@ -15,7 +15,6 @@
 //#define MATERIAL_KD_SHADING
 
 #define DEBUG
-
 namespace BeeView {
 
 	extern int verbose_lvl;
@@ -385,7 +384,7 @@ namespace BeeView {
 			color = Color(); // 0,0,0
 
 			// weight each color in colorSamples and add up
-			for (int i = 0; i < colorSamples.size(); i++)
+			for (unsigned int i = 0; i < colorSamples.size(); i++)
 			{
 				float &w = camera->m_sampler.m_weights[i];
 				color.m_r += w * colorSamples[i].m_r;

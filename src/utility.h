@@ -28,7 +28,7 @@ namespace BeeView
 	 * home/user/Docements/file.txt -> return home/user/Docements/ */
 	inline std::string getFilePath(std::string fullPath)
 	{
-		if (fullPath.find_last_of("\\/") != -1) {
+		if (fullPath.find_last_of("\\/") != std::string::npos) {
 			return fullPath.substr(0, fullPath.find_last_of("\\/")+1);
 		}
 		return "";
@@ -150,7 +150,7 @@ namespace BeeView
 
 		std::ofstream outFile(txtFile);
 
-		for (int i = 0; i < x.size(); i++)
+		for (unsigned int i = 0; i < x.size(); i++)
 		{
 			outFile << x[i] << "," << y[i] << "\n";
 		}
@@ -165,7 +165,7 @@ namespace BeeView
 
 		std::ofstream outFile(txtFile);
 
-		for (int i = 0; i < vec.size(); i++)
+		for (unsigned int i = 0; i < vec.size(); i++)
 		{
 			outFile << vec[i](0) << "," << vec[i](1) << "\n";
 		}
@@ -185,7 +185,7 @@ namespace BeeView
 
 		std::ofstream outFile(txtFile);
 
-		for (int i = 0; i < vec.size(); i++)
+		for (unsigned int i = 0; i < vec.size(); i++)
 		{
 			outFile << vec[i](0) << "," << vec[i](1) << "," << data[i] << "\n";
 		}
@@ -214,7 +214,7 @@ namespace BeeView
 		float max_x = *std::max_element(vec.begin(), vec.end());
 
 		std::cout << "min: " << min_x << " max: " << max_x << std::endl;
-		for (int i = 0; i < vec.size(); i++)
+		for (unsigned int i = 0; i < vec.size(); i++)
 		{
 			normalize(vec[i], a, b, min_x, max_x);
 		}

@@ -32,7 +32,7 @@ Dependencies:
 * Cython (only needed if building from source)
 
 ### Precompiled Binaries
-* [Windows](api/build/lib.win-amd64-3.6/beeview.cp36-win_amd64.pyd). 
+* [Windows](api/build/lib.win-amd64-3.6/beeview.cp36-win_amd64.pyd)
 * [Linux](api/build/lib.linux-x86_64-3.6/beeview.cpython-36m-x86_64-linux-gnu.so)
 
 Add the precompiled file (.pyd for windows, .so for linux) to your PATH variable. 

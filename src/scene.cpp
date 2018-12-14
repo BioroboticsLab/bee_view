@@ -66,7 +66,7 @@ namespace BeeView
 			Triangle* triangles = (Triangle*)rtcMapBuffer(m_rtcscene, rtcmesh, RTC_INDEX_BUFFER);
 
 
-			for (int i = 0; i < mesh->triangles.size(); i++)
+			for (unsigned int i = 0; i < mesh->triangles.size(); i++)
 			{
 				triangles[i].v0 = mesh->triangles[i].v0;
 				triangles[i].v1 = mesh->triangles[i].v1;

@@ -11,8 +11,8 @@ namespace BeeView {
 	{
 
 	private:
-		Vec3f m_dir;
 		Vec3f m_position;
+		Vec3f m_dir;
 		Vec3f m_up;
 
 	public:
@@ -141,11 +141,13 @@ namespace BeeView {
 	class PanoramicCamera : public Camera
 	{
 	public:
+		// width in pixels
+
+		int m_width = 1000;
+
 		float m_xFov = 360;
 		float m_yFov = 180;
 
-		// width in pixels
-		int m_width = 1000;
 
 		PanoramicCamera()
 		{

@@ -18,13 +18,14 @@ namespace BeeView
 
 		Camera::Type m_renderMode;
 
+		Renderer m_renderer;
+
 		/* A wavefront .obj file which contains the scene data (located in data folder of bee_view) */
 		std::string m_sceneFile;
 		/* A .csv file, which contains the elevation and azimuth angles for the bee eye (located in data folder of bee_view) */
 		std::string m_ommatidiaFile;
 
 	
-		Renderer m_renderer;
 
 		Impl(std::string sceneFile, std::string ommatidiaFile)
 			: m_renderer(nullptr,nullptr), m_sceneFile(sceneFile), m_ommatidiaFile(ommatidiaFile)
@@ -108,7 +109,7 @@ namespace BeeView
 		std::vector<float> out_rightB = std::vector<float>();
 
 		// convert the color arrays to float arrays
-		for (int i = 0; i < out_leftColor.size(); i++)
+		for (unsigned int i = 0; i < out_leftColor.size(); i++)
 		{
 			Color left_color = out_leftColor[i];
 			Color right_color = out_rightColor[i];

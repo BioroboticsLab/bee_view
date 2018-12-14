@@ -16,7 +16,7 @@ namespace BeeView {
 	public:
 		std::shared_ptr<Scene> m_scene;
 
-		Renderer(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camera) : m_scene(scene), m_camera(camera) 
+		Renderer(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camera) : m_camera(camera), m_scene(scene)
 		{ 
 			if(m_scene != nullptr)
 				m_scene->initEmbree();

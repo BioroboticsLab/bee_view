@@ -116,7 +116,7 @@ namespace BeeView
 		int sign_x = 1;
 		int sign_y = 1;
 
-		for (int i = 0; i < m_ommatidia.size(); i++)
+		for (unsigned int i = 0; i < m_ommatidia.size(); i++)
 		{
 			Ommatidium &ommatidium = m_ommatidia[i];
 
