@@ -20,8 +20,11 @@ namespace BeeView
 	/* commit all objects to embree */
 	void Scene::initEmbree()
 	{
-		m_device = rtcNewDevice(NULL);
-		m_rtcscene = rtcDeviceNewScene(m_device, RTC_SCENE_STATIC, RTC_INTERSECT1);
+		m_device = rtcNewDevice("verbose=3");
+		m_rtcscene = rtcNewScene(m_device);
+
+  		rtcSetSceneFlags(m_rtcscene,RTC_SCENE_FLAG_COMPACT);
+  		rtcSetSceneBuildQuality(m_rtcscene,RTC_BUILD_QUALITY_MEDIUM); 
 
 		struct Vertex { float x, y, z, a; }; // vertex coordinates, 'a' not used
 		struct Triangle { int v0, v1, v2; }; // vertex indices
@@ -48,9 +51,11 @@ namespace BeeView
 			}
 
 			// create the mesh
-			unsigned int rtcmesh = rtcNewTriangleMesh(m_rtcscene, RTC_GEOMETRY_STATIC, mesh->triangles.size(), mesh->numVertices()); //n_tri: number of traingles, n_v: number of vertices
+   			RTCGeometry geom_0 = rtcNewGeometry (m_device, RTC_GEOMETRY_TYPE_TRIANGLE);
+   			rtcSetGeometryBuildQuality(geom_0,RTC_BUILD_QUALITY_MEDIUM);
+   			rtcSetGeometryTimeStepCount(geom_0,1);	
 
-			Vertex* vertices = (Vertex*)rtcMapBuffer(m_rtcscene, rtcmesh, RTC_VERTEX_BUFFER);
+			Vertex* vertices = (Vertex*)rtcSetNewGeometryBuffer(geom_0,RTC_BUFFER_TYPE_VERTEX,0,RTC_FORMAT_FLOAT3,4*sizeof(float),mesh->numVertices());
 
 			// fill vertices
 			for (size_t i = 0; i < mesh->numVertices(); i++)
@@ -59,11 +64,9 @@ namespace BeeView
 				vertices[i].y = mesh->positions[i](1);
 				vertices[i].z = mesh->positions[i](2); // Fix left vs righthanded coordinate system
 			}
-			rtcUnmapBuffer(m_rtcscene, rtcmesh, RTC_VERTEX_BUFFER);
-
-
+			
 			// fill triangle indices
-			Triangle* triangles = (Triangle*)rtcMapBuffer(m_rtcscene, rtcmesh, RTC_INDEX_BUFFER);
+			Triangle* triangles = (Triangle*)rtcSetNewGeometryBuffer(geom_0,RTC_BUFFER_TYPE_INDEX,0,RTC_FORMAT_UINT3,3*sizeof(int),mesh->triangles.size());
 
 
 			for (unsigned int i = 0; i < mesh->triangles.size(); i++)
@@ -72,16 +75,18 @@ namespace BeeView
 				triangles[i].v1 = mesh->triangles[i].v1;
 				triangles[i].v2 = mesh->triangles[i].v2;
 			}
-			rtcUnmapBuffer(m_rtcscene, rtcmesh, RTC_INDEX_BUFFER);
 
+			rtcCommitGeometry(geom_0); //?
+   			rtcAttachGeometry(m_rtcscene,geom_0);
+   			rtcReleaseGeometry(geom_0); 
 		}
 
 		//after adding all meshes call
 		/* commit changes to scene */
-		rtcCommit(m_rtcscene);
+		rtcCommitScene(m_rtcscene);
 		
 		// calc AABB
-		rtcGetBounds(m_rtcscene, m_bounds);
+		rtcGetSceneBounds(m_rtcscene,&m_bounds);
 
 		if (verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
@@ -96,9 +101,10 @@ namespace BeeView
 			if (verbose_lvl > 0)
 				std::cout << std::endl <<"Cleaning up Embree... ";
 			// cleanup
-			rtcDeleteScene(m_rtcscene);
+			std::cout << "Embree: " << rtcGetDeviceError(m_device) << std::endl;
+			rtcReleaseScene(m_rtcscene);
 			m_rtcscene = nullptr;
-			rtcDeleteDevice(m_device);
+			rtcReleaseDevice (m_device);
 			m_device = nullptr;
 
 			if (verbose_lvl > 0)

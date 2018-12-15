@@ -31,7 +31,7 @@
 #include <cassert>
 
 #include <Eigen/Dense>
-#include <embree2/rtcore.h>
-#include <embree2/rtcore_ray.h>
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_ray.h>
 
 // TODO: reference additional headers your program requires here

@@ -64,7 +64,12 @@ cdef class Renderer:
 		"""
 
 		img = self.C_Class.render()
-		img = (np.array(img) * 255).astype(np.uint8)
+		img = np.array(img)
+		print(img.shape)
+		print(np.max(img))
+		print(np.min(img))
+		print(np.mean(img))
+		img = (img * 255).astype(np.uint8)
 		return img
 		#return Image.fromarray(img)
 	

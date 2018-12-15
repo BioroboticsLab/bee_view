@@ -139,49 +139,57 @@ namespace BeeView {
 		Vec3f cam_pos = m_camera->getPosition();
 
 		/* initialize ray */
-		RTCRay ray;
+		RTCRayHit ray_hit; // EMBREE_FIXME: use RTCRay for occlusion rays
+  		ray_hit.ray.flags = 0;
 
-		ray.org[0] = cam_pos(0);
-		ray.org[1] = cam_pos(1);
-		ray.org[2] = cam_pos(2);
-		ray.dir[0] = dir(0);
-		ray.dir[1] = dir(1);
-		ray.dir[2] = dir(2);
+		ray_hit.ray.org_x = cam_pos(0);
+		ray_hit.ray.org_y = cam_pos(1);
+		ray_hit.ray.org_z = cam_pos(2);
+		ray_hit.ray.dir_x = dir(0);
+		ray_hit.ray.dir_y = dir(1);
+		ray_hit.ray.dir_z = dir(2);
 
-		ray.tnear = 0.0f;
-		ray.tfar = std::numeric_limits<float>::infinity();
-		ray.geomID = RTC_INVALID_GEOMETRY_ID;
-		ray.primID = RTC_INVALID_GEOMETRY_ID;
-		ray.mask = -1;
-		ray.time = 0;
+		ray_hit.ray.tnear = 0.0f;
+		ray_hit.ray.tfar = std::numeric_limits<float>::infinity();
+		ray_hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+		ray_hit.hit.primID = RTC_INVALID_GEOMETRY_ID;
+		ray_hit.ray.mask = -1;
+		ray_hit.ray.time = 0;
 
 		/* intersect ray with scene */
-		rtcIntersect(m_scene->m_rtcscene, ray);
+		{
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+    rtcIntersect1(m_scene->m_rtcscene,&context,&ray_hit);
+    ray_hit.hit.Ng_x = -ray_hit.hit.Ng_x;
+    ray_hit.hit.Ng_y = -ray_hit.hit.Ng_y;
+    ray_hit.hit.Ng_z = -ray_hit.hit.Ng_z;
+  }
 		/* shade pixels */
 
 		// no Objects hit -> Backgroundcolor
-		if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
+		if (ray_hit.hit.geomID == RTC_INVALID_GEOMETRY_ID)
 			return Color(0.5f, 0.5f, 0.5f);
 
 
 #ifdef MATERIAL_KD_SHADING
-		return(Color(m_scene->m_objects[ray.geomID]->texture->Kd));
+		return(Color(m_scene->m_objects[ray_hit.hit.geomID]->texture->Kd));
 #endif	
 
 #ifdef UV_SHADING
-		return Color(ray.u, ray.v, 1.0f - ray.u - ray.v);
+		return Color(ray_hit.hit.u, ray_hit.hit.v, 1.0f - ray_hit.hit.u - ray_hit.hit.v);
 #endif	
 
 		/* Default: texture shading */
-		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray.geomID]; // get the hit object
-		Triangle *tri = &mesh->triangles[ray.primID]; // get the hit triangle
+		std::shared_ptr<Mesh> mesh = m_scene->m_objects[ray_hit.hit.geomID]; // get the hit object
+		Triangle *tri = &mesh->triangles[ray_hit.hit.primID]; // get the hit triangle
 
 		if (mesh->texcoords.size() > 0) // if object has tex coords
 		{
 			const Vec2f st0 = mesh->texcoords[tri->v0]; // get the texcoordinate for vertex 1 
 			const Vec2f st1 = mesh->texcoords[tri->v1]; // get the texcoordinate for vertex 2 
 			const Vec2f st2 = mesh->texcoords[tri->v2]; // get the texcoordinate for vertex 3 
-			const float u = ray.u, v = ray.v, w = 1.0f - ray.u - ray.v; // w = 1 - u - v
+			const float u = ray_hit.hit.u, v = ray_hit.hit.v, w = 1.0f - ray_hit.hit.u - ray_hit.hit.v; // w = 1 - u - v
 			const Vec2f st = w*st0 + u*st1 + v*st2; // calc texture coordinate of hitpoint
 
 			return mesh->texture->getTexel(st(0), st(1)); // 1.0f - st(1) for lefthanded
@@ -194,20 +202,12 @@ namespace BeeView {
 	{
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
 
+		std::cout << "DEBUG 1: " << camera->getImageWidth() << "," << camera->getImageHeight() << std::endl;
+
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
 
 		//int ommatidiumSize = camera->getOmmatidiumSize();
-
-#ifdef DEBUG
-		// write to log
-		std::ofstream benchmarkLog;
-		benchmarkLog.open("log_table.txt", std::ios_base::app);
-		//std::string cam_mode = (camera->m_sampler.getMode() == Sampler::Mode::DISK) ? ", Disk" : ", Square";
-
-		//benchmarkLog << std::endl << "ns: " << std::to_string((camera->m_sampler.getNumSamplePoints() + 1) * camera->m_sampler.getNumSamplePoints()) << ", aa: " << std::to_string(camera->m_sampler.getAcceptanceAngle()) << cam_mode << ", bilinear" << std::endl;
-		benchmarkLog << std::to_string((camera->m_sampler.getTotalSamplePoints())) << ",";
-#endif
 
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 		// draw bee eye on image
@@ -216,12 +216,6 @@ namespace BeeView {
 		renderBeeEye(img, Side::RIGHT);
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-#ifdef DEBUG
-		benchmarkLog << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
-		//benchmarkLog << "Time difference (microseconds) = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
-		//benchmarkLog << "Time difference (ms) = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << std::endl;
-#endif
 
 		if (verbose_lvl > 0)
 			std::cout << "Done." << std::endl;
@@ -512,35 +506,43 @@ namespace BeeView {
 	float Renderer::getDistance(Vec3f pos, Vec3f dir)
 	{
 		/* initialize ray */
-		RTCRay ray;
+		RTCRayHit ray_hit;
+  		ray_hit.ray.flags = 0;
 
 		dir.normalize();
 
-		ray.org[0] = pos(0);
-		ray.org[1] = pos(1);
-		ray.org[2] = pos(2);
-		ray.dir[0] = dir(0);
-		ray.dir[1] = dir(1);
-		ray.dir[2] = dir(2);
+		ray_hit.ray.org_x = pos(0);
+		ray_hit.ray.org_y = pos(1);
+		ray_hit.ray.org_z = pos(2);
+		ray_hit.ray.dir_x = dir(0);
+		ray_hit.ray.dir_y = dir(1);
+		ray_hit.ray.dir_z = dir(2);
 
-		ray.tnear = 0.0f;
-		ray.tfar = std::numeric_limits<float>::infinity();
-		ray.geomID = RTC_INVALID_GEOMETRY_ID;
-		ray.primID = RTC_INVALID_GEOMETRY_ID;
-		ray.mask = -1;
-		ray.time = 0;
+		ray_hit.ray.tnear = 0.0f;
+		ray_hit.ray.tfar = std::numeric_limits<float>::infinity();
+		ray_hit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+		ray_hit.hit.primID = RTC_INVALID_GEOMETRY_ID;
+		ray_hit.ray.mask = -1;
+		ray_hit.ray.time = 0;
 
 		/* intersect ray with scene */
-		rtcIntersect(m_scene->m_rtcscene, ray);
+		{
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+    rtcIntersect1(m_scene->m_rtcscene,&context,&ray_hit);
+    ray_hit.hit.Ng_x = -ray_hit.hit.Ng_x;
+    ray_hit.hit.Ng_y = -ray_hit.hit.Ng_y;
+    ray_hit.hit.Ng_z = -ray_hit.hit.Ng_z;
+  }
 		/* shade pixels */
 
 		// no Objects hit -> -1
-		if (ray.geomID == RTC_INVALID_GEOMETRY_ID)
+		if (ray_hit.hit.geomID == RTC_INVALID_GEOMETRY_ID)
 			return -1;
-		if (std::isinf(ray.tfar))
+		if (std::isinf(ray_hit.ray.tfar))
 			return -1;
-		if (ray.tfar < 0)
+		if (ray_hit.ray.tfar < 0)
 			return -1;
-		return ray.tfar;
+		return ray_hit.ray.tfar;
 	}
 }

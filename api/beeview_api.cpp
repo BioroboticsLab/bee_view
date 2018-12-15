@@ -76,6 +76,10 @@ namespace BeeView
 		std::vector<std::vector<std::vector<float>>> returnImage;
 		returnImage.resize(img->m_height, std::vector<std::vector<float> >(img->m_width, std::vector<float>(3)));
 
+
+		std::cout << img->m_height << std::endl;
+		std::cout << img->m_width << std::endl;
+
 		for (int y = 0; y < img->m_height; y++)
 			for (int x = 0; x < img->m_width; x++)
 			{
@@ -83,6 +87,7 @@ namespace BeeView
 				returnImage[y][x][0] = color.m_r;
 				returnImage[y][x][1] = color.m_g;
 				returnImage[y][x][2] = color.m_b;
+				//std::cout << "(" << color.m_r << "," << color.m_g << "," << color.m_b << "," << ")" << std::endl;
 			}
 
 		return returnImage;

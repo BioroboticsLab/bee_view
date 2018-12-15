@@ -22,7 +22,7 @@ sourcefiles  = [
 
 	
 if platform.system() == 'Linux':
-    link_args = ["-L"+ os.path.join(project_path,'lib'),"-Wl,-rpath=/usr/lib/","-l:libtbbmalloc.so.2","-l:libtbb.so.2","-l:libembree.so.2"]
+    link_args = ["-L"+ os.path.join(project_path,'lib'),"-Wl,-rpath=/usr/lib/","-l:libtbbmalloc.so.2","-l:libtbb.so.2","-l:libembree3.so"]
     comp_args = ["-std=c++17", "-I" + os.path.join(project_path,'external'), "-O3"]
     macros = []
 else:
@@ -32,7 +32,7 @@ else:
 	
 ext=[Extension('beeview',
             sources = sourcefiles,
-            libraries=["embree"],  
+            libraries=["embree3"],  
             extra_link_args=link_args,
             extra_compile_args=comp_args,
 			define_macros=macros,
