@@ -5,6 +5,7 @@
 #include "renderer.h"
 
 // debug variables, for beeEye rendering
+
 #define TEXTURE_SHADING
 //#define XYZ_SHADING
 //#define SOLID_SHADING
@@ -81,7 +82,7 @@ namespace BeeView {
 		}
 
 		if (verbose_lvl > 0)
-			std::cout << "Done. " << std::endl;
+			std::cout << "Done rendering image." << std::endl;
 		if (verbose_lvl > 2)
 			std::cout << "Camera settings: Type PANORAMIC, xFov " << camera->m_xFov << ", yFov " << camera->m_yFov << ", Width " << img->m_width << ", Height " << img->m_height << "." << std::endl;
 
@@ -139,7 +140,7 @@ namespace BeeView {
 		Vec3f cam_pos = m_camera->getPosition();
 
 		/* initialize ray */
-		RTCRayHit ray_hit; // EMBREE_FIXME: use RTCRay for occlusion rays
+		RTCRayHit ray_hit;
   		ray_hit.ray.flags = 0;
 
 		ray_hit.ray.org_x = cam_pos(0);
@@ -158,13 +159,13 @@ namespace BeeView {
 
 		/* intersect ray with scene */
 		{
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
-    rtcIntersect1(m_scene->m_rtcscene,&context,&ray_hit);
-    ray_hit.hit.Ng_x = -ray_hit.hit.Ng_x;
-    ray_hit.hit.Ng_y = -ray_hit.hit.Ng_y;
-    ray_hit.hit.Ng_z = -ray_hit.hit.Ng_z;
-  }
+			RTCIntersectContext context;
+			rtcInitIntersectContext(&context);
+			rtcIntersect1(m_scene->m_rtcscene,&context,&ray_hit);
+			ray_hit.hit.Ng_x = -ray_hit.hit.Ng_x;
+			ray_hit.hit.Ng_y = -ray_hit.hit.Ng_y;
+			ray_hit.hit.Ng_z = -ray_hit.hit.Ng_z;
+		}
 		/* shade pixels */
 
 		// no Objects hit -> Backgroundcolor
@@ -195,14 +196,12 @@ namespace BeeView {
 			return mesh->texture->getTexel(st(0), st(1)); // 1.0f - st(1) for lefthanded
 		}
 
-		return Color(0.0f, 0.0f, 0.0f); // if nothing hit: black
+		return Color(0.5f, 0.5f, 0.5f);// if nothing hit: black
 	}
 
 	std::unique_ptr<Image> Renderer::renderToImageBeeEye()
 	{
 		std::shared_ptr<BeeEyeCamera> camera = std::static_pointer_cast<BeeEyeCamera>(m_camera);
-
-		std::cout << "DEBUG 1: " << camera->getImageWidth() << "," << camera->getImageHeight() << std::endl;
 
 		// create black image
 		std::unique_ptr<Image> img = std::make_unique<Image>(camera->getImageWidth(), camera->getImageHeight());
@@ -212,7 +211,6 @@ namespace BeeView {
 		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 		// draw bee eye on image
 		renderBeeEye(img, Side::LEFT);
-
 		renderBeeEye(img, Side::RIGHT);
 
 		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -298,7 +296,6 @@ namespace BeeView {
 #ifdef ELEVATION_AZIMUTH_SHADING
 
 			color = azimuthElevationColor(ommatidium.m_azimuth, ommatidium.m_elevation);
-
 #endif
 
 #ifdef XYZ_SHADING
@@ -372,7 +369,8 @@ namespace BeeView {
 				rayDir.normalize();
 
 				// shoot ray and store color in array
-				colorSamples.push_back(shootRay(rayDir));
+				color = shootRay(rayDir);
+				colorSamples.push_back(color);
 			}
 
 			color = Color(); // 0,0,0
@@ -380,10 +378,17 @@ namespace BeeView {
 			// weight each color in colorSamples and add up
 			for (unsigned int i = 0; i < colorSamples.size(); i++)
 			{
+				//std::cout << colorSamples[i].m_r << colorSamples[i].m_g << colorSamples[i].m_b << std::endl;
+				
+
 				float &w = camera->m_sampler.m_weights[i];
+
+				//std::cout << camera->m_sampler.m_weights[i] << std::endl;
+				
 				color.m_r += w * colorSamples[i].m_r;
 				color.m_g += w * colorSamples[i].m_g;
 				color.m_b += w * colorSamples[i].m_b;
+
 			}
 #endif
 

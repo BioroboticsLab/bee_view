@@ -55,6 +55,9 @@ namespace BeeView
 			return;
 		}
 
+		std::ofstream output_coords;
+		output_coords.open("output_coords.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+
 		std::string line;
 
 		/*
@@ -153,6 +156,9 @@ namespace BeeView
 			ommatidium.m_x = sign_x*x;
 			ommatidium.m_y = sign_y*y;
 
+			// write to file
+			output_coords << ommatidium.m_x << "," << ommatidium.m_y << "," << ommatidium.m_azimuth << "," << ommatidium.m_elevation << std::endl;
+
 			++x;
 #if 0
 			std::cout <<
@@ -165,7 +171,7 @@ namespace BeeView
 #endif
 
 		}
-
+		output_coords.close();
 		// save min max of coordinate expansion:
 		auto minmax_x = std::minmax_element(m_ommatidia.begin(), m_ommatidia.end(),
 			[](Ommatidium const& lhs, Ommatidium const& rhs) {return lhs.m_x < rhs.m_x; });

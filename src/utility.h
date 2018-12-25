@@ -128,7 +128,7 @@ namespace BeeView
 	}
 
 	/* return [0..1] */
-	inline float randf()
+	inline float randf()#cc7832
 	{
 		return (float)xorshf96() / std::numeric_limits<unsigned long>::max();
 	}

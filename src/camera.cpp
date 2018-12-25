@@ -188,7 +188,7 @@ namespace BeeView {
 	{
 		// compute image dimensions
 		m_image_width = (m_leftEye->m_x_max + abs(m_leftEye->m_x_min) + 1) * m_ommatidium_size;
-		m_image_height = (m_leftEye->m_y_max + abs(m_leftEye->m_y_min) + 1)*m_ommatidium_size;
+		m_image_height = (m_leftEye->m_y_max + abs(m_leftEye->m_y_min) + 1) * m_ommatidium_size;
 
 		// add to x_dim because of ommatidia shift
 		if(m_ommatidium_size > 1)
